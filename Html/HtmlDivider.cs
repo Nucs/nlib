@@ -37,7 +37,11 @@ namespace nucs.Html {
                   {"~", "%7E"}
               }
             );
-        
+
+        public static HtmlDocument RetriveDocument(Uri site) {
+            return RetriveDocument(site.ToString());
+        }
+
         public static HtmlDocument RetriveDocument(string site) {
             site = site.Replace("https", "http");
             if (!site.StartsWith("http://"))
@@ -49,7 +53,7 @@ namespace nucs.Html {
             return (executer.Invoke(RetriveDocument(site).DocumentNode) ?? new List<HtmlNode>()).ToList();
         } 
 
-        public static List<HtmlNode> RetriveNodes(HtmlDocument document, DocumentExecuter executer) {
+        public static List<HtmlNode> RetriveNodes(this HtmlDocument document, DocumentExecuter executer) {
             return (executer.Invoke(document.DocumentNode) ?? new List<HtmlNode>()).ToList();
         } 
 
@@ -57,7 +61,7 @@ namespace nucs.Html {
             return executer.Invoke(RetriveDocument(site).DocumentNode);
         } 
 
-        public static HtmlNode RetriveNode(HtmlDocument document, DocumentExecuterSingle executer) {
+        public static HtmlNode RetriveNode(this HtmlDocument document, DocumentExecuterSingle executer) {
             return executer.Invoke(document.DocumentNode);
         } 
 

@@ -125,6 +125,7 @@
     <Compile Include="Network\NetCommsExtension.cs" />
     <Compile Include="Reduant\Network\BooleanHolder.cs" />
     <Compile Include="Reduant\Network\Commons.cs" />
+    <Compile Include="SystemCore\UriExtensions.cs" />
     <Compile Include="Threading\TimeLimitedInspector.cs" />
     <Compile Include="Diagnostics\TimeMeasurer.cs" />
     <Compile Include="Forms\ControlExtensions.cs" />
