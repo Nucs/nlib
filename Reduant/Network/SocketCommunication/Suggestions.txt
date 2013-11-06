@@ -1,0 +1,26 @@
+﻿
+
+
+
+
+
+message built of:
+guid, splitter, message
+
+			Master												Slave
+			send												answer back
+		hs:request						|					  hs@name^guid
+	ping:<datetime.now>					|		pinga@sentdatetime^<datetime.now>
+										|
+										|
+										|
+										|
+________________________________________-_______________________________________________
+			Master Answer				|						Slave Send
+	pinga@sentdatetime^<datetime.now>	|					ping:<datetime.now>
+										|
+										|
+										|
+										|
+										|
+										|

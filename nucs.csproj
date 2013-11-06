@@ -1,0 +1,317 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AC624321-8EB6-4D1F-ACF0-C6F7CF5247A0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>nucs</RootNamespace>
+    <AssemblyName>nucslib</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\CardChecked\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="MySql.Data, Version=6.7.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\CardChecked\packages\MySql.Data.6.7.4\lib\net40\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="NetworkCommsDotNetComplete">
+      <HintPath>Libraries\MarcF-networkcomms.net\NetworkCommsDotNetComplete.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ADO.NET\ConnectionStringManager.cs" />
+    <Compile Include="ADO.NET\MySql\MySqlConnectionAuto.cs" />
+    <Compile Include="ADO.NET\MySql\MySqlConnectionString.cs" />
+    <Compile Include="ADO.NET\MySql\MySqlConnectionTools.cs" />
+    <Compile Include="ADO.NET\MySql\MySqlTools.cs" />
+    <Compile Include="ADO.NET\MySql\MySqlTransaction.cs" />
+    <Compile Include="ADO.NET\DataGridHelpers.cs" />
+    <Compile Include="ADO.NET\PetaPoco\IRepository.cs" />
+    <Compile Include="ADO.NET\PetaPoco\PetaPocoExpansion.cs" />
+    <Compile Include="Business\PetaPocoRepository.cs" />
+    <Compile Include="Collections\ArrayQueue.cs" />
+    <Compile Include="Collections\Collector.cs" />
+    <Compile Include="Collections\ConcurrentDict.cs" />
+    <Compile Include="Collections\ConcurrentHashSet.cs" />
+    <Compile Include="Collections\ConcurrentList.cs" />
+    <Compile Include="Collections\Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Collections\Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Collections\ImprovedList.cs" />
+    <Compile Include="Collections\SynchronizedList.cs" />
+    <Compile Include="Collections\ThreadSafeList.cs" />
+    <Compile Include="Collections\DictionaySelfModifier.cs" />
+    <Compile Include="Controls\DataGridPro.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DataGridPro.Designer.cs">
+      <DependentUpon>DataGridPro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SizeTabber.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SizeTabber.Designer.cs">
+      <DependentUpon>SizeTabber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cryptography\EBCrypt\MOCrypt.cs" />
+    <Compile Include="Cryptography\Extensions.cs" />
+    <Compile Include="Diagnostics\AssertExtensions.cs" />
+    <Compile Include="Forms\ModernMessageBox.cs" />
+    <Compile Include="Forms\UserConnectionDetailsRequester.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UserConnectionDetailsRequester.Designer.cs">
+      <DependentUpon>UserConnectionDetailsRequester.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Network\InternetTools.cs" />
+    <Compile Include="Network\NetCommsExtension.cs" />
+    <Compile Include="Reduant\Network\BooleanHolder.cs" />
+    <Compile Include="Reduant\Network\Commons.cs" />
+    <Compile Include="Threading\TimeLimitedInspector.cs" />
+    <Compile Include="Diagnostics\TimeMeasurer.cs" />
+    <Compile Include="Forms\ControlExtensions.cs" />
+    <Compile Include="Forms\InvisibleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Html\HtmlDivider.cs" />
+    <Compile Include="ADO.NET\PetaPoco\PetaPocoOldModified.cs" />
+    <Compile Include="Reduant\Network\Client.cs" />
+    <Compile Include="Reduant\Network\NetworkPoint.cs" />
+    <Compile Include="Reduant\Network\Server.cs" />
+    <Compile Include="SystemCore\AggregatableObject.cs" />
+    <Compile Include="SystemCore\Bit.cs" />
+    <Compile Include="SystemCore\Math.cs" />
+    <Compile Include="ADO.NET\PetaPoco\Models\Generated\Database.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Database.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ADO.NET\PetaPoco\PetaPoco.cs" />
+    <Compile Include="Reduant\SomeNiceNetworkingCode.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="SystemCore\Binding\WatchingBinding.cs" />
+    <Compile Include="SystemCore\Boolean\Bool.cs" />
+    <Compile Include="SystemCore\Boolean\BooleanTools.cs" />
+    <Compile Include="SystemCore\Dynamic\AnonymousProperties.cs" />
+    <Compile Include="SystemCore\Dynamic\Dynamic.cs" />
+    <Compile Include="SystemCore\Reflection\ReflectionTools.cs" />
+    <Compile Include="SystemCore\SingleRun.cs" />
+    <Compile Include="SystemCore\String\StringToOthers.cs" />
+    <Compile Include="SystemCore\String\StringAsParameterPassing.cs" />
+    <Compile Include="Reduant\Network\SocketCommunication\Commons\AsyncRequester.cs" />
+    <Compile Include="Reduant\Network\SocketCommunication\Commons\ISendable.cs" />
+    <Compile Include="Reduant\Network\SocketCommunication\Commons\Sendable.cs" />
+    <Compile Include="Threading\TimedLocker.cs" />
+    <Compile Include="Utils\CountingInvoker.cs" />
+    <Compile Include="Utils\Tools.cs" />
+    <Compile Include="Windows\ConsoleUtils\ConsoleHelper.cs" />
+    <Compile Include="Windows\ConsoleUtils\Consoler.cs" />
+    <Compile Include="Windows\FileSystem\FileOpeningDialog.cs" />
+    <Compile Include="Windows\FileSystem\FileDialogs.cs" />
+    <Compile Include="Windows\FileSystem\FileHelper.cs" />
+    <Compile Include="Windows\FileSystem\FileOpeningDialogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\FileSystem\FileOpeningDialogForm.Designer.cs">
+      <DependentUpon>FileOpeningDialogForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Keyboard\CardReader\CRManager.cs" />
+    <Compile Include="Windows\Keyboard\CardReader\InputDevice.cs" />
+    <Compile Include="Collections\EventyDictionary.cs" />
+    <Compile Include="Controls\ErrorProviderTool.cs" />
+    <Compile Include="Windows\Keyboard\CardReader\Forms\InputDeviceDetect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Keyboard\CardReader\Forms\InputDeviceDetect.Designer.cs">
+      <DependentUpon>InputDeviceDetect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Keyboard\CardReader\Forms\InputWaiter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Keyboard\CardReader\Forms\InputWaiter.Designer.cs">
+      <DependentUpon>InputWaiter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reduant\Network\SocketCommunication\Commons\Commons.cs" />
+    <Compile Include="Controls\StringUpDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\StringUpDown.Designer.cs">
+      <DependentUpon>StringUpDown.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reduant\Client.cs" />
+    <Compile Include="Reduant\NetworkBase.cs" />
+    <Compile Include="Reduant\Responder.cs" />
+    <Compile Include="Reduant\Server.cs" />
+    <Compile Include="Reduant\Network\SocketCommunication\Master.cs" />
+    <Compile Include="Reduant\Network\SocketCommunication\Slave.cs" />
+    <Compile Include="backups\TestingClass.cs" />
+    <Compile Include="Threading\TaskTools.cs" />
+    <Compile Include="SystemCore\String\StringTools.cs" />
+    <Compile Include="Windows\Keyboard\Conversions.cs" />
+    <Compile Include="Windows\Hooking\GlobalHook.cs" />
+    <Compile Include="Windows\Hooking\KeyboardHook.cs" />
+    <Compile Include="Windows\Keyboard\InputStimulator.cs" />
+    <Compile Include="Windows\Keyboard\KeyboardSimulator.cs" />
+    <Compile Include="Windows\Hooking\MouseHook.cs" />
+    <Compile Include="Windows\Mouse\MouseSimulator.cs" />
+    <Compile Include="Windows\Keyboard\HotkeyManager.cs" />
+    <Compile Include="Windows\Keyboard\KeyboardLanguage.cs" />
+    <Compile Include="Windows\Keyboard\oldGlobalHotkeyRegisterator.cs" />
+    <Compile Include="Windows\Keyboard\GlobalHotkeyManager.cs" />
+    <Compile Include="Windows\Keyboard\KeySender.cs" />
+    <Compile Include="Windows\Keyboard\ModifiersTools.cs" />
+    <Compile Include="Windows\NativeWin32.cs" />
+    <Compile Include="Windows\Keyboard\TypingTarget.cs" />
+    <Compile Include="Windows\Processes\ProcessFinder.cs" />
+    <Compile Include="Windows\Processes\ProcessInfo.cs" />
+    <Compile Include="Windows\Security\SecurityDiagnoser.cs" />
+    <Compile Include="Windows\Startup\StartupManager.cs" />
+    <None Include="backups\ServerAsync.cs.backup" />
+    <None Include="backups\Network.cs.backup" />
+    <Compile Include="Reduant\utils.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="backups\Sockets.cs.back" />
+    <EmbeddedResource Include="Controls\SizeTabber.resx">
+      <DependentUpon>SizeTabber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\StringUpDown.resx">
+      <DependentUpon>StringUpDown.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserConnectionDetailsRequester.resx">
+      <DependentUpon>UserConnectionDetailsRequester.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\FileSystem\FileOpeningDialogForm.resx">
+      <DependentUpon>FileOpeningDialogForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Keyboard\CardReader\Forms\InputDeviceDetect.resx">
+      <DependentUpon>InputDeviceDetect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Keyboard\CardReader\Forms\InputWaiter.resx">
+      <DependentUpon>InputWaiter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="ADO.NET\PetaPoco\Models\Generated\Database.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Database.cs</LastGenOutput>
+    </None>
+    <None Include="ADO.NET\PetaPoco\Models\Generated\PetaPoco.Core.ttinclude" />
+    <None Include="ADO.NET\PetaPoco\Models\Generated\PetaPoco.Generator.ttinclude" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\questionmark.png" />
+    <None Include="Resources\refreshImg.bmp" />
+    <None Include="Resources\erroricon.png" />
+    <None Include="Images\refresh-icon.png" />
+    <Content Include="Reduant\Network\SocketCommunication\Suggestions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Business\Interface\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
