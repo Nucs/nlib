@@ -58,7 +58,13 @@ namespace nucs.ADO.NET {
         /// </summary>
         public bool IsBoundAndLoaded { get; set; }
 
+        /// <summary>
+        /// List of active layers that will be applied
+        /// </summary>
         public readonly List<IColumnLayer<object, object>> Layerers = new List<IColumnLayer<object, object>>();
+        /// <summary>
+        /// List of active custom layers that will be applied
+        /// </summary>
         public readonly ImprovedList<IManualColumnLayer<object>> ManualLayerers = new ImprovedList<IManualColumnLayer<object>>();
 
         public event BindingAndLoadingCompletedHandler BindingAndLoadingCompleted;
@@ -99,7 +105,7 @@ namespace nucs.ADO.NET {
             foreach (DataGridViewColumn low in columns) {
                 //todo PARALLELISM!! 
                 IColumnLayer<object, object> _layer =
-                    Layerers.FirstOrDefault(lay => lay.LowerLayerName.ToLowerInvariant() == low.Name.ToLowerInvariant());
+                    Layerers.FirstOrDefault(lay => String.Equals(lay.LowerLayerName, low.Name, StringComparison.InvariantCultureIgnoreCase));
                 if (_layer == null) continue;
                 _layer.LowerLayer = low;
                 grid.Columns.Add(ApplyLayerStyling(_layer.CreateLayeredColumn(), _layer));

@@ -24,6 +24,10 @@ using Cell = System.Windows.Forms.DataGridViewCell;
 
 namespace nucs.Controls {
     public delegate void ReadyForModificationsHandler(object sender, int TimesInvoked);
+
+    /// <summary>
+    /// Improved version of the DataGridView, contains bugfixes, many more options, issue solving and a layer architecture
+    /// </summary>
     public partial class DataGridPro : DataGridView {
 
         #region Constructor
@@ -63,8 +67,9 @@ namespace nucs.Controls {
         private bool _rowHeadersVisible; //false by default
         private bool _colorEverySecondLine = true;
         private bool? _rtl;
-        private bool __binded_mouseclick;
+        private bool _bound_mouseclick;
         private bool _onready_binded;
+        private bool _ignoreErrors = true;
         internal readonly object lock_rdyformods = new object();
         internal int _onready_invokeCounts = 0;
         /// <summary>
@@ -80,12 +85,21 @@ namespace nucs.Controls {
         ///     Value are properties of the column that are passed as anonymous typle to AnonymousProperties class
         /// </summary>
         internal readonly DictionaySelfModifierAggregatable<string, AnonymousProperties<Column>> _customizeColumns = new DictionaySelfModifierAggregatable<string, AnonymousProperties<Column>>();
-        
+
         /// <summary>
         /// Provides the instance's grid. Used to display data from database and has many techniques to modify and display data. 
         /// <remarks>To create, start a new instance or use InitAdapter() method</remarks>
         /// </summary>
-        public DataGridAdapter Adapter;
+        public DataGridAdapter Adapter { get; set; }
+
+        /// <summary>
+        /// Ignore errors that are being thrown - default is true.
+        /// </summary>
+        public bool IgnoreErrors {
+            get { return _ignoreErrors; }
+            set { _ignoreErrors = value; }
+        }
+
         /// <summary>
         ///     Streches the columns inside the grid to fit just the width of the control, while considering the content of the
         ///     column. default is true.
@@ -220,6 +234,9 @@ namespace nucs.Controls {
 
         #endregion
 
+        /// <summary>
+        /// Initializes a new adapter with given properties.
+        /// </summary>
         public void InitAdapter(IDbConnection conn, IDbDataAdapter da, DbCommandBuilder builder) {
             Adapter = new DataGridAdapter(this, conn, da, builder);
         }
@@ -251,6 +268,8 @@ namespace nucs.Controls {
             return a;
         }*/
 
+        // ReSharper disable LoopCanBeConvertedToQuery
+
         public IEnumerable<DataGridViewCell> GetCells(string columnName) {
             foreach (DataGridViewRow row in Rows)
                 yield return row.Cells[columnName];
@@ -263,12 +282,14 @@ namespace nucs.Controls {
             }
         }
 
-        public IEnumerable<Column> GetDisplayedColumnsOrdered() {
+        // ReSharper restore LoopCanBeConvertedToQuery
+        public IEnumerable<Column> GetDisplayedColumnsOrdered()
+        {
             return GetDisplayedColumns().OrderBy(c => c.DisplayIndex);
         }
         
         /// <summary>
-        ///     Finds the duplicates inside of a DataGridView
+        /// Finds the duplicates inside of a DataGridView, returning the index of the compares (key) and the list of equal indexes (value).
         /// </summary>
         /// <param name="columnNamesToCompare">Collection of the Column.Name to compare</param>
         public IEnumerable<KeyValuePair<int, List<int>>> FindDuplicates(ICollection<string> columnNamesToCompare) {
@@ -358,16 +379,25 @@ namespace nucs.Controls {
             Console.WriteLine("DataBinding Completed");
         }
 
-        private void OnDataError(object sender, DataGridViewDataErrorEventArgs args) {
-            throw args.Exception;
+
+        /// <summary>
+        /// Called when an error is thrown
+        /// </summary>
+        public virtual void OnDataError(object sender, DataGridViewDataErrorEventArgs args) {
+            if (!IgnoreErrors)
+                throw args.Exception;
         }
 
+        /// <summary>
+        /// Used to leave focus from the grid when a click is called outside of it.
+        /// </summary>
+        /// <param name="parent">the parent form containing all of the controls.</param>
         public void BindEndEditOnClickElsewhere([NotNull] Control parent) {
-            if (__binded_mouseclick) return;
+            if (_bound_mouseclick) return;
             Parent = parent;
             Parent.MouseClick += _OnMouseStopEdit;
             Parent.Controls.Cast<Control>().ForEach(c => c.MouseClick += _OnMouseStopEdit);
-            __binded_mouseclick = true;
+            _bound_mouseclick = true;
         }
 
         private void _OnRowHeadGridMouseClick(object sender, MouseEventArgs e) {
@@ -399,6 +429,7 @@ namespace nucs.Controls {
         #region OnReadyForModifications
         //private readonly Semaphore _pool = new Semaphore(2, 2);
         private readonly object lock_attemptTolock = new object(); //this will make sure that _counter won't be accessed till _catchOnHandle() finishes
+
         protected virtual void OnReadyForModifications() {
             if (IgnoreOnReadyForModifications)
                 return;
