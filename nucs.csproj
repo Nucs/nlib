@@ -99,6 +99,9 @@
     <Compile Include="Collections\SynchronizedList.cs" />
     <Compile Include="Collections\ThreadSafeList.cs" />
     <Compile Include="Collections\DictionaySelfModifier.cs" />
+    <Compile Include="Controls\CheckBoxConnector.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\DataGridPro.cs">
       <SubType>Component</SubType>
     </Compile>
