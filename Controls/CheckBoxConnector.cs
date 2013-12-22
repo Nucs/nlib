@@ -72,7 +72,9 @@ namespace nucs.Controls {
                 c.Checked = val;
         }
 
-
+        /// <summary>
+        /// Binds multiple checkboxes together into a single checked list. also thread-safe.
+        /// </summary>
         public static CheckBoxConnector BindTogether(params CheckBox[] boxes) {
             return new CheckBoxConnector(boxes);
         }

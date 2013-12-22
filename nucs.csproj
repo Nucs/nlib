@@ -215,6 +215,7 @@
     <Compile Include="Windows\Keyboard\InputStimulator.cs" />
     <Compile Include="Windows\Keyboard\KeyboardSimulator.cs" />
     <Compile Include="Windows\Hooking\MouseHook.cs" />
+    <Compile Include="Windows\Keyboard\KeyCode.cs" />
     <Compile Include="Windows\Mouse\MouseSimulator.cs" />
     <Compile Include="Windows\Keyboard\HotkeyManager.cs" />
     <Compile Include="Windows\Keyboard\KeyboardLanguage.cs" />

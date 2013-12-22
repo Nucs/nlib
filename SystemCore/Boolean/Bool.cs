@@ -26,5 +26,13 @@ namespace nucs.SystemCore {
         public static implicit operator bool(Bool b) {
             return b.value;
         }
+
+        public static bool EqualsAny(object obj, params object[] objs) {
+            return objs.Any(o => o.Equals(obj));
+        }
+
+        public static bool EqualsAny<T>(T obj, params T[] objs) {
+            return objs.Any(o => o.Equals(obj));
+        }
     }
 }
