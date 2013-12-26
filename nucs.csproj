@@ -99,6 +99,9 @@
     <Compile Include="Collections\SynchronizedList.cs" />
     <Compile Include="Collections\ThreadSafeList.cs" />
     <Compile Include="Collections\DictionaySelfModifier.cs" />
+    <Compile Include="Controls\KeyDetectionButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\CheckBoxConnector.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -177,6 +180,7 @@
     <Compile Include="Windows\FileSystem\FileOpeningDialogForm.Designer.cs">
       <DependentUpon>FileOpeningDialogForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Keyboard\AKey.cs" />
     <Compile Include="Windows\Keyboard\CardReader\CRManager.cs" />
     <Compile Include="Windows\Keyboard\CardReader\InputDevice.cs" />
     <Compile Include="Collections\EventyDictionary.cs" />
@@ -212,7 +216,6 @@
     <Compile Include="Windows\Keyboard\Conversions.cs" />
     <Compile Include="Windows\Hooking\GlobalHook.cs" />
     <Compile Include="Windows\Hooking\KeyboardHook.cs" />
-    <Compile Include="Windows\Keyboard\InputStimulator.cs" />
     <Compile Include="Windows\Keyboard\KeyboardSimulator.cs" />
     <Compile Include="Windows\Hooking\MouseHook.cs" />
     <Compile Include="Windows\Keyboard\KeyCode.cs" />

@@ -78,7 +78,7 @@ namespace nucs.Windows.Keyboard {
                 return false;
             if (!OnlyInSpecificProcess || FocusedProc.Id == ProcessBeingFocused.UniqueID) {
                 KeySender.SendText(text);
-                KeySender.PressKey(KeyCode.RETURN);
+                KeySender.PressKey(KeyCode.Return);
                 return true;
             }
             return false;

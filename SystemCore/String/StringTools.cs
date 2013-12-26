@@ -438,6 +438,14 @@ namespace nucs.SystemCore.String {
             }
         }
 
+        public static bool StartsWithAny(this string Sample, params string[] CompareTo) {
+            try {
+                return CompareTo.Any(Sample.StartsWith);
+            } catch {
+                return false;
+            }
+        }
+
         public static bool CompareAny(this string Sample, params string[] CompareTo) {
             try {
                 return CompareTo.Any(s => string.CompareOrdinal(Sample, s) == 0);
@@ -454,7 +462,7 @@ namespace nucs.SystemCore.String {
             }
         }
 
-        public static string ContainsAny(this string testunit, params string[] tocompare) {
+        public static string FirstOrDefault(this string testunit, params string[] tocompare) {
             return tocompare.FirstOrDefault(testunit.Contains);
         }
 

@@ -103,7 +103,7 @@ namespace nucs.Windows {
         ///             These left- and right-distinguishing constants are only available when you call the GetKeyboardState, SetKeyboardState, GetAsyncKeyState, GetKeyState, and MapVirtualKey functions.
         /// 
         /// </remarks>
-        [DllImport("user32.dll", SetLastError = true)]
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true, SetLastError = true)]
         internal static extern short GetAsyncKeyState(ushort virtualKeyCode);
         /// <summary>
         /// The GetKeyState function retrieves the status of the specified virtual key. The status specifies whether the key is up, down, or toggled (on, off alternating each time the key is pressed). (See: http://msdn.microsoft.com/en-us/library/ms646301(VS.85).aspx)
@@ -134,8 +134,8 @@ namespace nucs.Windows {
         ///             These left- and right-distinguishing constants are available to an application only through the GetKeyboardState, SetKeyboardState, GetAsyncKeyState, GetKeyState, and MapVirtualKey functions.
         /// 
         /// </remarks>
-        [DllImport("user32.dll", SetLastError = true)]
-        internal static extern short GetKeyState(ushort virtualKeyCode);
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true, SetLastError = true)]
+        internal static extern short GetKeyState(int virtualKeyCode);
         /// <summary>
         /// The GetMessageExtraInfo function retrieves the extra message information for the current thread. Extra message information is an application- or driver-defined value associated with the current thread's message queue.
         /// 
