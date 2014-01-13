@@ -57,7 +57,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack">
-      <HintPath>..\CardChecked\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <HintPath>..\muauto\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin">
@@ -193,6 +193,7 @@
     <Compile Include="Reduant\Network\Commons.cs" />
     <Compile Include="SystemCore\Drawing\RectangleExtensions.cs" />
     <Compile Include="SystemCore\UriExtensions.cs" />
+    <Compile Include="Threading\SleepUtils.cs" />
     <Compile Include="Threading\TimeLimitedInspector.cs" />
     <Compile Include="Diagnostics\TimeMeasurer.cs" />
     <Compile Include="Forms\ControlExtensions.cs" />
@@ -273,7 +274,6 @@
     <Compile Include="Reduant\Server.cs" />
     <Compile Include="Reduant\Network\SocketCommunication\Master.cs" />
     <Compile Include="Reduant\Network\SocketCommunication\Slave.cs" />
-    <Compile Include="backups\TestingClass.cs" />
     <Compile Include="Threading\TaskTools.cs" />
     <Compile Include="SystemCore\String\StringTools.cs" />
     <Compile Include="Windows\Keyboard\Class1.cs" />
@@ -299,11 +299,8 @@
     <Compile Include="Windows\Processes\WindowFinder.cs" />
     <Compile Include="Windows\Security\SecurityDiagnoser.cs" />
     <Compile Include="Windows\Startup\StartupManager.cs" />
-    <None Include="backups\ServerAsync.cs.backup" />
-    <None Include="backups\Network.cs.backup" />
     <Compile Include="Reduant\utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="backups\Sockets.cs.back" />
     <EmbeddedResource Include="Controls\SizeTabber.resx">
       <DependentUpon>SizeTabber.cs</DependentUpon>
     </EmbeddedResource>
@@ -379,6 +376,7 @@
     <Content Include="Reduant\Network\SocketCommunication\Suggestions.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="backups\" />
     <Folder Include="Business\Interface\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

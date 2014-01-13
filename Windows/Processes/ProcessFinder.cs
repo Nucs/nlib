@@ -34,15 +34,24 @@ namespace nucs.Windows.Processes {
         /// <summary>
         ///     Iterates through the open processes list and find if any of them is named by <paramref name="processName" />
         /// </summary>
-        /// <param name="processName">The name of the process as can be found at Window's Task Manager</param>
+        /// <param name="name">The name of the process as can be found at Window's Task Manager (Not in process tab)</param>
         /// <returns>If exists</returns>
-        public static bool ProcessExists(string processName) {
+        public static bool ExistsByName(string name) {
             try {
-                Process[] procs = Process.GetProcessesByName(processName);
+                Process[] procs = Process.GetProcessesByName(name);
                 return procs.Length > 0;
             } catch {
                 return false;
             }
+        }
+
+        /// <summary>
+        ///     Iterates through the open processes list and find if any of them is named by <paramref name="processName" />
+        /// </summary>
+        /// <param name="processName">The name of the process as can be found at Window's Task Manager</param>
+        /// <returns>If exists</returns>
+        public static bool ExistsByProcName(string processName) {
+            return Process.GetProcesses().Any(p => p.ProcessName.Contains(processName.Contains(".") ? processName.Split('.')[0] : processName));
         }
 
         /// <summary>
