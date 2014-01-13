@@ -1,48 +1,64 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using nucs.Windows.Keyboard;
+using nucs.Windows.Mouse;
 
 namespace nucs.Windows {
-    internal static partial class NativeWin32 {
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        internal static extern IntPtr GetForegroundWindow();
+    public static partial class NativeWin32 {
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern int ShowCursor(bool show);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern void mouse_event(int flags, int dX, int dY, int buttons, int extraInfo);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr GetForegroundWindow();
 
         // The GetWindowThreadProcessId function retrieves the identifier of the thread
         // that created the specified window and, optionally, the identifier of the
         // process that created the window.
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        internal static extern Int32 GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern Int32 GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool SetForegroundWindow(IntPtr hWnd);
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
         [DllImport("user32", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool RegisterHotKey(IntPtr hwnd, int uid, uint fsModifiers, uint vk);
+        public static extern bool RegisterHotKey(IntPtr hwnd, int uid, uint fsModifiers, uint vk);
         [DllImport("user32", SetLastError = true)]
-        internal static extern bool UnregisterHotKey(IntPtr hwnd, int uid);
+        public static extern bool UnregisterHotKey(IntPtr hwnd, int uid);
         [DllImport("kernel32", SetLastError = true)]
-        internal static extern short GlobalAddAtom(string lpString);
+        public static extern short GlobalAddAtom(string lpString);
         [DllImport("kernel32", SetLastError = true)]
-        internal static extern short GlobalDeleteAtom(short nAtom);
+        public static extern short GlobalDeleteAtom(short nAtom);
         [DllImport("kernel32")]
-        internal static extern bool AllocConsole();
+        public static extern bool AllocConsole();
         [DllImport("kernel32.dll", SetLastError = true)]
-        internal static extern bool AttachConsole(int dwProcessId);
+        public static extern bool AttachConsole(int dwProcessId);
         [DllImport("user32.dll")]
-        internal static extern int ToUnicodeEx(uint wVirtKey, uint wScanCode, byte[] lpKeyState, [Out, MarshalAs(UnmanagedType.LPWStr)] System.Text.StringBuilder pwszBuff, int cchBuff, uint wFlags, IntPtr dwhkl);
+        public static extern int ToUnicodeEx(uint wVirtKey, uint wScanCode, byte[] lpKeyState, [Out, MarshalAs(UnmanagedType.LPWStr)] System.Text.StringBuilder pwszBuff, int cchBuff, uint wFlags, IntPtr dwhkl);
         [DllImport("user32.dll")]
-        internal static extern bool GetKeyboardState(byte[] lpKeyState);
+        public static extern bool GetKeyboardState(byte[] lpKeyState);
         [DllImport("user32.dll")]
-        internal static extern uint MapVirtualKey(uint uCode, uint uMapType);
+        public static extern uint MapVirtualKey(uint uCode, uint uMapType);
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetKeyboardLayout(UIntPtr idThread);
+        public static extern IntPtr GetKeyboardLayout(UIntPtr idThread);
         [DllImport("user32.dll")]
-        internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr ProcessId);
+        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr ProcessId);
         [DllImport("coredll.dll", SetLastError = true)]
-        internal static extern Int32 GetLastError();
+        public static extern Int32 GetLastError();
         [DllImport("kernel32.dll")]
-        internal static extern IntPtr LoadLibrary(string lpFileName);
+        public static extern IntPtr LoadLibrary(string lpFileName);
         public static uint GetTopMostThreadId() {
             return GetWindowThreadProcessId(GetForegroundWindow(), IntPtr.Zero);
         }
@@ -104,7 +120,7 @@ namespace nucs.Windows {
         /// 
         /// </remarks>
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true, SetLastError = true)]
-        internal static extern short GetAsyncKeyState(ushort virtualKeyCode);
+        public static extern short GetAsyncKeyState(ushort virtualKeyCode);
         /// <summary>
         /// The GetKeyState function retrieves the status of the specified virtual key. The status specifies whether the key is up, down, or toggled (on, off alternating each time the key is pressed). (See: http://msdn.microsoft.com/en-us/library/ms646301(VS.85).aspx)
         /// 
@@ -135,7 +151,7 @@ namespace nucs.Windows {
         /// 
         /// </remarks>
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true, SetLastError = true)]
-        internal static extern short GetKeyState(int virtualKeyCode);
+        public static extern short GetKeyState(int virtualKeyCode);
         /// <summary>
         /// The GetMessageExtraInfo function retrieves the extra message information for the current thread. Extra message information is an application- or driver-defined value associated with the current thread's message queue.
         /// 
@@ -147,6 +163,6 @@ namespace nucs.Windows {
         /// To set a thread's extra message information, use the SetMessageExtraInfo function.
         /// </remarks>
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetMessageExtraInfo();
+        public static extern IntPtr GetMessageExtraInfo();
     }
 }

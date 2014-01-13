@@ -60,6 +60,9 @@
       <HintPath>..\CardChecked\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin">
+      <HintPath>C:\Users\ELI-PC\Documents\Visual Studio 2013\Projects\MuAutomater\packages\Microsoft.Owin.2.0.0-rc1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="MySql.Data, Version=6.7.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\CardChecked\packages\MySql.Data.6.7.4\lib\net40\MySql.Data.dll</HintPath>
@@ -67,12 +70,16 @@
     <Reference Include="NetworkCommsDotNetComplete">
       <HintPath>Libraries\MarcF-networkcomms.net\NetworkCommsDotNetComplete.dll</HintPath>
     </Reference>
+    <Reference Include="Owin">
+      <HintPath>C:\Users\ELI-PC\Documents\Visual Studio 2013\Projects\MuAutomater\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -87,12 +94,64 @@
     <Compile Include="ADO.NET\DataGridHelpers.cs" />
     <Compile Include="ADO.NET\PetaPoco\IRepository.cs" />
     <Compile Include="ADO.NET\PetaPoco\PetaPocoExpansion.cs" />
+    <Compile Include="Botlib\ApplicationTunnel.cs" />
+    <Compile Include="Botlib\Browser.cs" />
+    <Compile Include="Botlib\CommonRegex.cs" />
+    <Compile Include="Botlib\ControlArtist.cs" />
+    <Compile Include="Botlib\DataTypes\Hex32.cs" />
+    <Compile Include="Botlib\Encryption.cs" />
+    <Compile Include="Botlib\FiniteStateEngine\Pattern\Singleton.cs" />
+    <Compile Include="Botlib\FiniteStateEngine\StateEngine\Entites\BaseEntity.cs" />
+    <Compile Include="Botlib\FiniteStateEngine\StateEngine\Entites\EntityManager.cs" />
+    <Compile Include="Botlib\FiniteStateEngine\StateEngine\Messaging\MessageDispatcher.cs" />
+    <Compile Include="Botlib\FiniteStateEngine\StateEngine\Messaging\Telegram.cs" />
+    <Compile Include="Botlib\FiniteStateEngine\StateEngine\State.cs" />
+    <Compile Include="Botlib\FiniteStateEngine\StateEngine\StateMachine.cs" />
+    <Compile Include="Botlib\ImageLibrary\CommonFunctions.cs" />
+    <Compile Include="Botlib\ImageLibrary\Filter.cs" />
+    <Compile Include="Botlib\ImageLibrary\ImageData.cs" />
+    <Compile Include="Botlib\ImageLibrary\Manipulating.cs" />
+    <Compile Include="Botlib\ImageLibrary\Template.cs" />
+    <Compile Include="Botlib\IniParser.cs" />
+    <Compile Include="Botlib\Keyboard.cs" />
+    <Compile Include="Botlib\MachineLearning\NeuralNetwork\ActivationFunctions\BipolarSigmoidActivationFunction.cs" />
+    <Compile Include="Botlib\MachineLearning\NeuralNetwork\ActivationFunctions\GaussianActivationFunction.cs" />
+    <Compile Include="Botlib\MachineLearning\NeuralNetwork\ActivationFunctions\HeavisideActivationFunction.cs" />
+    <Compile Include="Botlib\MachineLearning\NeuralNetwork\ActivationFunctions\iActivationFunction.cs" />
+    <Compile Include="Botlib\MachineLearning\NeuralNetwork\ActivationFunctions\LinearActivationFunction.cs" />
+    <Compile Include="Botlib\MachineLearning\NeuralNetwork\ActivationFunctions\SigmoidActivationFunction.cs" />
+    <Compile Include="Botlib\MachineLearning\NeuralNetwork\ActivationFunctions\TanhActivationFunction.cs" />
+    <Compile Include="Botlib\MachineLearning\NeuralNetwork\Layer.cs" />
+    <Compile Include="Botlib\MachineLearning\NeuralNetwork\LearningAlgorithms\BackPropagationLearningAlgorithm.cs" />
+    <Compile Include="Botlib\MachineLearning\NeuralNetwork\LearningAlgorithms\LearningAlgorithm.cs" />
+    <Compile Include="Botlib\MachineLearning\NeuralNetwork\LearningMonitors\iLearningMonitor.cs" />
+    <Compile Include="Botlib\MachineLearning\NeuralNetwork\NeuralNetwork.cs" />
+    <Compile Include="Botlib\MachineLearning\NeuralNetwork\Neuron.cs" />
+    <Compile Include="Botlib\Mouse.cs" />
+    <Compile Include="Botlib\NativeMethods.cs" />
+    <Compile Include="Botlib\Net\HttpClient.cs" />
+    <Compile Include="Botlib\Net\HttpConstants.cs" />
+    <Compile Include="Botlib\Net\HttpHeader.cs" />
+    <Compile Include="Botlib\Net\HttpHeaderCollection.cs" />
+    <Compile Include="Botlib\Net\HttpPostData.cs" />
+    <Compile Include="Botlib\Net\HttpPostDataCollection.cs" />
+    <Compile Include="Botlib\Net\HttpProxy.cs" />
+    <Compile Include="Botlib\Net\HttpProxyHacker.cs" />
+    <Compile Include="Botlib\Net\HttpRequestException.cs" />
+    <Compile Include="Botlib\Recognition\Character\MagicMatchStick.cs" />
+    <Compile Include="Botlib\Recognition\Character\MagicMatchSticks.cs" />
+    <Compile Include="Botlib\Recognition\Character\OCR.cs" />
+    <Compile Include="Botlib\ScreenShot.cs" />
+    <Compile Include="Botlib\Utility.cs" />
+    <Compile Include="Botlib\Window.cs" />
+    <Compile Include="Botting\BotLib.cs" />
     <Compile Include="Business\PetaPocoRepository.cs" />
     <Compile Include="Collections\ArrayQueue.cs" />
     <Compile Include="Collections\Collector.cs" />
     <Compile Include="Collections\ConcurrentDict.cs" />
     <Compile Include="Collections\ConcurrentHashSet.cs" />
     <Compile Include="Collections\ConcurrentList.cs" />
+    <Compile Include="Collections\EnumerationPartitioner.cs" />
     <Compile Include="Collections\Extensions\DictionaryExtensions.cs" />
     <Compile Include="Collections\Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Collections\ImprovedList.cs" />
@@ -127,10 +186,12 @@
     <Compile Include="Forms\UserConnectionDetailsRequester.Designer.cs">
       <DependentUpon>UserConnectionDetailsRequester.cs</DependentUpon>
     </Compile>
+    <Compile Include="Network\Mail\Gmail.cs" />
     <Compile Include="Network\InternetTools.cs" />
     <Compile Include="Network\NetCommsExtension.cs" />
     <Compile Include="Reduant\Network\BooleanHolder.cs" />
     <Compile Include="Reduant\Network\Commons.cs" />
+    <Compile Include="SystemCore\Drawing\RectangleExtensions.cs" />
     <Compile Include="SystemCore\UriExtensions.cs" />
     <Compile Include="Threading\TimeLimitedInspector.cs" />
     <Compile Include="Diagnostics\TimeMeasurer.cs" />
@@ -180,6 +241,8 @@
     <Compile Include="Windows\FileSystem\FileOpeningDialogForm.Designer.cs">
       <DependentUpon>FileOpeningDialogForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Graphics\BitmapIO.cs" />
+    <Compile Include="Windows\Graphics\Screenshot.cs" />
     <Compile Include="Windows\Keyboard\AKey.cs" />
     <Compile Include="Windows\Keyboard\CardReader\CRManager.cs" />
     <Compile Include="Windows\Keyboard\CardReader\InputDevice.cs" />
@@ -213,9 +276,12 @@
     <Compile Include="backups\TestingClass.cs" />
     <Compile Include="Threading\TaskTools.cs" />
     <Compile Include="SystemCore\String\StringTools.cs" />
+    <Compile Include="Windows\Keyboard\Class1.cs" />
+    <Compile Include="Windows\Keyboard\Class2.cs" />
     <Compile Include="Windows\Keyboard\Conversions.cs" />
     <Compile Include="Windows\Hooking\GlobalHook.cs" />
     <Compile Include="Windows\Hooking\KeyboardHook.cs" />
+    <Compile Include="Windows\Keyboard\GlobalHotkeyManagerOld.cs" />
     <Compile Include="Windows\Keyboard\KeyboardSimulator.cs" />
     <Compile Include="Windows\Hooking\MouseHook.cs" />
     <Compile Include="Windows\Keyboard\KeyCode.cs" />
@@ -230,6 +296,7 @@
     <Compile Include="Windows\Keyboard\TypingTarget.cs" />
     <Compile Include="Windows\Processes\ProcessFinder.cs" />
     <Compile Include="Windows\Processes\ProcessInfo.cs" />
+    <Compile Include="Windows\Processes\WindowFinder.cs" />
     <Compile Include="Windows\Security\SecurityDiagnoser.cs" />
     <Compile Include="Windows\Startup\StartupManager.cs" />
     <None Include="backups\ServerAsync.cs.backup" />

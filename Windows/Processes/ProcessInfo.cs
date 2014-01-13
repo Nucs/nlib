@@ -41,6 +41,10 @@ namespace nucs.Windows.Processes {
             return ProcessFinder.ProcessExists(this);
         }
 
+        /// <summary>
+        /// Attemts to find the process using the function <see cref="ProcessFinder.FindProcess"/>. If not found, null is returned
+        /// </summary>
+        /// <returns></returns>
         public Process ToProcess() {
             return ProcessFinder.FindProcess(this);
         }

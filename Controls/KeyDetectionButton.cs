@@ -80,10 +80,6 @@ namespace nucs.Controls {
             }
         }
 
-        private bool _contains_key(Keys code, Keys key) {
-            return (code & key) == key;
-        }
-
         private void onDisposing() {
             
         }

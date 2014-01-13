@@ -90,6 +90,15 @@ namespace nucs.Windows.Keyboard {
             return mods.All(m => Modifiers.Contains((KeyCode)m));
         }
 
+         /// <summary>
+        /// Compares the given mods to the current mods list if any of them is contained
+        /// </summary>
+        /// <param name="mods"></param>
+        /// <returns></returns>
+        public bool ContainsAnyModifiers(params KeyCodeModifiers[] mods) {
+            return Modifiers.Any(m => mods.Any(mm=>mm.Equals(m)));
+        }
+
         /// <summary>
         /// StringifyModifiers+Key
         /// </summary>
@@ -106,10 +115,17 @@ namespace nucs.Windows.Keyboard {
         /// </summary>
         public static AKey Produce(bool useAsync = true) {
             var l = useAsync
-                ? (from KeyCode i in Enumerable.Range(1, 254).Select(i => (KeyCode)i) where (i.IsKeyDownAsync()) select i).ToList()
-                : (from KeyCode i in Enumerable.Range(1, 254).Select(i => (KeyCode)i) where (i.IsKeyDown()) select i).ToList();
+                ? (from KeyCode i in Enumerable.Range(1, 256).Select(i => (KeyCode)i) where (i.IsKeyDownAsync()) select i).ToList()
+                : (from KeyCode i in Enumerable.Range(1, 256).Select(i => (KeyCode)i) where (i.IsKeyDown()) select i).ToList();
             var mods = l.Where(k => k.IsSidedModifier()).ToList();
             var key = l.FirstOrDefault(k => k.IsKey());
+            return new AKey(mods, key);
+        }
+
+        /// <summary>
+        /// Produces a key state from the current keyboard keys and returns it in form of AKey
+        /// </summary>
+        internal static AKey Produce(KeyCode key, List<KeyCode> mods) {
             return new AKey(mods, key);
         }
 

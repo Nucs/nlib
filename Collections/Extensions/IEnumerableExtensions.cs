@@ -35,7 +35,7 @@ namespace nucs.Collections.Extensions {
             return forEach;
         }
 
-        public static IEnumerable<T> ForEachSelf<T>(this IEnumerable<T> list, Action<T[],T> action) {
+        public static IEnumerable<T> ForEachSelf<T>(this IEnumerable<T> list, Action<T[], T> action, object unknown) {
             var forEach = list as T[] ?? list.ToArray();
             foreach (var j in forEach) {
                 action.Invoke(forEach, j);
