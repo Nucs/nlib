@@ -22,59 +22,83 @@ namespace nucs.Windows.Processes {
         public static string GetForegroundProcessName() { return GetForegroundProcess().ProcessName; }
 
 
-        public static bool ProcessExists(ProcessInfo process) {
-            try {
-                Process[] procs = Process.GetProcesses();
-                return procs.Any(process.Equals);
-            } catch {
-                return false;
+        /// <summary>
+        ///     Iterates through the open processes list and finds the procs based on the given parameters.
+        /// </summary>
+        /// <param name="method">The different methods you can use to find a process.</param>
+        /// <param name="value">The value that must fit into the method's object that can be found in the doc.</param>
+        /// <returns>The processes in array or an empty array</returns>
+        /// <exception cref="ArgumentException">Incorrect type of <see cref="object"/> was passed.</exception>
+        public static Process[] Find(ProcessSearchMethod method, object value) {
+            var procs = new Process[0];
+            switch (method) {
+                case ProcessSearchMethod.TitleName:
+                    if (value is string == false) throw new ArgumentException("Incorrect value was passed compared to the method (" + method + ")");
+                    return Process.GetProcessesByName(value as string);
+                case ProcessSearchMethod.ProcessName:
+                    if (value is string == false) throw new ArgumentException("Incorrect value was passed compared to the method (" + method + ")");
+                    var s = value as string;
+                    return Process.GetProcesses().Where(p => p.ProcessName.Contains(s.Contains(".") ? s.Split('.')[0] : s)).ToArray();
+                case ProcessSearchMethod.Handle:
+                    if (value is IntPtr == false) throw new ArgumentException("Incorrect value was passed compared to the method ("+method+")");
+                    var ptr = (IntPtr) value;
+                    return Process.GetProcesses().Where(p => p.Handle.Equals(ptr)).ToArray();
+                case ProcessSearchMethod.ProcessInfo:
+                    if (value is ProcessInfo == false) throw new ArgumentException("Incorrect value was passed compared to the method (" + method + ")");
+                    var pi = value as ProcessInfo;
+                    var proc = pi.ToProcess();
+                    return proc == null ? new Process[0] : new[] {proc};
+                case ProcessSearchMethod.Process:
+                    if (value is Process == false) throw new ArgumentException("Incorrect value was passed compared to the method ("+method+")");
+                    var process = (Process)value;
+                    return Process.GetProcesses().Where(p => p.Id == process.Id && p.ProcessName == process.ProcessName && p.MachineName == process.MachineName).ToArray(); 
+
+                default:
+                    throw new ArgumentOutOfRangeException("method");
             }
         }
 
         /// <summary>
-        ///     Iterates through the open processes list and find if any of them is named by <paramref name="processName" />
+        ///     Iterates through the list of processes and if any fit the parameters, it returns true.
         /// </summary>
-        /// <param name="name">The name of the process as can be found at Window's Task Manager (Not in process tab)</param>
-        /// <returns>If exists</returns>
-        public static bool ExistsByName(string name) {
-            try {
-                Process[] procs = Process.GetProcessesByName(name);
-                return procs.Length > 0;
-            } catch {
-                return false;
-            }
+        /// <param name="method">The different methods you can use to find a process.</param>
+        /// <param name="value">The value that must fit into the method's object that can be found in the doc.</param>
+        /// <returns>The process exists</returns>
+        /// <exception cref="ArgumentException">Incorrect type of <see cref="object"/> was passed.</exception>
+        public static int Exists(ProcessSearchMethod method, object value) {
+            return Find(method, value).Length;
         }
 
         /// <summary>
-        ///     Iterates through the open processes list and find if any of them is named by <paramref name="processName" />
+        /// Converts the process into a <see cref="ProcessInfo"/> object.
         /// </summary>
-        /// <param name="processName">The name of the process as can be found at Window's Task Manager</param>
-        /// <returns>If exists</returns>
-        public static bool ExistsByProcName(string processName) {
-            return Process.GetProcesses().Any(p => p.ProcessName.Contains(processName.Contains(".") ? processName.Split('.')[0] : processName));
-        }
-
-        /// <summary>
-        ///     Finds the process based on the info, if not found null is returned.
-        /// </summary>
-        public static Process FindProcess(ProcessInfo info) { return Process.GetProcesses().FirstOrDefault(p => p.Id == info.UniqueID && p.MachineName == info.MachineName && p.ProcessName == info.Name); }
-
-        public static bool ProcessExists(Process process) {
-            try {
-                return Process.GetProcesses().Any(p => {
-                                                      try {
-                                                          if (p.Id == process.Id && p.ProcessName == process.ProcessName && p.MachineName == process.MachineName) 
-                                                              return true;
-                                                          return false;
-                                                      } catch {
-                                                          return false;
-                                                      }
-                                                  });
-            } catch {
-                return false;
-            }
-        }
-
+        /// <param name="proc"></param>
+        /// <returns></returns>
         public static ProcessInfo ToProcessInfo(this Process proc) { return new ProcessInfo(proc); }
+
+        public enum ProcessSearchMethod {
+            /// <summary>
+            ///     The title of the process
+            /// </summary>
+            TitleName,
+            /// <summary>
+            ///     The process name that can be observed at the task manager 'Processes' tab.
+            /// </summary>
+            ProcessName,
+            /// <summary>
+            ///     The handle of the process.
+            /// </summary>
+            Handle,
+            /// <summary>
+            ///     The <see cref="ProcessInfo"/> object
+            /// </summary>
+            ProcessInfo,
+            /// <summary>
+            ///     Finds the process because the object might refer to a dead object. use this to check or find if it is still alive.
+            /// </summary>
+            Process
+        }
+
+
     }
 }

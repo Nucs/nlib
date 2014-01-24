@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using nucs.SystemCore.String;
 
 namespace nucs.Windows.Processes {
@@ -20,7 +21,12 @@ namespace nucs.Windows.Processes {
             this.Name = Name;
             this.MachineName = MachineName;
         }
-
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((ProcessInfo) obj);
+        }
         public bool Equals(Process proc) {
             try {
                 return (UniqueID == proc.Id && Name == proc.ProcessName && MachineName == proc.MachineName);
@@ -29,16 +35,12 @@ namespace nucs.Windows.Processes {
             }
         }
 
-        public bool Equals(ProcessInfo proc) {
-            try {
-                return (UniqueID == proc.UniqueID && Name == proc.Name && MachineName == proc.MachineName);
-            } catch {
-                return false;
-            }
+        protected bool Equals(ProcessInfo proc) {
+            return UniqueID == proc.UniqueID && string.Equals(Name, proc.Name) && string.Equals(MachineName, proc.MachineName);
         }
 
         public bool Exists() {
-            return ProcessFinder.ProcessExists(this);
+            return ProcessFinder.Exists(ProcessFinder.ProcessSearchMethod.ProcessInfo, this) > 0;
         }
 
         /// <summary>
@@ -46,7 +48,7 @@ namespace nucs.Windows.Processes {
         /// </summary>
         /// <returns></returns>
         public Process ToProcess() {
-            return ProcessFinder.FindProcess(this);
+            return ProcessFinder.Find(ProcessFinder.ProcessSearchMethod.ProcessInfo, this).FirstOrDefault();
         }
 
         public bool WaitForExit(uint timeout = 0) {
@@ -65,6 +67,15 @@ namespace nucs.Windows.Processes {
 
         public override string ToString() {
             return Name + "↔" + UniqueID + "↔" + MachineName;
+        }
+
+        public override int GetHashCode() {
+            unchecked {
+                int hashCode = UniqueID;
+                hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (MachineName != null ? MachineName.GetHashCode() : 0);
+                return hashCode;
+            }
         }
 
         public static ProcessInfo TryParse(string toString) {
