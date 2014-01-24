@@ -34,7 +34,7 @@ namespace nucs.Windows.Processes {
             switch (method) {
                 case ProcessSearchMethod.TitleName:
                     if (value is string == false) throw new ArgumentException("Incorrect value was passed compared to the method (" + method + ")");
-                    return Process.GetProcessesByName(value as string);
+                    return Process.GetProcesses().Where(p => p.MainWindowTitle.ToLowerInvariant().Contains((value as string).ToLowerInvariant())).ToArray();
                 case ProcessSearchMethod.ProcessName:
                     if (value is string == false) throw new ArgumentException("Incorrect value was passed compared to the method (" + method + ")");
                     var s = value as string;
@@ -75,30 +75,27 @@ namespace nucs.Windows.Processes {
         /// <param name="proc"></param>
         /// <returns></returns>
         public static ProcessInfo ToProcessInfo(this Process proc) { return new ProcessInfo(proc); }
-
-        public enum ProcessSearchMethod {
-            /// <summary>
-            ///     The title of the process
-            /// </summary>
-            TitleName,
-            /// <summary>
-            ///     The process name that can be observed at the task manager 'Processes' tab.
-            /// </summary>
-            ProcessName,
-            /// <summary>
-            ///     The handle of the process.
-            /// </summary>
-            Handle,
-            /// <summary>
-            ///     The <see cref="ProcessInfo"/> object
-            /// </summary>
-            ProcessInfo,
-            /// <summary>
-            ///     Finds the process because the object might refer to a dead object. use this to check or find if it is still alive.
-            /// </summary>
-            Process
-        }
-
-
+    }
+    public enum ProcessSearchMethod {
+        /// <summary>
+        ///     The title of the process
+        /// </summary>
+        TitleName,
+        /// <summary>
+        ///     The process name that can be observed at the task manager 'Processes' tab.
+        /// </summary>
+        ProcessName,
+        /// <summary>
+        ///     The handle of the process.
+        /// </summary>
+        Handle,
+        /// <summary>
+        ///     The <see cref="ProcessInfo"/> object
+        /// </summary>
+        ProcessInfo,
+        /// <summary>
+        ///     Finds the process because the object might refer to a dead object. use this to check or find if it is still alive.
+        /// </summary>
+        Process
     }
 }

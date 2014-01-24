@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using nucs.SystemCore.String;
 
@@ -8,12 +9,15 @@ namespace nucs.Windows.Processes {
         public string Name { get; private set; }
         public string MachineName { get; private set; }
 
+        public IntPtr Handle;
+
         public ProcessInfo(Process proc) {
             if (proc == null)
                 return;
             UniqueID = proc.Id;
             Name = proc.ProcessName;
             MachineName = proc.MachineName;
+            Handle = proc.Handle;
         }
 
         public ProcessInfo(int UniqueID, string Name, string MachineName) {
@@ -40,7 +44,7 @@ namespace nucs.Windows.Processes {
         }
 
         public bool Exists() {
-            return ProcessFinder.Exists(ProcessFinder.ProcessSearchMethod.ProcessInfo, this) > 0;
+            return ProcessFinder.Exists(ProcessSearchMethod.ProcessInfo, this) > 0;
         }
 
         /// <summary>
@@ -48,7 +52,7 @@ namespace nucs.Windows.Processes {
         /// </summary>
         /// <returns></returns>
         public Process ToProcess() {
-            return ProcessFinder.Find(ProcessFinder.ProcessSearchMethod.ProcessInfo, this).FirstOrDefault();
+            return ProcessFinder.Find(ProcessSearchMethod.ProcessInfo, this).FirstOrDefault();
         }
 
         public bool WaitForExit(uint timeout = 0) {
