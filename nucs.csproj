@@ -203,6 +203,12 @@
     <Compile Include="Reduant\Network\Commons.cs" />
     <Compile Include="SystemCore\Drawing\ColorExtensions.cs" />
     <Compile Include="SystemCore\Drawing\RectangleExtensions.cs" />
+    <Compile Include="SystemCore\Drawing\SnippingTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SystemCore\Drawing\SnippingTool.Designer.cs">
+      <DependentUpon>SnippingTool.cs</DependentUpon>
+    </Compile>
     <Compile Include="SystemCore\UriExtensions.cs" />
     <Compile Include="Threading\SleepUtils.cs" />
     <Compile Include="Threading\TimeLimitedInspector.cs" />
