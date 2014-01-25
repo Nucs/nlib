@@ -145,6 +145,7 @@
     <Compile Include="Botlib\Utility.cs" />
     <Compile Include="Botlib\Window.cs" />
     <Compile Include="Botting\BotLib.cs" />
+    <Compile Include="Botting\Pixel.cs" />
     <Compile Include="Business\PetaPocoRepository.cs" />
     <Compile Include="Collections\ArrayQueue.cs" />
     <Compile Include="Collections\Collector.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="Network\NetCommsExtension.cs" />
     <Compile Include="Reduant\Network\BooleanHolder.cs" />
     <Compile Include="Reduant\Network\Commons.cs" />
+    <Compile Include="SystemCore\Drawing\ColorExtensions.cs" />
     <Compile Include="SystemCore\Drawing\RectangleExtensions.cs" />
     <Compile Include="SystemCore\UriExtensions.cs" />
     <Compile Include="Threading\SleepUtils.cs" />

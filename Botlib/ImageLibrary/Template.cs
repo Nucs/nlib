@@ -225,7 +225,7 @@ namespace BotSuite.ImageLibrary {
                         for (Int32 referenceX = 0; referenceX < Ref.Width; referenceX++) {
                             for (Int32 referenceY = 0; referenceY < Ref.Height; referenceY++) {
 
-                                
+
 
                                 CurrentInnerPictureColor = Ref[referenceX, referenceY];
                                 if (CurrentInnerPictureColor.Equals(DontCareBrush.Color)) //checks for /DC/ pixel
@@ -243,20 +243,20 @@ namespace BotSuite.ImageLibrary {
                             var rec = new Rectangle(originalX, originalY, Ref.Width, Ref.Height);
                             RetVal.Add(rec);
                             ToSkip.Add(rec);
-                        
+
                         }
-                        
+
                     }
-                _continue_nextpixel_y:
-                        if (false) ;
+                    _continue_nextpixel_y:
+                    if (false) ;
                 }
                 _continue_rectintersect_x:
-                        if (false) ;
+                if (false) ;
             }
             return RetVal;
         }
 
-        /// <summary>
+/*        /// <summary>
         /// Find the location of the the first found <paramref name="needle"/>s inside of <paramref name="haystack"/>
         /// </summary>
         /// <param name="haystack">The image that is suppose to contain <paramref name="needle"/></param>
@@ -409,5 +409,6 @@ namespace BotSuite.ImageLibrary {
         Down,
         Left,
         Right
+    }*/
     }
 }
