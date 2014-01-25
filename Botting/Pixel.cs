@@ -2,7 +2,7 @@
 using System.Drawing;
 using nucs.SystemCore.Drawing;
 
-namespace MuAutomater {
+namespace nucs.Botting {
     public struct Pixel : IDisposable {
         public Byte? Blue;
         public Byte? Green;
