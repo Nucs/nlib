@@ -61,11 +61,58 @@ namespace nucs.SystemCore.Drawing {
             return null;
         }
 
+        /// <summary>
+        /// Takes screenshot of the window (supports multiple monitors) and then lets user to select the wanted area and returns that area.
+        /// Also returns the rectangle of the selected part inside of the window.
+        /// </summary>
+        public static Image Snip(IntPtr hWnd, out Rectangle rect, PixelFormat format = PixelFormat.Format24bppRgb) {
+            NativeWin32.SetForegroundWindow(hWnd);
+            var p = NativeWin32.GetWindowRect(hWnd);
+            var bmp = ScreenShot.Create(hWnd, format);
+            Graph = Graphics.FromImage(bmp);
+            Graph.SmoothingMode = SmoothingMode.None;
+            
+            using (var snipper = new SnippingTool(bmp) {SpecificWindowMode = true}) {
+                snipper.Location = new Point(p.Left, p.Top);
+                NativeWin32.SetForegroundWindow(snipper.Handle);
+                 
+                if (snipper.ShowDialog() == DialogResult.OK) {
+                    rect = snipper.rcSelect;
+                    return snipper.Image;
+                }
+            }
+            rect = Rectangle.Empty;
+            return null;
+        }
+
+        /// <summary>
+        /// Takes screenshot of the screen (supports multiple monitors) and then lets user to select the wanted area and returns that area.
+        /// Also returns the rectangle of the selected part inside of the window.
+        /// </summary>
+        public static Image Snip(out Rectangle rect, PixelFormat format = PixelFormat.Format24bppRgb) {
+            MultiScreenSize m_MultiScreenSize = FindMultiScreenSize();
+            var bmp = new Bitmap(m_MultiScreenSize.maxRight - m_MultiScreenSize.minX, m_MultiScreenSize.maxBottom - m_MultiScreenSize.minY, format);
+            Graph = Graphics.FromImage(bmp);
+            Graph.SmoothingMode = SmoothingMode.None;
+            BitmapSize = bmp.Size;
+            using (var snipper = new SnippingTool(bmp)) {
+                snipper.Location = new Point(m_MultiScreenSize.minX, m_MultiScreenSize.minY);
+
+                if (snipper.ShowDialog() == DialogResult.OK) {
+                    rect = snipper.rcSelect;
+                    return snipper.Image;
+                }
+            }
+
+            rect = Rectangle.Empty;
+            return null;
+        }
+
 
         private static Size BitmapSize;
         private static Graphics Graph;
         private Point pntStart;
-        private Rectangle rcSelect;
+        public Rectangle rcSelect;
 
         /// <summary>
         /// Wether you want to use it on specific size and set <see cref="Form.Location"/> after displaying or go full screen.
@@ -79,10 +126,18 @@ namespace nucs.SystemCore.Drawing {
             this.FormBorderStyle = FormBorderStyle.None;
             this.StartPosition = FormStartPosition.Manual;
             this.DoubleBuffered = true;
+            this.TopMost = true;
         }
 
-        public Image Image { get; set; }
+        /// <summary>
+        /// The snipped picture.
+        /// </summary>
+        public Image Image { get; private set; }
 
+        /// <summary>
+        /// The rectangle of the image inside of the window or screen.
+        /// </summary>
+        public Rectangle ImageRectangle { get; private set; }
         private static MultiScreenSize FindMultiScreenSize() {
             int minX = Screen.AllScreens[0].Bounds.X;
             int minY = Screen.AllScreens[0].Bounds.Y;
@@ -109,6 +164,7 @@ namespace nucs.SystemCore.Drawing {
             }
             return new MultiScreenSize {minX = minX, minY = minY, maxBottom = maxBottom, maxRight = maxRight};
         }
+
 
         protected override void OnMouseDown(MouseEventArgs e) {
             // Start the snip on mouse down'

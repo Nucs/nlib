@@ -42,7 +42,23 @@ namespace nucs.Windows.Processes {
                 case ProcessSearchMethod.Handle:
                     if (value is IntPtr == false) throw new ArgumentException("Incorrect value was passed compared to the method ("+method+")");
                     var ptr = (IntPtr) value;
-                    return Process.GetProcesses().Where(p => p.Handle.Equals(ptr)).ToArray();
+                    return Process.GetProcesses().Where(p => {
+                                                            try {
+                                                                return p.Handle.Equals(ptr);
+                                                            }
+                                                            catch { return false;}
+                                                        }).ToArray();
+                case ProcessSearchMethod.WindowHandle:
+                    if (value is IntPtr == false) throw new ArgumentException("Incorrect value was passed compared to the method (" + method + ")");
+                    var ptrr = (IntPtr)value;
+                    return Process.GetProcesses().Where(p =>
+                    {
+                        try
+                        {
+                            return p.MainWindowHandle.Equals(ptrr);
+                        }
+                        catch { return false; }
+                    }).ToArray();
                 case ProcessSearchMethod.ProcessInfo:
                     if (value is ProcessInfo == false) throw new ArgumentException("Incorrect value was passed compared to the method (" + method + ")");
                     var pi = value as ProcessInfo;
@@ -96,6 +112,11 @@ namespace nucs.Windows.Processes {
         /// <summary>
         ///     Finds the process because the object might refer to a dead object. use this to check or find if it is still alive.
         /// </summary>
-        Process
+        Process,
+        /// <summary>
+        ///     The window handle (hWnd) of the process.
+        ///     
+        /// </summary>
+        WindowHandle
     }
 }
