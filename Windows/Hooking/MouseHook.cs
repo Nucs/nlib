@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Text;
-using System.Windows.Forms;
+using System.Drawing;
 using System.Runtime.InteropServices;
-using nucs.Windows.Hooking;
+using System.Windows.Forms;
 
-namespace MouseKeyboardLibrary {
+namespace nucs.Windows.Hooking {
+
+    public delegate void MouseClickEventHandler(object sender, Point location);
     /// <summary>
     /// Captures global mouse events
     /// </summary>
-    public class MouseHook : AbstractGlobalHook {
+    public class MouseHook : AbstractGlobalHook, IDisposable {
         #region MouseEventType Enum
 
         private enum MouseEventType {
@@ -29,8 +30,8 @@ namespace MouseKeyboardLibrary {
         public event MouseEventHandler MouseMove;
         public event MouseEventHandler MouseWheel;
 
-        public event EventHandler Click;
-        public event EventHandler DoubleClick;
+        public event MouseClickEventHandler Click;
+        public event MouseClickEventHandler DoubleClick;
 
         #endregion
 
@@ -45,7 +46,7 @@ namespace MouseKeyboardLibrary {
         #region Methods
 
         protected override int HookCallbackProcedure(int nCode, int wParam, IntPtr lParam) {
-            if (nCode > -1 && (MouseDown != null || MouseUp != null || MouseMove != null)) {
+            if (nCode > -1 && (MouseDown != null || MouseUp != null || MouseMove != null || Click != null || DoubleClick != null)) {
                 MouseLLHookStruct mouseHookStruct =
                     (MouseLLHookStruct) Marshal.PtrToStructure(lParam, typeof (MouseLLHookStruct));
 
@@ -70,13 +71,13 @@ namespace MouseKeyboardLibrary {
                         break;
                     case MouseEventType.MouseUp:
                         if (Click != null)
-                            Click(this, new EventArgs());
+                            Click(this, new Point(mouseHookStruct.pt.x, mouseHookStruct.pt.y));
                         if (MouseUp != null)
                             MouseUp(this, e);
                         break;
                     case MouseEventType.DoubleClick:
                         if (DoubleClick != null)
-                            DoubleClick(this, new EventArgs());
+                            DoubleClick(this, new Point(mouseHookStruct.pt.x, mouseHookStruct.pt.y));
                         break;
                     case MouseEventType.MouseWheel:
                         if (MouseWheel != null)
@@ -137,5 +138,14 @@ namespace MouseKeyboardLibrary {
         }
 
         #endregion
+
+        public void Dispose() {
+            if (IsStarted) Stop();
+            this.MouseWheel = null;
+            this.MouseUp = null;
+            this.MouseMove = null;
+            this.Click = null;
+            this.MouseDown = null;
+        }
     }
 }
