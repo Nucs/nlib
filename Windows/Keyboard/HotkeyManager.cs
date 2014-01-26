@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Linq;
-using MouseKeyboardLibrary;
 using nucs.Windows.Hooking;
 
 namespace nucs.Windows.Keyboard {

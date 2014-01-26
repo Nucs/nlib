@@ -8,10 +8,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using nucs.Windows;
 
 namespace BotSuite {
     /// <summary>
@@ -27,7 +29,7 @@ namespace BotSuite {
         /// </code>
         /// </example>
         /// <returns>bitmap of captured screen</returns>
-        public static Bitmap Create() { return Create(0, 0, Screen.PrimaryScreen.Bounds.Size.Width, Screen.PrimaryScreen.Bounds.Size.Height); }
+        public static Bitmap Create(PixelFormat format = PixelFormat.Format24bppRgb) { return Create(0, 0, Screen.PrimaryScreen.Bounds.Size.Width, Screen.PrimaryScreen.Bounds.Size.Height, format); }
 
         /// <summary>
         /// creates a screenshot from a hidden window
@@ -71,6 +73,7 @@ namespace BotSuite {
         /// <param name="top"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
+        /// <param name="format"></param>
         /// <example>
         /// <code>
         /// <![CDATA[
@@ -80,11 +83,11 @@ namespace BotSuite {
         /// </code>
         /// </example>
         /// <returns>bitmap of captured screen</returns>
-        public static Bitmap Create(Int32 left, Int32 top, Int32 width, Int32 height) {
+        public static Bitmap Create(Int32 left, Int32 top, Int32 width, Int32 height, PixelFormat format = PixelFormat.Format24bppRgb) {
             Bitmap bmpScreen = null;
             Graphics g = null;
             try {
-                bmpScreen = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                bmpScreen = new Bitmap(width, height, format);
                 g = Graphics.FromImage(bmpScreen);
                 g.CopyFromScreen(left, top, 0, 0, new Size(width, height));
             } catch (Exception) {
@@ -109,13 +112,14 @@ namespace BotSuite {
         /// </code>
         /// </example>
         /// <param name="windowHandle">handle of window</param>
+        /// <param name="format"></param>
         /// <returns>captured screen</returns>
-        public static Bitmap Create(IntPtr windowHandle) {
-            NativeMethods.RECT WINDOW = new NativeMethods.RECT();
+        public static Bitmap Create(IntPtr windowHandle, PixelFormat format = PixelFormat.Format24bppRgb) {
+            var WINDOW = new NativeWin32.RECT();
             NativeMethods.GetWindowRect(windowHandle, out WINDOW);
             Int32 winWidth = WINDOW.Right - WINDOW.Left;
             Int32 winHeight = WINDOW.Bottom - WINDOW.Top;
-            return Create(WINDOW.Left, WINDOW.Top, winWidth, winHeight);
+            return Create(WINDOW.Left, WINDOW.Top, winWidth, winHeight, format);
         }
 
         /// <summary>
