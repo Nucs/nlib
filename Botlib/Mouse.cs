@@ -7,13 +7,12 @@
  * *************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
+using BotSuite;
+using nucs.Windows;
 
-namespace BotSuite {
+namespace nucs.Botlib {
     /// <summary>
     /// class for simulate mouse actions like moving or clicking
     /// </summary>
@@ -235,7 +234,7 @@ namespace BotSuite {
         /// <param name="steps">points of pathpolygons</param>
         /// <returns>true/false</returns>
         public static Boolean MoveRelativeToWindow(IntPtr windowHandle, Int32 targetX, Int32 targetY, Boolean human = true, Int32 steps = 100) {
-            NativeMethods.RECT WINDOW = new NativeMethods.RECT();
+            var WINDOW = new NativeWin32.RECT();
 
             if (!NativeMethods.GetWindowRect(windowHandle, out WINDOW))
                 return false;
@@ -260,7 +259,7 @@ namespace BotSuite {
         /// <returns>Point position</returns>
         public static Point GetPositionRelativeToWindow(IntPtr window) {
             Point position = Cursor.Position;
-            NativeMethods.RECT WINDOW = new NativeMethods.RECT();
+            NativeWin32.RECT WINDOW = new NativeWin32.RECT();
             NativeMethods.GetWindowRect(window, out WINDOW);
             return new Point(position.X - WINDOW.Left, position.Y - WINDOW.Top);
         }

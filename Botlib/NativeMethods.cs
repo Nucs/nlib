@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using nucs.Windows;
 
 namespace BotSuite {
     /// <summary>
@@ -46,15 +47,7 @@ namespace BotSuite {
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct RECT {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
-        }
+        internal static extern bool GetWindowRect(IntPtr hWnd, out NativeWin32.RECT lpRect);
 
         [DllImport("user32.dll")]
         internal static extern short GetAsyncKeyState(System.Windows.Forms.Keys vKey);

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
+using nucs.Botting;
 using nucs.Windows.Keyboard;
 using nucs.Windows.Mouse;
 
@@ -32,33 +34,47 @@ namespace nucs.Windows {
         [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
+
         [DllImport("user32", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool RegisterHotKey(IntPtr hwnd, int uid, uint fsModifiers, uint vk);
+
         [DllImport("user32", SetLastError = true)]
         public static extern bool UnregisterHotKey(IntPtr hwnd, int uid);
+
         [DllImport("kernel32", SetLastError = true)]
         public static extern short GlobalAddAtom(string lpString);
+
         [DllImport("kernel32", SetLastError = true)]
         public static extern short GlobalDeleteAtom(short nAtom);
+
         [DllImport("kernel32")]
         public static extern bool AllocConsole();
+
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool AttachConsole(int dwProcessId);
+
         [DllImport("user32.dll")]
         public static extern int ToUnicodeEx(uint wVirtKey, uint wScanCode, byte[] lpKeyState, [Out, MarshalAs(UnmanagedType.LPWStr)] System.Text.StringBuilder pwszBuff, int cchBuff, uint wFlags, IntPtr dwhkl);
+
         [DllImport("user32.dll")]
         public static extern bool GetKeyboardState(byte[] lpKeyState);
+
         [DllImport("user32.dll")]
         public static extern uint MapVirtualKey(uint uCode, uint uMapType);
+
         [DllImport("user32.dll")]
         public static extern IntPtr GetKeyboardLayout(UIntPtr idThread);
+
         [DllImport("user32.dll")]
         public static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr ProcessId);
+
         [DllImport("coredll.dll", SetLastError = true)]
         public static extern Int32 GetLastError();
+
         [DllImport("kernel32.dll")]
         public static extern IntPtr LoadLibrary(string lpFileName);
+
         public static uint GetTopMostThreadId() {
             return GetWindowThreadProcessId(GetForegroundWindow(), IntPtr.Zero);
         }
@@ -80,6 +96,7 @@ namespace nucs.Windows {
         /// </remarks>
         [DllImport("User32.dll")]
         internal static extern uint SendInput(uint numberOfInputs, INPUT[] inputs, int sizeOfInputStructure);
+
         /// <summary>
         /// The GetAsyncKeyState function determines whether a key is up or down at the time the function is called, and whether the key was pressed after a previous call to GetAsyncKeyState. (See: http://msdn.microsoft.com/en-us/library/ms646293(VS.85).aspx)
         /// 
@@ -121,6 +138,7 @@ namespace nucs.Windows {
         /// </remarks>
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true, SetLastError = true)]
         public static extern short GetAsyncKeyState(ushort virtualKeyCode);
+
         /// <summary>
         /// The GetKeyState function retrieves the status of the specified virtual key. The status specifies whether the key is up, down, or toggled (on, off alternating each time the key is pressed). (See: http://msdn.microsoft.com/en-us/library/ms646301(VS.85).aspx)
         /// 
@@ -152,6 +170,7 @@ namespace nucs.Windows {
         /// </remarks>
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true, SetLastError = true)]
         public static extern short GetKeyState(int virtualKeyCode);
+
         /// <summary>
         /// The GetMessageExtraInfo function retrieves the extra message information for the current thread. Extra message information is an application- or driver-defined value associated with the current thread's message queue.
         /// 
@@ -167,28 +186,26 @@ namespace nucs.Windows {
 
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct POINTAPI
-        {
+        public struct POINTAPI {
             public int x;
             public int y;
         }
 
         // Type definitions for Windows' basic types.
-        public const int ANYSIZE_ARRAY = unchecked((int)(1));
+        public const int ANYSIZE_ARRAY = unchecked((int) (1));
+
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct RECT
-        {
-            public int left;
-            public int top;
-            public int right;
-            public int bottom;
+        public struct RECT {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
         }
 
         /// <summary>
         /// Gets the text of the specified window.
         /// </summary>
-        internal static string GetWindowText(IntPtr hWnd)
-        {
+        internal static string GetWindowText(IntPtr hWnd) {
             int cch;
             IntPtr lpString;
             string sResult;
@@ -197,10 +214,9 @@ namespace nucs.Windows {
             if (IsWindow(hWnd) == false)
                 return "";
 
-            if (IsWindowUnicode(hWnd) != 0)
-            {
+            if (IsWindowUnicode(hWnd) != 0) {
                 // Allocate new Unicode string
-                lpString = Marshal.AllocHGlobal((cch = (GetWindowTextLengthW(hWnd) + 1)) * 2);
+                lpString = Marshal.AllocHGlobal((cch = (GetWindowTextLengthW(hWnd) + 1))*2);
 
                 // Get window Unicode text
                 GetWindowTextW(hWnd, lpString, cch);
@@ -214,9 +230,7 @@ namespace nucs.Windows {
 
                 // Return managed string
                 return sResult;
-            }
-            else
-            {
+            } else {
                 // Allocate new ANSI string
                 lpString = Marshal.AllocHGlobal((cch = (GetWindowTextLengthA(hWnd) + 1)));
 
@@ -238,8 +252,7 @@ namespace nucs.Windows {
         /// <summary>
         /// Gets the class name of the specified window.
         /// </summary>
-        internal static string GetClassName(IntPtr hWnd)
-        {
+        internal static string GetClassName(IntPtr hWnd) {
             const int windowClassNameLength = 255;
             int cch;
             IntPtr lpString;
@@ -249,10 +262,9 @@ namespace nucs.Windows {
             if (IsWindow(hWnd) == false)
                 return "";
 
-            if (IsWindowUnicode(hWnd) != 0)
-            {
+            if (IsWindowUnicode(hWnd) != 0) {
                 // Allocate new Unicode string
-                lpString = Marshal.AllocHGlobal((cch = (windowClassNameLength + 1)) * 2);
+                lpString = Marshal.AllocHGlobal((cch = (windowClassNameLength + 1))*2);
 
                 // Get window class Unicode text
                 GetClassNameW(hWnd, lpString, cch);
@@ -266,9 +278,7 @@ namespace nucs.Windows {
 
                 // Return managed string
                 return sResult;
-            }
-            else
-            {
+            } else {
                 // Allocate new ANSI string
                 lpString = Marshal.AllocHGlobal((cch = (GetWindowTextLengthA(hWnd) + 1)));
 
@@ -290,41 +300,39 @@ namespace nucs.Windows {
         /// <summary>
         /// Retrieves the window from the client point.
         /// </summary>
-        internal static IntPtr WindowFromPoint(IntPtr hClientWnd, int xPoint, int yPoint)
-        {
+        internal static IntPtr WindowFromPoint(IntPtr hClientWnd, int xPoint, int yPoint) {
             POINTAPI pt;
 
             pt.x = xPoint;
             pt.y = yPoint;
             ClientToScreen(hClientWnd, ref pt);
 
-            return (IntPtr)WindowFromPoint(pt.x, pt.y);
+            return (IntPtr) WindowFromPoint(pt.x, pt.y);
         }
 
         /// <summary>
         /// Highlights the specified window.
         /// </summary>
-        internal static bool HighlightWindow(IntPtr hWnd)
-        {
-            IntPtr hDC;                   // The DC of the window.
-            RECT rt = new RECT();         // Rectangle area of the window.
+        internal static bool HighlightWindow(IntPtr hWnd) {
+            IntPtr hDC; // The DC of the window.
+            RECT rt; // Rectangle area of the window.
 
             // Get the window DC of the window.
-            if ((hDC = (IntPtr)GetWindowDC(hWnd)) == IntPtr.Zero)
+            if ((hDC = (IntPtr) GetWindowDC(hWnd)) == IntPtr.Zero)
                 return false;
 
             // Get the screen coordinates of the rectangle of the window.
-            GetWindowRect(hWnd, ref rt);
-            rt.right -= rt.left;
-            rt.left = 0;
-            rt.bottom -= rt.top;
-            rt.top = 0;
+            GetWindowRect(hWnd, out rt);
+            rt.Right -= rt.Left;
+            rt.Left = 0;
+            rt.Bottom -= rt.Top;
+            rt.Top = 0;
 
             // Draw a border in the DC covering the entire window area of the window.
-            IntPtr hRgn = (IntPtr)CreateRectRgnIndirect(ref rt);
+            IntPtr hRgn = (IntPtr) CreateRectRgnIndirect(ref rt);
             GetWindowRgn(hWnd, hRgn);
             SetROP2(hDC, R2_NOT);
-            FrameRgn(hDC, hRgn, (IntPtr)GetStockObject(WHITE_BRUSH), 3, 3);
+            FrameRgn(hDC, hRgn, (IntPtr) GetStockObject(WHITE_BRUSH), 3, 3);
             DeleteObject(hRgn);
 
             // Finally release the DC.
@@ -336,8 +344,7 @@ namespace nucs.Windows {
         /// <summary>
         /// Determines whether the two windows are related.
         /// </summary>
-        internal static bool IsRelativeWindow(IntPtr hWnd, IntPtr hRelativeWindow, bool bProcessAncestor)
-        {
+        internal static bool IsRelativeWindow(IntPtr hWnd, IntPtr hRelativeWindow, bool bProcessAncestor) {
             int dwProcess = new int(), dwProcessOwner = new int();
             int dwThread = new int(), dwThreadOwner = new int();
             ;
@@ -358,6 +365,18 @@ namespace nucs.Windows {
             if (bProcessAncestor)
                 return (dwProcess == dwProcessOwner);
             return (dwThread == dwThreadOwner);
+        }
+
+        /// <summary>
+        /// Gets the rectangle of a window using it's handle.
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <returns></returns>
+        public static Rectangle GetWindowRect(IntPtr hWnd) {
+            RECT rect;
+            if(GetWindowRect(hWnd, out rect) == false)
+                return Rectangle.Empty;
+            return new Rectangle {X = rect.Left, Y = rect.Top, Width = rect.Right - rect.Left + 1, Height = rect.Bottom - rect.Top + 1};
         }
 
 
@@ -404,7 +423,8 @@ namespace nucs.Windows {
         public static extern int GetWindowDC(IntPtr hWnd);
 
         [DllImport("user32", EntryPoint = "GetWindowRect", SetLastError = true, CharSet = CharSet.Auto, ExactSpelling = false, CallingConvention = CallingConvention.Winapi)]
-        public static extern int GetWindowRect(IntPtr hWnd, ref RECT lpRect);
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
         [DllImport("gdi32", EntryPoint = "CreateRectRgnIndirect", SetLastError = true, CharSet = CharSet.Auto, ExactSpelling = false, CallingConvention = CallingConvention.Winapi)]
         public static extern int CreateRectRgnIndirect(ref RECT lpRect);

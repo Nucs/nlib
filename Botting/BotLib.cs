@@ -1,5 +1,8 @@
 ﻿/* BOTTING LIBRARY NAMESPACES */
 
+using BotSuite;
+using nucs.Windows;
+
 #region NAMESPACES
 
 using System;
@@ -38,7 +41,7 @@ namespace nucs.Botting {
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+        private static extern bool GetWindowRect(IntPtr hWnd, out NativeWin32.RECT lpRect);
 
         [DllImport("User32.dll")]
         public static extern int ShowWindow(IntPtr hwnd, int nCmdShow);
@@ -49,14 +52,14 @@ namespace nucs.Botting {
         [DllImport("user32.dll")]
         private static extern short GetAsyncKeyState(Keys vKey);
 
-        [StructLayout(LayoutKind.Sequential)]
+        /*[StructLayout(LayoutKind.Sequential)]
         public struct RECT {
             //This will contain the location of the 4 corners of our window
             public int Left;
             public int Top;
             public int Right;
             public int Bottom;
-        }
+        }*/
 
         #endregion
 
@@ -90,7 +93,7 @@ namespace nucs.Botting {
         /// <returns>Bitmap of the window</returns>
         public static Bitmap getScreenshotOfWindow(string windowTitle) {
             //This will hold our window's information
-            var WINDOW = new RECT();
+            var WINDOW = new NativeWin32.RECT();
 
             //Get the window information
             IntPtr window = getWindowHandle(windowTitle);
@@ -506,7 +509,7 @@ namespace nucs.Botting {
         /// <returns>True or false depending on outcome</returns>
         public static bool moveMouseRelative(IntPtr windowHandle, Point target, bool human = true, int steps = 100) {
             //Will sore window details
-            var WINDOW = new RECT();
+            var WINDOW = new NativeWin32.RECT();
 
             //Get window details
             if (!GetWindowRect(windowHandle, out WINDOW))
@@ -555,7 +558,7 @@ namespace nucs.Botting {
         /// <returns>True or false on outcome</returns>
         public static bool dragMouseRelative(IntPtr windowHandle, Point start, Point end, bool human = true, int steps = 100) {
             //Will sore window details
-            var WINDOW = new RECT();
+            var WINDOW = new NativeWin32.RECT();
 
             //Get window details
             if (!GetWindowRect(windowHandle, out WINDOW))
