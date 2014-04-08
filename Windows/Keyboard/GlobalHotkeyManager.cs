@@ -159,7 +159,6 @@ namespace nucs.Windows.Keyboard {
             hke.Hotkey = manager.Registers.FirstOrDefault(hk => hk.Key == key && ((hk.Modifiers & 0xf) == (uint) modifiers));
             return hke.Hotkey == null ? null : hke;
         }
-
     }
 
     public class Hotkey {

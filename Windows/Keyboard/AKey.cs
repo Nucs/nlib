@@ -131,10 +131,6 @@ namespace nucs.Windows.Keyboard {
 
         #endregion
 
-        #region Private
-
-        #endregion
-
         public void Dispose() {}
     }
 }

