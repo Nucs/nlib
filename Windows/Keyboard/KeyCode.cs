@@ -320,6 +320,7 @@ namespace nucs.Windows.Keyboard {
         #endregion
     }
 
+    [Serializable]
     public enum KeyCodeModifiers : ushort {
         Shift = (ushort)16,
         Control = (ushort)17,
@@ -340,6 +341,8 @@ namespace nucs.Windows.Keyboard {
         LAlt = (ushort)164,
         RAlt = (ushort)165
     }
+
+    [Serializable]
     public enum KeyCodeKeys : ushort {
         None = 0,
         LButton = (ushort)1,
@@ -514,6 +517,7 @@ namespace nucs.Windows.Keyboard {
         OEM_Clear = (ushort)254,
     }
 
+    [Serializable]
     public enum KeyCode : ushort {
         None = 0,
         LButton = (ushort)1,

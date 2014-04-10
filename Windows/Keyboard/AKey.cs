@@ -10,6 +10,8 @@ using nucs.SystemCore.String;
 
 namespace nucs.Windows.Keyboard {
 
+
+    [Serializable]
     /// <summary>
     /// My custom way of handling keys, and yes - Im sick with recreating things. Also this object is immutable
     /// </summary>
@@ -63,6 +65,11 @@ namespace nucs.Windows.Keyboard {
             Key = key;
         }
        
+        public AKey(string modifiers, string key) {
+            Modifiers = UnstringifyModifiers(modifiers);
+            Key = (KeyCode)Enum.Parse(typeof (KeyCode), key);
+        }
+
         #endregion
 
         #region Methods
@@ -77,7 +84,7 @@ namespace nucs.Windows.Keyboard {
         /// <summary>
         /// Translates a string such as "RControl+LAlt+..." into a list of Keys {Keys.RControl, Keys.LMenu}
         /// </summary>
-        public List<KeyCode> UnstringifyModifiers(string mods) {
+        public static List<KeyCode> UnstringifyModifiers(string mods) {
             return mods.Split('+').Select(s => Enum.Parse(typeof(KeyCode), s)).Where(o => o != null).Select(o => (KeyCode)o).ToList();
         }
 
