@@ -144,6 +144,41 @@ namespace nucs.Controls {
         [DefaultValue(false)]
         public bool IgnoreOnReadyForModifications { get; set; }
 
+        private ContextMenuDisplayMode _contextMenuMode = ContextMenuDisplayMode.OnCell;
+        public ContextMenuDisplayMode ContextMenuMode {
+            get { return _contextMenuMode; }
+            set { _contextMenuMode = value; }
+        }
+
+        /// <summary>
+        /// Right click menu context, pass null to disable.
+        /// </summary>
+        public override ContextMenu ContextMenu {
+            get { return base.ContextMenu; }
+            set {
+                if (value == null) {
+                    this.MouseDown -= _invokeOnClick;
+                    return;
+                }
+                if (ContextMenu == null)
+                    this.MouseDown += _invokeOnClick;
+                base.ContextMenu = value;
+            }
+        }
+
+        private void _invokeOnClick(object sender, MouseEventArgs e) {
+            var hti = HitTest(e.X, e.Y);
+            //if (Rows.Count-1 > hti.RowIndex) //index 5 clicked
+            if (_contextMenuMode == ContextMenuDisplayMode.OnCell && hti.RowIndex != -1 && hti.ColumnIndex != -1) {
+                ClearSelection();
+                Rows[hti.RowIndex].Selected = true;
+                ContextMenu.Show(this, e.Location);
+            } else if (_contextMenuMode == ContextMenuDisplayMode.Anywhere)
+                ContextMenu.Show(this, e.Location);
+            
+            
+
+        }
 
         #region Events
 
@@ -487,5 +522,10 @@ namespace nucs.Controls {
         }
 
         #endregion
+    }
+
+    public enum ContextMenuDisplayMode {
+        Anywhere,
+        OnCell
     }
 }
