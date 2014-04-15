@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="0e11e320fdd94b3abe94c38890758d3c" Name="Diagram1">
+        <EntityTypeShape EntityType="EntityFrameworkTestModel.BulkCopyTest2" Width="1.5" PointX="2.75" PointY="5.75" />
+        <EntityTypeShape EntityType="EntityFrameworkTestModel.EntityWithAllColumn2" Width="1.5" PointX="0.75" PointY="5.875" />
+        <EntityTypeShape EntityType="EntityFrameworkTestModel.TestMapping2" Width="1.5" PointX="4.375" PointY="6.375" />
+        <EntityTypeShape EntityType="EntityFrameworkTestModel.VW_BulkCopyTest" Width="1.5" PointX="6.375" PointY="6.375" />
+        <EntityTypeShape EntityType="EntityFrameworkTestModel.Client" Width="1.5" PointX="0.75" PointY="0.75" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

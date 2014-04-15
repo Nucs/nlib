@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{578522CD-BE39-45A9-9906-331DCB5CCF96}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Z.ExtensionMethods.EF6.Examples</RootNamespace>
+    <AssemblyName>Z.ExtensionMethods.EF6.Examples</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.0.2\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.0.2\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <Compile Include="BulkCopyTest2.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Client.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CodeFirstContext.cs" />
+    <Compile Include="Database\Database.GetContext.cs" />
+    <Compile Include="Database\Database.GetDbContext.cs" />
+    <Compile Include="Database\Database.GetEntityTransaction.cs" />
+    <Compile Include="Database\Database.GetEntityConnection.cs" />
+    <Compile Include="Database\Database.GetDbTransaction.cs" />
+    <Compile Include="Database\Database.GetSqlConnection.cs" />
+    <Compile Include="Database\Database.GetSqlTransaction.cs" />
+    <Compile Include="Database\Execute\Database.ExecuteEntityWithMapping.cs" />
+    <Compile Include="Database\Execute\Database.ExecuteEntitiesWithMapping.cs" />
+    <Compile Include="Database\Execute\Database.ExecuteEntities.cs" />
+    <Compile Include="Database\Execute\Database.ExecuteEntity.cs" />
+    <Compile Include="Database\Execute\Database.ExecuteExpandoObject.cs" />
+    <Compile Include="Database\Execute\Database.ExecuteExpandoObjects.cs" />
+    <Compile Include="Database\Execute\Database.ExecuteNonQuery.cs" />
+    <Compile Include="Database\Execute\Database.ExecuteReader.cs" />
+    <Compile Include="Database\Execute\Database.ExecuteScalar.cs" />
+    <Compile Include="Database\Execute\Database.SqlExecuteDataSet.cs" />
+    <Compile Include="Database\Execute\Database.SqlExecuteDataTable.cs" />
+    <Compile Include="Database\Execute\Database.SqlExecuteEntities.cs" />
+    <Compile Include="Database\Execute\Database.SqlExecuteEntity.cs" />
+    <Compile Include="Database\Execute\Database.SqlExecuteExpandoObject.cs" />
+    <Compile Include="Database\Execute\Database.SqlExecuteExpandoObjects.cs" />
+    <Compile Include="Database\Execute\Database.SqlExecuteNonQuery.cs" />
+    <Compile Include="Database\Execute\Database.SqlExecuteReader.cs" />
+    <Compile Include="Database\Execute\Database.SqlExecuteScalar.cs" />
+    <Compile Include="Database\Execute\Database.SqlExecuteXmlReader.cs" />
+    <Compile Include="DbContext\BulkOperation\DbContext.SqlBulkCodeFirstTest.cs" />
+    <Compile Include="DbContext\BulkOperation\DbContext.SqlBulkTestTransaction.cs" />
+    <Compile Include="DbContext\BulkOperation\DbContext.SqlBulkTestWithoutIdentiy.cs" />
+    <Compile Include="DbContext\BulkOperation\SqlBulkCopy.TestHelperCodeFirst.cs" />
+    <Compile Include="DbContext\Model\DbContext.GetStorageModelString.cs" />
+    <Compile Include="DbContext\Model\DbContext.GetMappingModelString.cs" />
+    <Compile Include="DbContext\Model\DbContext.GetConceptualModelString.cs" />
+    <Compile Include="DbContext\Model\DbContext.GetStorageModelStream.cs" />
+    <Compile Include="DbContext\Model\DbContext.GetMappingModelStream.cs" />
+    <Compile Include="DbContext\Model\DbContext.GetConceptualModelStream.cs" />
+    <Compile Include="DbContext\Model\DbContext.GetMappingModelName.cs" />
+    <Compile Include="DbContext\Model\DbContext.GetStorageModelName.cs" />
+    <Compile Include="DbContext\Model\DbContext.GetConceptualModelName.cs" />
+    <Compile Include="DbContext\Model\DbContext.GetModel.cs" />
+    <Compile Include="DbContext\Model\DbContext.GetCodeFirstModel.cs" />
+    <Compile Include="DbContext\Model\DbContext.GetDatabaseFirstModel.cs" />
+    <Compile Include="DbContext\BulkOperation\DbContext.SqlBulkUpsert.cs" />
+    <Compile Include="DbContext\BulkOperation\DbContext.SqlBulkMerge.cs" />
+    <Compile Include="DbContext\BulkOperation\DbContext.SqlBulkUpdate.cs" />
+    <Compile Include="DbContext\BulkOperation\DbContext.SqlBulkDelete.cs" />
+    <Compile Include="DbContext\BulkOperation\DbContext.SqlBulkInsert.cs" />
+    <Compile Include="DbContext\Model\DbContext.GetModelName.cs" />
+    <Compile Include="DbContext\DbContext.GetObjectContext.cs" />
+    <Compile Include="DbContext\DbContext.GetTableName.cs" />
+    <Compile Include="DbContext\BulkOperation\SqlBulkCopy.TestHelper.cs" />
+    <Compile Include="Domain\ComplexType.cs" />
+    <Compile Include="Domain\EntityTPC.cs" />
+    <Compile Include="Domain\EntityTPH.cs" />
+    <Compile Include="Domain\EntityTPT.cs" />
+    <Compile Include="Domain\EntityWithAllColumn.cs" />
+    <Compile Include="Domain\EntityWithTypeID.cs" />
+    <Compile Include="EntityWithAllColumn2.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IDbSet\IDbSet.AddOrUpdateExtension.cs" />
+    <Compile Include="Model.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="My.cs" />
+    <Compile Include="ObjectContext\ObjectContext.GetTableName.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestMapping2.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UnitTest.cs" />
+    <Compile Include="VW_BulkCopyTest.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Model.Context.cs</LastGenOutput>
+      <DependentUpon>Model.edmx</DependentUpon>
+    </None>
+    <None Include="Model.edmx.diagram">
+      <DependentUpon>Model.edmx</DependentUpon>
+    </None>
+    <None Include="Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Model.cs</LastGenOutput>
+      <DependentUpon>Model.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Z.ExtensionMethods.EntityFramework.WithNamespace\Z.ExtensionMethods.EntityFramework.WithNamespace.csproj">
+      <Project>{f14054fc-ef5e-4b7a-ac15-882d64953e4a}</Project>
+      <Name>Z.ExtensionMethods.EntityFramework.WithNamespace</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Z.ExtensionMethods.WithNamespace\Z.ExtensionMethods.WithNamespace.csproj">
+      <Project>{45e32a78-4111-4c66-a888-abea9b989f41}</Project>
+      <Name>Z.ExtensionMethods.WithNamespace</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

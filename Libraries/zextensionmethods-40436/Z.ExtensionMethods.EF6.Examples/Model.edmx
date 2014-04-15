@@ -1,0 +1,314 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="EntityFrameworkTestModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BulkCopyTest">
+          <Key>
+            <PropertyRef Name="ID1" />
+            <PropertyRef Name="ID2" />
+          </Key>
+          <Property Name="ID1" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID2" Type="int" Nullable="false" />
+          <Property Name="ValueBit" Type="bit" />
+          <Property Name="ValueInt" Type="int" />
+          <Property Name="ValueString" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ClientID" />
+          </Key>
+          <Property Name="ClientID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="EntityWithAllColumns">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BitIntColumn" Type="bigint" />
+          <Property Name="BinaryColumn" Type="varbinary(max)" />
+          <Property Name="BitColumn" Type="bit" />
+          <Property Name="CharColumn" Type="nvarchar(max)" />
+          <Property Name="DateColumn" Type="datetime" />
+          <Property Name="DateTimeColumn" Type="datetime" />
+          <Property Name="DateTime2Column" Type="datetime" />
+          <Property Name="DateTimeOffsetColumn" Type="datetimeoffset" Precision="7" />
+          <Property Name="DecimalColumn" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="FloatColumn" Type="float" />
+          <Property Name="ImageColumn" Type="varbinary(max)" />
+          <Property Name="IntColumn" Type="int" />
+          <Property Name="MoneyColumn" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="NCharColumn" Type="nvarchar(max)" />
+          <Property Name="NTextColumn" Type="nvarchar(max)" />
+          <Property Name="NumericColumn" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="NVarcharColumn" Type="nvarchar(max)" />
+          <Property Name="NVarcharMaxColumn" Type="nvarchar(max)" />
+          <Property Name="RealColumn" Type="real" />
+          <Property Name="SmallDateTimeColumn" Type="datetime" />
+          <Property Name="SmallIntColumn" Type="smallint" />
+          <Property Name="SmallMoneyColumn" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TextColumn" Type="nvarchar(max)" />
+          <Property Name="TimeColumn" Type="time" Precision="7" />
+          <Property Name="TimestampColumn" Type="varbinary(max)" />
+          <Property Name="TinyIntColumn" Type="tinyint" />
+          <Property Name="UniqueIdentifierColumn" Type="uniqueidentifier" />
+          <Property Name="VarBinaryColumn" Type="varbinary(max)" />
+          <Property Name="VarBinaryMaxColumn" Type="varbinary(max)" />
+          <Property Name="VarcharColumn" Type="nvarchar(max)" />
+          <Property Name="VarcharMaxColumn" Type="nvarchar(max)" />
+          <Property Name="XmlColumn" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="TestMapping">
+          <Key>
+            <PropertyRef Name="PrimaryKeyColumn" />
+          </Key>
+          <Property Name="PrimaryKeyColumn" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IntColumn" Type="int" Nullable="false" />
+          <Property Name="VarcharColumn" Type="nvarchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DatabaseFirstTest.dbo.VW_BulkCopyTest' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VW_BulkCopyTest">
+          <Key>
+            <PropertyRef Name="ID1" />
+            <PropertyRef Name="ID2" />
+          </Key>
+          <Property Name="ID1" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID2" Type="int" Nullable="false" />
+          <Property Name="ValueBit" Type="bit" />
+          <Property Name="ValueInt" Type="int" />
+          <Property Name="ValueString" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Function Name="Procedure_WithoutParameter" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Procedure_WithReturn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Procedure_WithSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="EntityFrameworkTestModelStoreContainer">
+          <EntitySet Name="BulkCopyTest" EntityType="Self.BulkCopyTest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EntityWithAllColumns" EntityType="Self.EntityWithAllColumns" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TestMapping" EntityType="Self.TestMapping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VW_BulkCopyTest" EntityType="Self.VW_BulkCopyTest" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VW_BulkCopyTest].[ID1] AS [ID1], 
+    [VW_BulkCopyTest].[ID2] AS [ID2], 
+    [VW_BulkCopyTest].[ValueBit] AS [ValueBit], 
+    [VW_BulkCopyTest].[ValueInt] AS [ValueInt], 
+    [VW_BulkCopyTest].[ValueString] AS [ValueString]
+    FROM [dbo].[VW_BulkCopyTest] AS [VW_BulkCopyTest]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EntityFrameworkTestModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="EntityFrameworkTestEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="TestProcedure" ReturnType="Collection(Int32)">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="BulkCopyTest2" EntityType="EntityFrameworkTestModel.BulkCopyTest2" />
+          <EntitySet Name="EntityWithAllColumn2" EntityType="EntityFrameworkTestModel.EntityWithAllColumn2" />
+          <EntitySet Name="TestMapping2" EntityType="EntityFrameworkTestModel.TestMapping2" />
+          <EntitySet Name="VW_BulkCopyTest" EntityType="EntityFrameworkTestModel.VW_BulkCopyTest" />
+          <EntitySet Name="Clients" EntityType="EntityFrameworkTestModel.Client" />
+          <FunctionImport Name="Procedure_WithReturn">
+          <Parameter Name="ID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Procedure_WithSelect" ReturnType="Collection(Int32)">
+          <Parameter Name="ID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Procedure_WithoutParameter" />
+          </EntityContainer>
+        <EntityType Name="BulkCopyTest2">
+          <Key>
+            <PropertyRef Name="ID1" />
+            <PropertyRef Name="ID2" />
+          </Key>
+          <Property Name="ID1" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID2" Type="Int32" Nullable="false" />
+          <Property Name="ValueBit" Type="Boolean" />
+          <Property Name="ValueInt" Type="Int32" />
+          <Property Name="ValueString" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="EntityWithAllColumn2">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BitIntColumn" Type="Int64" />
+          <Property Name="BinaryColumn" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="BitColumn" Type="Boolean" />
+          <Property Name="CharColumn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateColumn" Type="DateTime" Precision="3" />
+          <Property Name="DateTimeColumn" Type="DateTime" Precision="3" />
+          <Property Name="DateTime2Column" Type="DateTime" Precision="3" />
+          <Property Name="DateTimeOffsetColumn" Type="DateTimeOffset" Precision="7" />
+          <Property Name="DecimalColumn" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="FloatColumn" Type="Double" />
+          <Property Name="ImageColumn" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="IntColumn" Type="Int32" />
+          <Property Name="MoneyColumn" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NCharColumn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NTextColumn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NumericColumn" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NVarcharColumn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NVarcharMaxColumn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RealColumn" Type="Single" />
+          <Property Name="SmallDateTimeColumn" Type="DateTime" Precision="3" />
+          <Property Name="SmallIntColumn" Type="Int16" />
+          <Property Name="SmallMoneyColumn" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TextColumn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TimeColumn" Type="Time" Precision="7" />
+          <Property Name="TimestampColumn" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="TinyIntColumn" Type="Byte" />
+          <Property Name="UniqueIdentifierColumn" Type="Guid" />
+          <Property Name="VarBinaryColumn" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="VarBinaryMaxColumn" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="VarcharColumn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="VarcharMaxColumn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="XmlColumn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TestMapping2">
+          <Key>
+            <PropertyRef Name="PrimaryKeyColumn" />
+          </Key>
+          <Property Name="PrimaryKeyColumn" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IntColumn" Type="Int32" Nullable="false" />
+          <Property Name="VarcharColumn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VW_BulkCopyTest">
+          <Key>
+            <PropertyRef Name="ID1" />
+            <PropertyRef Name="ID2" />
+          </Key>
+          <Property Name="ID1" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID2" Type="Int32" Nullable="false" />
+          <Property Name="ValueBit" Type="Boolean" />
+          <Property Name="ValueInt" Type="Int32" />
+          <Property Name="ValueString" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ClientID" />
+          </Key>
+          <Property Name="ClientID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EntityFrameworkTestModelStoreContainer" CdmEntityContainer="EntityFrameworkTestEntities">
+          <EntitySetMapping Name="BulkCopyTest2">
+            <EntityTypeMapping TypeName="EntityFrameworkTestModel.BulkCopyTest2">
+              <MappingFragment StoreEntitySet="BulkCopyTest">
+                <ScalarProperty Name="ValueString" ColumnName="ValueString" />
+                <ScalarProperty Name="ValueInt" ColumnName="ValueInt" />
+                <ScalarProperty Name="ValueBit" ColumnName="ValueBit" />
+                <ScalarProperty Name="ID2" ColumnName="ID2" />
+                <ScalarProperty Name="ID1" ColumnName="ID1" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EntityWithAllColumn2">
+            <EntityTypeMapping TypeName="EntityFrameworkTestModel.EntityWithAllColumn2">
+              <MappingFragment StoreEntitySet="EntityWithAllColumns">
+                <ScalarProperty Name="XmlColumn" ColumnName="XmlColumn" />
+                <ScalarProperty Name="VarcharMaxColumn" ColumnName="VarcharMaxColumn" />
+                <ScalarProperty Name="VarcharColumn" ColumnName="VarcharColumn" />
+                <ScalarProperty Name="VarBinaryMaxColumn" ColumnName="VarBinaryMaxColumn" />
+                <ScalarProperty Name="VarBinaryColumn" ColumnName="VarBinaryColumn" />
+                <ScalarProperty Name="UniqueIdentifierColumn" ColumnName="UniqueIdentifierColumn" />
+                <ScalarProperty Name="TinyIntColumn" ColumnName="TinyIntColumn" />
+                <ScalarProperty Name="TimestampColumn" ColumnName="TimestampColumn" />
+                <ScalarProperty Name="TimeColumn" ColumnName="TimeColumn" />
+                <ScalarProperty Name="TextColumn" ColumnName="TextColumn" />
+                <ScalarProperty Name="SmallMoneyColumn" ColumnName="SmallMoneyColumn" />
+                <ScalarProperty Name="SmallIntColumn" ColumnName="SmallIntColumn" />
+                <ScalarProperty Name="SmallDateTimeColumn" ColumnName="SmallDateTimeColumn" />
+                <ScalarProperty Name="RealColumn" ColumnName="RealColumn" />
+                <ScalarProperty Name="NVarcharMaxColumn" ColumnName="NVarcharMaxColumn" />
+                <ScalarProperty Name="NVarcharColumn" ColumnName="NVarcharColumn" />
+                <ScalarProperty Name="NumericColumn" ColumnName="NumericColumn" />
+                <ScalarProperty Name="NTextColumn" ColumnName="NTextColumn" />
+                <ScalarProperty Name="NCharColumn" ColumnName="NCharColumn" />
+                <ScalarProperty Name="MoneyColumn" ColumnName="MoneyColumn" />
+                <ScalarProperty Name="IntColumn" ColumnName="IntColumn" />
+                <ScalarProperty Name="ImageColumn" ColumnName="ImageColumn" />
+                <ScalarProperty Name="FloatColumn" ColumnName="FloatColumn" />
+                <ScalarProperty Name="DecimalColumn" ColumnName="DecimalColumn" />
+                <ScalarProperty Name="DateTimeOffsetColumn" ColumnName="DateTimeOffsetColumn" />
+                <ScalarProperty Name="DateTime2Column" ColumnName="DateTime2Column" />
+                <ScalarProperty Name="DateTimeColumn" ColumnName="DateTimeColumn" />
+                <ScalarProperty Name="DateColumn" ColumnName="DateColumn" />
+                <ScalarProperty Name="CharColumn" ColumnName="CharColumn" />
+                <ScalarProperty Name="BitColumn" ColumnName="BitColumn" />
+                <ScalarProperty Name="BinaryColumn" ColumnName="BinaryColumn" />
+                <ScalarProperty Name="BitIntColumn" ColumnName="BitIntColumn" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TestMapping2">
+            <EntityTypeMapping TypeName="EntityFrameworkTestModel.TestMapping2">
+              <MappingFragment StoreEntitySet="TestMapping">
+                <ScalarProperty Name="VarcharColumn" ColumnName="VarcharColumn" />
+                <ScalarProperty Name="IntColumn" ColumnName="IntColumn" />
+                <ScalarProperty Name="PrimaryKeyColumn" ColumnName="PrimaryKeyColumn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VW_BulkCopyTest">
+            <EntityTypeMapping TypeName="EntityFrameworkTestModel.VW_BulkCopyTest">
+              <MappingFragment StoreEntitySet="VW_BulkCopyTest">
+                <ScalarProperty Name="ValueString" ColumnName="ValueString" />
+                <ScalarProperty Name="ValueInt" ColumnName="ValueInt" />
+                <ScalarProperty Name="ValueBit" ColumnName="ValueBit" />
+                <ScalarProperty Name="ID2" ColumnName="ID2" />
+                <ScalarProperty Name="ID1" ColumnName="ID1" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="EntityFrameworkTestModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Procedure_WithReturn" FunctionName="EntityFrameworkTestModel.Store.Procedure_WithReturn" />
+          <FunctionImportMapping FunctionImportName="Procedure_WithSelect" FunctionName="EntityFrameworkTestModel.Store.Procedure_WithSelect" />
+          <FunctionImportMapping FunctionImportName="Procedure_WithoutParameter" FunctionName="EntityFrameworkTestModel.Store.Procedure_WithoutParameter" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

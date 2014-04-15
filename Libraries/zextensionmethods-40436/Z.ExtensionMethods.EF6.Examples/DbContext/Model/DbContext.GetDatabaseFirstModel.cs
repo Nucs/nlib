@@ -1,0 +1,478 @@
+﻿using System.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Z.EntityFramework.Model;
+using Z.ExtensionMethods.EntityFramework;
+
+namespace Z.ExtensionMethods.EF6.Examples
+{
+    [TestClass]
+    public class DbContext_GetDatabaseFirstModel
+    {
+        [TestMethod]
+        public void GetDatabaseFirstModel()
+        {
+            using (var ctx = new EntityFrameworkTestEntities())
+            {
+                var clock1 = new Stopwatch();
+                var clock2 = new Stopwatch();
+
+                // Examples
+                clock1.Start();
+                Model model = ctx.GetDatabaseFirstModel();
+                clock1.Stop();
+
+                clock2.Start();
+                Model model2 = ctx.GetDatabaseFirstModel();
+                clock2.Stop();
+
+
+                // Unit Test
+
+                {
+                    // Unit Test - Database
+                    Assert.AreEqual("DatabaseFirstTest", model.Storage.Name);
+
+                    // Unit Test - Table
+                    StorageTable table = model.Storage.Tables.Find(x => x.Name == "EntityWithAllColumns");
+                    Assert.IsNotNull(table);
+                    Assert.AreEqual("dbo", table.Schema);
+                    Assert.IsNotNull(table.Mapping);
+
+                    // Unit Test - Primary Key
+                    Assert.IsNotNull(table.PrimaryKey);
+                    Assert.AreEqual(1, table.PrimaryKey.Columns.Count);
+                    Assert.AreEqual("ID", table.PrimaryKey.Columns[0].Name);
+
+                //    // Unit Test - Columns
+                //    StorageColumn column;
+                //    column = table.Columns.Find(x => x.Name == "ID");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("int", column.Type);
+                //    Assert.IsFalse(column.IsNullable);
+                //    Assert.IsTrue(column.IsIdentity);
+                //    Assert.IsNotNull(column.Mapping);
+                //    //column = table.Columns.Find(x => x.Name == "BitIntColumn");
+                //    //Assert.IsNotNull(column);
+                //    //Assert.AreEqual("bigint", column.Type);
+                //    //Assert.IsTrue(column.IsNullable);
+                //    //Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "BinaryColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("varbinary(max)", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    //Assert.AreEqual(50, column.MaxLength);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "BitColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("bit", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "CharColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("char", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    //Assert.AreEqual(10, column.MaxLength);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "DateColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("date", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "DateTimeColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("datetime", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "DateTime2Column");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("datetime2", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.AreEqual(7, column.Precision);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "DateTimeOffsetColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("datetimeoffset", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    //Assert.AreEqual(7, column.Precision);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "DecimalColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("decimal", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.AreEqual(18, column.Precision);
+                //    Assert.AreEqual(2, column.Scale);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "FloatColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("float", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    //column = table.Columns.Find(x => x.Name == "GeographyColumn");
+                //    //Assert.IsNotNull(column);
+                //    //Assert.AreEqual("geography", column.Type);
+                //    //Assert.IsTrue(column.IsNullable);
+                //    //Assert.IsNotNull(column.Mapping);
+                //    //column = table.Columns.Find(x => x.Name == "GeometryColumn");
+                //    //Assert.IsNotNull(column);
+                //    //Assert.AreEqual("geometry", column.Type);
+                //    //Assert.IsTrue(column.IsNullable);
+                //    //Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "ImageColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("image", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "IntColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("int", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "MoneyColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("money", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "NCharColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("nchar", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    //Assert.AreEqual(10, column.MaxLength);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "NTextColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("ntext", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "NumericColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("numeric", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.AreEqual(18, column.Precision);
+                //    Assert.AreEqual(0, column.Scale);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "NVarcharColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("nvarchar", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //   // Assert.AreEqual(50, column.MaxLength);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "NVarcharMaxColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("nvarchar(max)", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "RealColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("real", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "SmallDateTimeColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("smalldatetime", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "SmallIntColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("smallint", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "SmallMoneyColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("smallmoney", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "TextColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("text", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "TimeColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("time", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //   // Assert.AreEqual(7, column.Precision);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "TimestampColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("timestamp", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsTrue(column.IsComputed);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "TinyIntColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("tinyint", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "UniqueIdentifierColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("uniqueidentifier", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "VarBinaryColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("varbinary", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    //Assert.AreEqual(50, column.MaxLength);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "VarBinaryMaxColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("varbinary(max)", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "VarcharColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("varchar", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //   // Assert.AreEqual(50, column.MaxLength);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "VarcharMaxColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("varchar(max)", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+                //    column = table.Columns.Find(x => x.Name == "XmlColumn");
+                //    Assert.IsNotNull(column);
+                //    Assert.AreEqual("xml", column.Type);
+                //    Assert.IsTrue(column.IsNullable);
+                //    Assert.IsNotNull(column.Mapping);
+
+                //    // Expression
+                //    //table.GetColumn(x => x.)
+                }
+
+                //{
+                //    // Unit Test - Conceptual
+                //    Assert.AreEqual("EntityFrameworkTestModel", model.Conceptual.Name);
+
+                //    // Unit Test - Entities
+                //    ConceptualEntity entity = model.Conceptual.Entities.Find(x => x.Name == "TestMapping");
+                //    Assert.IsNotNull(entity);
+                //    Assert.AreEqual("TestMappings", entity.SetName);
+                //    Assert.AreEqual("EntityFrameworkTestModel.TestMapping", entity.Type);
+                //    Assert.IsNotNull(entity.Mapping);
+
+                //    // Unit Test - Key
+                //    Assert.IsNotNull(entity.Key);
+                //    Assert.AreEqual(1, entity.Key.Properties.Count);
+                //    Assert.AreEqual("PrimaryKeyColumn", entity.Key.Properties[0].Name);
+
+                //    // Unit Test - Columns
+                //    ConceptualProperty property;
+                //    property = entity.Properties.Find(x => x.Name == "PrimaryKeyColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Int32", property.Type);
+                //    Assert.IsFalse(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    //property = entity.Properties.Find(x => x.Name == "BitIntColumn");
+                //    //Assert.IsNotNull(property);
+                //    //Assert.AreEqual("Int64", property.Type);
+                //    //Assert.IsTrue(property.IsNullable);
+                //    //Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "BinaryColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Binary", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    //Assert.AreEqual(50, property.MaxLength);
+                //    Assert.IsTrue(property.IsFixedLength);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "BitColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Boolean", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "CharColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("String", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    //Assert.AreEqual(10, property.MaxLength);
+                //    Assert.IsTrue(property.IsFixedLength);
+                //    Assert.IsFalse(property.IsUnicode);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "DateColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("DateTime", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "DateTimeColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("DateTime", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "DateTime2Column");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("DateTime", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    //Assert.AreEqual(7, property.Precision);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "DateTimeOffsetColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("DateTimeOffset", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.AreEqual(7, property.Precision);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "DecimalColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Decimal", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    //Assert.AreEqual(18, property.Precision);
+                //    //Assert.AreEqual(2, property.Scale);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "FloatColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Double", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "GeographyColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Geography", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "GeometryColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Geometry", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "ImageColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Binary", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsFalse(property.IsFixedLength);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "IntColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Int32", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "MoneyColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Decimal", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "NCharColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("String", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    //Assert.AreEqual(10, property.MaxLength);
+                //    Assert.IsTrue(property.IsFixedLength);
+                //    Assert.IsTrue(property.IsUnicode);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "NTextColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("String", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsFalse(property.IsFixedLength);
+                //    Assert.IsTrue(property.IsUnicode);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "NumericColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Decimal", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.AreEqual(18, property.Precision);
+                //    Assert.AreEqual(0, property.Scale);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "NVarcharColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("String", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    // Assert.AreEqual(50, property.MaxLength);
+                //    Assert.IsFalse(property.IsFixedLength);
+                //    Assert.IsTrue(property.IsUnicode);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "NVarcharMaxColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("String", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsFalse(property.IsFixedLength);
+                //    Assert.IsTrue(property.IsUnicode);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "RealColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Single", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "SmallDateTimeColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("DateTime", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "SmallIntColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Int16", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "SmallMoneyColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Decimal", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "TextColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("String", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsFalse(property.IsFixedLength);
+                //    Assert.IsFalse(property.IsUnicode);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "TimeColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Time", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.AreEqual(7, property.Precision);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "TimestampColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Binary", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsTrue(property.IsFixedLength);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "TinyIntColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Byte", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "UniqueIdentifierColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Guid", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "VarBinaryColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Binary", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.AreEqual(50, property.MaxLength);
+                //    Assert.IsFalse(property.IsFixedLength);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "VarBinaryMaxColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("Binary", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsFalse(property.IsFixedLength);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "VarcharColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("String", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    //Assert.AreEqual(50, property.MaxLength);
+                //    Assert.IsFalse(property.IsFixedLength);
+                //    Assert.IsFalse(property.IsUnicode);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "VarcharMaxColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("String", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsFalse(property.IsFixedLength);
+                //    Assert.IsFalse(property.IsUnicode);
+                //    Assert.IsNotNull(property.Mapping);
+                //    property = entity.Properties.Find(x => x.Name == "XmlColumn");
+                //    Assert.IsNotNull(property);
+                //    Assert.AreEqual("String", property.Type);
+                //    Assert.IsTrue(property.IsNullable);
+                //    Assert.IsFalse(property.IsFixedLength);
+                //    Assert.IsTrue(property.IsUnicode);
+                //    Assert.IsNotNull(property.Mapping);
+
+                //    // Expression
+                //}
+            }
+        }
+    }
+}
