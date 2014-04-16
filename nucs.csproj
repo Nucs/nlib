@@ -217,6 +217,8 @@
     <Compile Include="SystemCore\Drawing\SnippingTool.Designer.cs">
       <DependentUpon>SnippingTool.cs</DependentUpon>
     </Compile>
+    <Compile Include="SystemCore\Reflection\AttributesTools.cs" />
+    <Compile Include="SystemCore\Settings\AppSettings.cs" />
     <Compile Include="SystemCore\UriExtensions.cs" />
     <Compile Include="Threading\SleepUtils.cs" />
     <Compile Include="Threading\TimeLimitedInspector.cs" />
@@ -361,8 +363,6 @@
     <Compile Include="ZExtensions\Z.ExtensionMethods.Object\ObjectExtension\TypeComparison\Object.IsSubclassOf.cs" />
     <Compile Include="ZExtensions\Z.ExtensionMethods.Object\ObjectExtension\TypeComparison\Object.IsTypeOf.cs" />
     <Compile Include="ZExtensions\Z.ExtensionMethods.Object\ObjectExtension\TypeComparison\Object.IsTypeOrInheritsOf.cs" />
-    <Compile Include="ZExtensions\Z.ExtensionMethods.Object\ObjectExtension\Utility\Object.Coalesce.cs" />
-    <Compile Include="ZExtensions\Z.ExtensionMethods.Object\ObjectExtension\Utility\Object.CoalesceOrDefault.cs" />
     <Compile Include="ZExtensions\Z.ExtensionMethods.Object\ObjectExtension\Utility\Object.GetValueOrDefault.cs" />
     <Compile Include="ZExtensions\Z.ExtensionMethods.Object\ObjectExtension\Utility\Object.ToStringSafe.cs" />
     <Compile Include="ZExtensions\Z.ExtensionMethods.Object\ObjectExtension\ValueComparison\Object.Between.cs" />

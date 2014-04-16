@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using System.Windows.Input;
 using nucs.SystemCore;
+using nucs.SystemCore.Settings;
 using nucs.SystemCore.String;
+using Z.ExtensionMethods.Object;
 
 namespace nucs.Windows.Keyboard {
 
@@ -60,13 +63,28 @@ namespace nucs.Windows.Keyboard {
 
         public AKey(Keys keyData) : this(new KeyEventArgs(keyData)) {}*/
 
+        [Obsolete("Used for deserialization")]
+        public AKey() {
+
+        }
+
         public AKey(IEnumerable<KeyCode> modifiers, KeyCode key) {
             Modifiers = modifiers as List<KeyCode> ?? new List<KeyCode>(modifiers);
             Key = key;
         }
        
+        public AKey(KeyCode key) {
+            Modifiers = new List<KeyCode>(0);
+            Key = key;
+        }
+
         public AKey(string modifiers, string key) {
             Modifiers = UnstringifyModifiers(modifiers);
+            Key = (KeyCode)Enum.Parse(typeof (KeyCode), key);
+        }
+
+        public AKey(string key) {
+            Modifiers = new List<KeyCode>(0);
             Key = (KeyCode)Enum.Parse(typeof (KeyCode), key);
         }
 
@@ -78,14 +96,14 @@ namespace nucs.Windows.Keyboard {
         /// Converts the modifiers list into a string, for example "RCtrl+LAlt+..."
         /// </summary>
         public string StringifyModifiers() {
-            return string.Join("+", Modifiers.Select(k => k.ToString().Replace("Menu", "Alt")));
+            return string.Join("+", (Modifiers = (Modifiers ?? new List<KeyCode>(0))).Select(k => k.ToStringSafe().Replace("Menu", "Alt")));
         }
 
         /// <summary>
         /// Translates a string such as "RControl+LAlt+..." into a list of Keys {Keys.RControl, Keys.LMenu}
         /// </summary>
         public static List<KeyCode> UnstringifyModifiers(string mods) {
-            return mods.Split('+').Select(s => Enum.Parse(typeof(KeyCode), s)).Where(o => o != null).Select(o => (KeyCode)o).ToList();
+            return mods.ToStringSafe().Split('+').Select(s => string.IsNullOrEmpty(s) ? KeyCode.None : Enum.Parse(typeof(KeyCode), s)).Where(o => o != null).Select(o => (KeyCode)o).ToList();
         }
 
         /// <summary>
@@ -111,6 +129,21 @@ namespace nucs.Windows.Keyboard {
         /// </summary>
         public override string ToString() {
             return StringifyModifiers() + (Modifiers.Count > 0 ? "+" : "") + Key;
+        }
+
+        /// <summary>
+        /// Converts from string or parses..
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static AKey FromString(string s) {
+            s = s.Trim();
+            if (string.IsNullOrEmpty(s))
+                return new AKey(KeyCode.None);
+            var li = s.LastIndexOf('+');
+            if (li == -1) 
+                return new AKey(s);
+            return new AKey(s.Substring(0, li), s.Substring(li, s.Length));
         }
 
         #endregion
@@ -139,5 +172,24 @@ namespace nucs.Windows.Keyboard {
         #endregion
 
         public void Dispose() {}
+    }
+    
+    [SettingsConverter]
+    public class AKeyJSConverter : JavaScriptConverter {
+        public override object Deserialize(IDictionary<string, object> dictionary, Type type, JavaScriptSerializer serializer) {
+            //return AKey.FromString(dictionary.FirstOrDefault().Value.ToStringSafe());
+            return new AKey(dictionary["mods"].ToStringSafe(), dictionary["key"].ToStringSafe());
+        }
+
+        
+        public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer) {
+            var k = obj as AKey;
+            var dic = new Dictionary<string, object>(2) {{"mods", k.StringifyModifiers()}, {"key", k.Key.ToString()}};
+            return dic;
+        }
+
+        public override IEnumerable<Type> SupportedTypes {
+            get { return new []{typeof(AKey)};}
+        }
     }
 }
