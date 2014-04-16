@@ -167,6 +167,8 @@ namespace nucs.Controls {
         }
 
         private void _invokeOnClick(object sender, MouseEventArgs e) {
+            if (e.Button != MouseButtons.Right || IsCurrentCellInEditMode)
+                return;
             var hti = HitTest(e.X, e.Y);
             //if (Rows.Count-1 > hti.RowIndex) //index 5 clicked
             if (_contextMenuMode == ContextMenuDisplayMode.OnCell && hti.RowIndex != -1 && hti.ColumnIndex != -1) {
