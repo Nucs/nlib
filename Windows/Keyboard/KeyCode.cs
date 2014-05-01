@@ -3,15 +3,69 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 using nucs.SystemCore;
+using nucs.Windows;
+using nucs.Windows.Keyboard;
 
-namespace nucs.Windows.Keyboard {
+public static class KeyCodeExtensions {
+    #region Differentiating
 
-    /// <summary>
-    /// Provides a range of tools from simulating inputs to testing if key is down.
-    /// </summary>
-    public static class KeyCodeUtils {
+        /// <summary>
+        /// Is the given KeyCode is a modifier
+        /// </summary>
+        public static bool IsModifier(this KeyCode kc) {
+            var i = (ushort)kc;
+            return (i >= 16 && i <= 18) || (i >= 160 && i <= 165);
+        }
 
+        /// <summary>
+        /// Is the given KeyCode is a modifier, but contains a side indicator e.g. LControl or RShift
+        /// </summary>
+        public static bool IsSidedModifier(this KeyCode kc) {
+            var i = (ushort)kc;
+            return (i >= 160 && i <= 165);
+        }
+
+        /// <summary>
+        /// Is the given KeyCode is a key
+        /// </summary>
+        public static bool IsKey(this KeyCode kc) {
+            return !IsModifier(kc);
+        }
+
+        #endregion
+
+        #region Conversion
+
+        /// <summary>
+        /// Converts a <see cref="KeyCode"/> Enum item to <see cref="Keys"/> of WinForm item. incase of missfit in conversion, <see cref="Keys.None"/> is returned
+        /// </summary>
+        /// <param name="kc"></param>
+        /// <returns></returns>
+        public static Keys ToKeys(this KeyCode kc) {
+            try {
+                return (Keys) kc;
+            } catch {
+                return Keys.None;
+            }
+        }
+
+        /// <summary>
+        /// Converts a <see cref="Keys"/> Enum item to <see cref="KeyCode"/> of WinForm item. incase of missfit in conversion, <see cref="KeyCode.None"/> is returned
+        /// </summary>
+        /// <param name="kc"></param>
+        /// <returns></returns>
+        public static KeyCode ToKeyCode(this Keys kc) {
+            try {
+                return (KeyCode)kc;
+            } catch {
+                return KeyCode.None;
+            }
+        }
+
+        #endregion
+        
         #region Status
 
         /// <summary>
@@ -45,8 +99,7 @@ namespace nucs.Windows.Keyboard {
         ///             These left- and right-distinguishing constants are only available when you call the GetKeyboardState, SetKeyboardState, GetAsyncKeyState, GetKeyState, and MapVirtualKey functions.
         /// 
         /// </remarks>
-        public static bool IsKeyDownAsync(this KeyCode keyCode)
-        {
+        public static bool IsKeyDownAsync(this KeyCode keyCode) {
             return NativeWin32.GetAsyncKeyState((ushort)keyCode) < 0;
         }
 
@@ -104,11 +157,22 @@ namespace nucs.Windows.Keyboard {
         ///             These left- and right-distinguishing constants are available to an application only through the GetKeyboardState, SetKeyboardState, GetAsyncKeyState, GetKeyState, and MapVirtualKey functions.
         /// 
         /// </remarks>
-        public static bool IsTogglingKeyInEffect(this KeyCode keyCode)
-        {
+        public static bool IsTogglingKeyInEffect(this KeyCode keyCode) {
             return (NativeWin32.GetKeyState((ushort)keyCode) & 1) == 1;
         }
+
         #endregion
+
+}
+
+
+namespace nucs.Windows.Keyboard {
+
+    /// <summary>
+    /// Provides a range of tools from simulating inputs to testing if key is down.
+    /// </summary>
+    public static class KeyCodeUtils {
+
 
         #region Simulation
         /// <summary>
@@ -292,34 +356,13 @@ namespace nucs.Windows.Keyboard {
         }
         #endregion
 
-        #region Differentiating
+        
 
-        /// <summary>
-        /// Is the given KeyCode is a modifier
-        /// </summary>
-        public static bool IsModifier(this KeyCode kc) {
-            var i = (ushort)kc;
-            return (i >= 16 && i <= 18) || (i >= 160 && i <= 165);
-        }
-
-        /// <summary>
-        /// Is the given KeyCode is a modifier, but contains a side indicator e.g. LControl or RShift
-        /// </summary>
-        public static bool IsSidedModifier(this KeyCode kc) {
-            var i = (ushort)kc;
-            return (i >= 160 && i <= 165);
-        }
-
-        /// <summary>
-        /// Is the given KeyCode is a key
-        /// </summary>
-        public static bool IsKey(this KeyCode kc) {
-            return !IsModifier(kc);
-        }
-
-        #endregion
     }
 
+    /// <summary>
+    /// A list of the modifiers available in the keyboard
+    /// </summary>
     [Serializable]
     public enum KeyCodeModifiers : ushort {
         Shift = (ushort)16,
@@ -336,12 +379,27 @@ namespace nucs.Windows.Keyboard {
         RShift = (ushort)161,
         LControl = (ushort)162,
         RControl = (ushort)163,
-        LMenu = (ushort)164,
-        RMenu = (ushort)165,
+        /// <summary>
+        /// Equivalent to LMenu
+        /// </summary>
         LAlt = (ushort)164,
-        RAlt = (ushort)165
+        /// <summary>
+        /// Equivalent to RMenu
+        /// </summary>
+        RAlt = (ushort)165,
+        /// <summary>
+        /// Equivalent to LAlt
+        /// </summary>
+        LMenu = (ushort)164,
+        /// <summary>
+        /// Equivalent to RAlt
+        /// </summary>
+        RMenu = (ushort)165
     }
 
+    /// <summary>
+    /// A list of only keys available on the keyboard
+    /// </summary>
     [Serializable]
     public enum KeyCodeKeys : ushort {
         None = 0,
@@ -517,6 +575,9 @@ namespace nucs.Windows.Keyboard {
         OEM_Clear = (ushort)254,
     }
 
+    /// <summary>
+    /// A full list of keys available on the keyboard.
+    /// </summary>
     [Serializable]
     public enum KeyCode : ushort {
         None = 0,
