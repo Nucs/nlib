@@ -44,6 +44,20 @@ public static class KeyCodeExtensions {
         /// <param name="kc"></param>
         /// <returns></returns>
         public static Keys ToKeys(this KeyCode kc) {
+/*            switch (kc) {
+                case KeyCode.LControl:
+                case KeyCode.RControl:
+                    kc = KeyCode.Control;
+                    break;
+                case KeyCode.LMenu:
+                case KeyCode.RMenu:
+                    kc = KeyCode.Menu;
+                    break;
+                case KeyCode.LShift:
+                case KeyCode.RShift:
+                    kc = KeyCode.Shift;
+                    break;
+            }*/
             try {
                 return (Keys) kc;
             } catch {

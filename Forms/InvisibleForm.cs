@@ -6,6 +6,13 @@ namespace nucs.Forms {
     /// An invisible form, can be used to capture wndProc or just hidden form.
     /// </summary>
     public class InvisibleForm : Form {
+
+        /// <summary>
+        /// Has the form finished loading and ready to be used? (after calling post creation)
+        /// </summary>
+        public bool Loaded { get; private set; }
+
+        private Action<InvisibleForm> post_creation;
         /// <summary>
         /// Create a regular invisible form
         /// </summary>
@@ -19,15 +26,24 @@ namespace nucs.Forms {
         /// Creates a regular invisible form and invokes <see cref="post_created"/> after creation and hiding.
         /// </summary>
         /// <param name="post_created">Invoked after creation and hiding</param>
-        public InvisibleForm(Action post_created) : this() {
-            post_created();
+        public InvisibleForm(Action<InvisibleForm> post_created) : this() {
+            this.post_creation = post_created;
         }
 
-
         protected override void SetVisibleCore(bool value) {
-            // Ensure the window never becomes visible
-            try {base.SetVisibleCore(false);}
-            catch { }
+            if (!IsHandleCreated) {
+                CreateHandle();
+                this.WaitForHandleCreation();
+            }
+
+            // Ensures the window never becomes visible
+            try {
+                base.SetVisibleCore(false);
+            } catch { }
+
+            post_creation(this);
+            post_creation = null;
+            Loaded = true;
         }
 
         #region partial

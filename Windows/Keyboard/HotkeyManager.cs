@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -34,7 +34,7 @@ namespace nucs.Windows.Keyboard {
                 HotKeyPressed(reg);
         }
 
-        public bool Register(Keys key, KeyModifiers modifier, string Description) {
+        public bool Register(Keys key, Keys modifier, string Description) {
             if (Registers.Any(hkk => string.Equals(hkk.Description, Description) || (hkk.Modifiers == (uint)modifier && hkk.Key == key))) return false;
             var hk = HotkeyRegisteration.Create(key, new[] { modifier },this, Description);
             Registers.Add(hk);
@@ -42,7 +42,7 @@ namespace nucs.Windows.Keyboard {
             return true;
         }
 
-        public bool Register(Keys key, IEnumerable<KeyModifiers> modifiers, string Description) {
+        public bool Register(Keys key, IEnumerable<Keys> modifiers, string Description) {
             if (Registers.Any(hkk => string.Equals(hkk.Description, Description) || (hkk.Modifiers == ModifiersTools.MergeModifiers(modifiers.ToArray()) && hkk.Key == key))) return false; 
             var hk = HotkeyRegisteration.Create(key, modifiers, this, Description);
             Registers.Add(hk);
@@ -58,20 +58,20 @@ namespace nucs.Windows.Keyboard {
         }
 
         public bool Unregister(Keys key) {
-            var hk = Registers.FirstOrDefault(k => k.Key == key && k.Modifiers == (uint)KeyModifiers.None);
+            var hk = Registers.FirstOrDefault(k => k.Key == key && k.Modifiers == (uint)Keys.None);
             if (hk == null || hk.Registered == false) return false;
             Registers.Remove(hk);
             return hk.Unregister();
         }
 
-        public bool Unregister(Keys key, KeyModifiers modifier) {
+        public bool Unregister(Keys key, Keys modifier) {
             var hk = Registers.FirstOrDefault(k => k.Key == key && k.Modifiers == (uint)modifier);
             if (hk == null || hk.Registered == false) return false;
             Registers.Remove(hk);
             return hk.Unregister();
         }
 
-        public bool Unregister(Keys key, KeyModifiers[] modifiers) {
+        public bool Unregister(Keys key, Keys[] modifiers) {
             var merged = ModifiersTools.MergeModifiers(modifiers);
             var hk = Registers.FirstOrDefault(k => k.Key == key && k.Modifiers == merged);
             if (hk == null || hk.Registered == false) return false;
@@ -98,8 +98,8 @@ namespace nucs.Windows.Keyboard {
 
     public class HotkeyRegisteration {
         public Keys Key { get; private set; }
-        public KeyModifiers[] ModifiersKeys { get; private set; }
-        public KeyModifiers ModifierKeys { get { return (KeyModifiers) Modifiers; } }
+        public Keys[] ModifiersKeys { get; private set; }
+        public Keys ModifierKeys { get { return (Keys) Modifiers; } }
         public uint Modifiers { get { return ModifiersTools.MergeModifiers(ModifiersKeys); } }
         public string Description { get; set; }
         public bool Registered { get; private set; }
@@ -108,14 +108,14 @@ namespace nucs.Windows.Keyboard {
 
         internal HotkeyRegisteration(Keys key, HotKeyManager Parent, string Description = "") {
             this.Parent = Parent;
-            ModifiersKeys = new[] {KeyModifiers.None};
+            ModifiersKeys = new[] {Keys.None};
             Key = key;
             this.Description = Description;
         }
 
-        internal HotkeyRegisteration(Keys key, IEnumerable<KeyModifiers> modifiers, HotKeyManager Parent, string Description = "") {
+        internal HotkeyRegisteration(Keys key, IEnumerable<Keys> modifiers, HotKeyManager Parent, string Description = "") {
             this.Parent = Parent;
-            ModifiersKeys = (modifiers ?? new[] {KeyModifiers.None}).Distinct().ToArray();
+            ModifiersKeys = (modifiers ?? new[] {Keys.None}).Distinct().ToArray();
             Key = key;
             this.Description = Description;
         }
@@ -136,7 +136,7 @@ namespace nucs.Windows.Keyboard {
             return new HotkeyRegisteration(key, Parent, Description);
         }
 
-        internal static HotkeyRegisteration Create(Keys key, IEnumerable<KeyModifiers> modifiers, HotKeyManager Parent,  string Description = "") {
+        internal static HotkeyRegisteration Create(Keys key, IEnumerable<Keys> modifiers, HotKeyManager Parent,  string Description = "") {
             return new HotkeyRegisteration(key, modifiers, Parent, Description);
         }
 
@@ -150,15 +150,15 @@ namespace nucs.Windows.Keyboard {
 
         public override string ToString() {
             var b = new StringBuilder();
-            if (ModifiersKeys.Contains(KeyModifiers.Control)) b.Append("C");
-            if (ModifiersKeys.Contains(KeyModifiers.Alt)) b.Append("A");
-            if (ModifiersKeys.Contains(KeyModifiers.Shift)) b.Append("S");
-            if (ModifiersKeys.Contains(KeyModifiers.Windows)) b.Append("W");
-            if (ModifiersKeys.Contains(KeyModifiers.Windows)) b.Append("N");
+            if (ModifiersKeys.Contains(Keys.Control)) b.Append("C");
+            if (ModifiersKeys.Contains(Keys.Alt)) b.Append("A");
+            if (ModifiersKeys.Contains(Keys.Shift)) b.Append("S");
+            if (ModifiersKeys.Contains(Keys.Windows)) b.Append("W");
+            if (ModifiersKeys.Contains(Keys.Windows)) b.Append("N");
             if (b.Length != 0)
                 b.Append('-');
             b.Append(Key.ToString());
             return b.ToString();
         }
     }
-}
+}*/

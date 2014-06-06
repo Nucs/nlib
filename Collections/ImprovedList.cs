@@ -28,7 +28,12 @@ namespace nucs.Collections {
         public ImprovedList(IList<T> list) {AddRange(list);}
 
         public T this[long index] {
-            get { return base[Convert.ToInt32(index)]; }
+            get {
+                return base[Convert.ToInt32(index)];
+            }
+            set {
+                base[Convert.ToInt32(index)] = value;
+            }
         }
 
         public new void Add(T item) { //DONE

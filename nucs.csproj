@@ -309,9 +309,17 @@
     <Compile Include="Windows\Hooking\GlobalHook.cs" />
     <Compile Include="Windows\Hooking\KeyboardHook.cs" />
     <Compile Include="Windows\Keyboard\GlobalHotkeyManagerOld.cs" />
+    <Compile Include="Windows\Keyboard\GlobalKeyboardHook - Backup.cs" />
+    <Compile Include="Windows\Keyboard\GlobalKeyboardHook.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Keyboard\Standard\BaseKeyboardImplementation.cs" />
+    <Compile Include="Windows\Keyboard\Standard\BaseKeyboardManagment.cs" />
     <Compile Include="Windows\Keyboard\KeyboardSimulator.cs" />
     <Compile Include="Windows\Hooking\MouseHook.cs" />
     <Compile Include="Windows\Keyboard\KeyCode.cs" />
+    <Compile Include="Windows\Keyboard\Standard\Hotkey.cs" />
+    <Compile Include="Windows\Keyboard\Standard\HotkeyEventArgs.cs" />
     <Compile Include="Windows\Mouse\MouseSimulator.cs" />
     <Compile Include="Windows\Keyboard\HotkeyManager.cs" />
     <Compile Include="Windows\Keyboard\KeyboardLanguage.cs" />
