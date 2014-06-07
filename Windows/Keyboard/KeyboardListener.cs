@@ -14,7 +14,7 @@ namespace nucs.Windows.Keyboard {
     /// <summary>
     /// Provides a hotkey binding tool.
     /// </summary>
-    public class GlobalHotkeyManager : BaseKeyboardManager {
+    public class KeyboardListener : BaseKeyboardManager {
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x100;
         private const int WM_KEYUP = 0x101;
@@ -22,7 +22,7 @@ namespace nucs.Windows.Keyboard {
         private const int WM_SYSKEYUP = 0x105;
 
         private readonly bool IsConsole;
-        public GlobalHotkeyManager(bool IsConsoleApplication = false) {
+        public KeyboardListener(bool IsConsoleApplication = false) {
             IsConsole = IsConsoleApplication;
         }
 

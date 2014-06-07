@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿/*/*using System;
 using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
@@ -127,7 +127,7 @@ namespace MouseKeyboardLibrary {
 
         public bool Handled { get; set; }
     }
-}*/
+}#1#
 
 using System;
 using System.Runtime.InteropServices;
@@ -370,4 +370,4 @@ namespace nucs.Windows.Hooking {
         /// true if the key event should not be sent to the control; otherwise, false.
         /// </returns>
     }
-}
+}*/
