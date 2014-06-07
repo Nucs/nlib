@@ -40,6 +40,15 @@ namespace nucs.Windows.Keyboard {
         /// </summary>
         protected abstract bool Unhook();
 
+
+        /// <summary>
+        /// Clears the registeration without unhooking.
+        /// </summary>
+        public virtual void Clear() {
+            _registers.Clear();
+        }
+
+
         /// <summary>
         /// 
         /// </summary>
