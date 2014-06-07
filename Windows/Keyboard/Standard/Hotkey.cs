@@ -1,34 +1,23 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
 namespace nucs.Windows.Keyboard {
-
-    public static class HotkeyExtensions {
-
-        public static void Register(this BaseKeyboardManager keyboard, Keys key, string description) {
-            Register(keyboard, key, Keys.None, description);
-        }
-
-        public static void Register(this BaseKeyboardManager keyboard, Keys key, Keys modifiers, string description) {
-            keyboard.Register(key, modifiers, description);
-        }
-    }
-
     public class Hotkey {
         public Keys Key { get; private set; }
-        public Keys Modifiers { get; set; }
+        public ModKeys Modifiers { get; set; }
         public string Description { get; set; }
         
         public BaseKeyboardManager KeyboardManager { get; private set; }
 
         public Hotkey(Keys key, string description) {
-            Modifiers = Keys.None;
+            Modifiers = ModKeys.None;
             Key = key;
             Description = description;
         }
 
-        public Hotkey(Keys key, Keys modifiers, string description) {
+        public Hotkey(Keys key, ModKeys modifiers, string description) {
             Modifiers = modifiers;
             Key = key;
             Description = description;
@@ -42,12 +31,19 @@ namespace nucs.Windows.Keyboard {
         }
 
         public bool Unregister() {
-            return KeyboardManager.Unregister(Description) || KeyboardManager.Unregister(Key, Modifiers);
+            return KeyboardManager.Unregister(Description) > 0 || KeyboardManager.Unregister(Key, Modifiers) > 0;
         }
 
+        internal static Hotkey Create(AKey k, string description) {
+            return new Hotkey(
+                    k.Key.ToKeys()
+                    , k.Modifiers == null ? ModKeys.None: k.Modifiers.Select(m => m.ToModKeys()).Aggregate((a, b) => a |= b)
+                    , description
+                );
+        }
         internal static Hotkey Create(Keys key, string description) { return new Hotkey(key, description); }
 
-        internal static Hotkey Create(Keys key, Keys modifiers, string description) { return new Hotkey(key, modifiers, description); }
+        internal static Hotkey Create(Keys key, ModKeys modifiers, string description) { return new Hotkey(key, modifiers, description); }
 
         public override bool Equals(object obj) {
             if (obj.GetType() == GetType()) {
@@ -59,9 +55,9 @@ namespace nucs.Windows.Keyboard {
 
         public override string ToString() {
             var b = new StringBuilder();
-            if (Modifiers.HasFlag(Keys.Control)) b.Append("C");
-            if (Modifiers.HasFlag(Keys.Alt)) b.Append("A");
-            if (Modifiers.HasFlag(Keys.Shift)) b.Append("S");
+            if (Modifiers.HasFlag(ModKeys.Control)) b.Append("C");
+            if (Modifiers.HasFlag(ModKeys.Alt)) b.Append("A");
+            if (Modifiers.HasFlag(ModKeys.Shift)) b.Append("S");
             if (b.Length != 0)
                 b.Append('-');
             b.Append(Key);

@@ -2,6 +2,9 @@
 
 namespace nucs.Windows.Keyboard {
     public static class KeyboardLanguage {
+        /// <summary>
+        /// Takes a Virtual Key from a key press event and translates it into a char from the current keyboard language.
+        /// </summary>
         public static string VKCodeToUnicode(uint VKCode){
             var sbString = new System.Text.StringBuilder();
 
@@ -16,6 +19,10 @@ namespace nucs.Windows.Keyboard {
             return sbString.ToString();
         }
         
+        /// <summary>
+        /// Gives the keyboard current language.
+        /// </summary>
+        /// <returns></returns>
         public static IntPtr GetCurrentKeyboardLayout() {
             return NativeWin32.GetKeyboardLayout(new UIntPtr(NativeWin32.GetTopMostThreadId()));
         }

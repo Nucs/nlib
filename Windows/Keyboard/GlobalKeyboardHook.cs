@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -9,122 +11,9 @@ using System.Windows.Forms.VisualStyles;
 using nucs.Forms;
 
 namespace nucs.Windows.Keyboard {
-    
-
-    public class ApplicationSimulator : InvisibleForm {
-        public IntPtr hInstance = IntPtr.Zero;
-
-        public delegate void MessageArrivalHandler(ref Message msg);
-
-        /// <summary>
-        /// Provides access to the messages that arrives through the application, unfiltered.
-        /// </summary>
-        public event MessageArrivalHandler MessageArrived; 
-        private ApplicationSimulator() { }
-
-        private ApplicationSimulator(Action<InvisibleForm> post_created) : base(post_created) {}
-
-        
-        public void Invoke(Action act) {
-            base.Invoke(act);
-        }
-
-        protected override void WndProc(ref Message m) {
-            if (MessageArrived != null)
-                MessageArrived(ref m);
-            base.WndProc(ref m);
-        }
-
-        public static ApplicationSimulator Start() {
-            ApplicationSimulator instace_holder = null;
-
-            var holder = new ManualResetEventSlim(false);
-            var t = new Thread(()=> Application.Run(
-                instace_holder = new ApplicationSimulator((inst) => {
-                    instace_holder = (ApplicationSimulator)inst; holder.Set();
-                }
-            )));
-
-            t.SetApartmentState(ApartmentState.STA);
-            t.IsBackground = true;
-            t.Start();
-            holder.Wait(); //wait for init.
-            return instace_holder;
-        }
-    }
-
-
-    /*public class ApplicationSimulator
-    {
-        public IntPtr hInstance = IntPtr.Zero;
-        public ManualResetEventSlim Loaded = new ManualResetEventSlim(false);
-
-        public bool IsStarted
-        {
-            get { return Form != null; }
-        }
-
-        public InvisibleForm Form { get; private set; }
-
-
-        public ApplicationSimulator() { }
-
-        public virtual void PostCreated() { }
-
-        /*        public void Hook() {
-                    if (IsStarted == false)
-                        Start();
-                }
-
-                public void UnHook() {
-                    if (IsStarted == true)
-                        Stop();
-                }#1#
-
-        public virtual void Start()
-        {
-            if (IsStarted)
-                return;
-            var t = new Thread(runForm);
-            t.SetApartmentState(ApartmentState.STA);
-            t.IsBackground = true;
-            t.Start();
-            Loaded.Wait();
-        }
-
-        /* #1#
-        public virtual void Stop()
-        {
-            if (!IsStarted)
-                return;
-            frm.Invoke(new MethodInvoker(endForm));
-            hInstance = IntPtr.Zero;
-            GlobalHotkeyManager.unhook(hInstance);
-            Loaded.Reset();
-        }
-
-        public void Invoke(Action act)
-        {
-            Form.Invoke(act);
-        }
-
-        private void runForm() { Application.Run(Form = new InvisibleForm(form => PostCreated())); }
-        private void endForm() { Form.Close(); }
-
-
-    }*/
-
-
-    /*GlobalHotkeyManager.hook(hInstance);
-            hInstance = NativeWin32.LoadLibrary("user32");
-            Loaded.Set();*/
-
-
-
-    public delegate void DeviceNotifyDelegate(Message msg);
-
-
-
+    /// <summary>
+    /// Provides a hotkey binding tool.
+    /// </summary>
     public class GlobalHotkeyManager : BaseKeyboardManager {
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x100;
@@ -133,73 +22,83 @@ namespace nucs.Windows.Keyboard {
         private const int WM_SYSKEYUP = 0x105;
 
         private readonly bool IsConsole;
-        private ApplicationSimulator app;
         public GlobalHotkeyManager(bool IsConsoleApplication = false) {
-            if ((IsConsole = IsConsoleApplication) == true)
-                app = ApplicationSimulator.Start();
+            IsConsole = IsConsoleApplication;
         }
 
 
         #region Events
 
         /// <summary>
-        ///     Occurs when one of the hooked keys is pressed
+        /// Disablemultiple (basically a spam) of firing button down event. True by default.
         /// </summary>
-        public static event KeyEventHandler KeyDown;
-
-        /// <summary>
-        ///     Occurs when one of the hooked keys is released
-        /// </summary>
-        public static event KeyEventHandler KeyUp;
+        public bool SuppressKeyHold {
+            get { return _suppressKeyHold; }
+            set { _suppressKeyHold = value; }
+        }
+        private bool _suppressKeyHold = true;
 
         #endregion
 
         /// <summary>
-        ///     The collections of keys to watch for
-        /// </summary>
-        public static List<Keys> HookedKeys = new List<Keys>();
-
-        /// <summary>
         ///     Handle to the hook, need this to unhook and call the next hook
         /// </summary>
-        private static IntPtr Handle = IntPtr.Zero;
+        private IntPtr HHook = IntPtr.Zero;
 
-        public static keyboardHookProc callbackDelegate;
+        protected keyboardHookProc callbackDelegate;
 
-        public override bool IsStarted { get; protected set; }
+        public override bool IsHooked { get; protected set; }
 
-        public override void Start() {
-            if (IsStarted) 
-                return;
-            if (IsConsole)
-                app.Start();
-            else
+
+
+        protected ApplicationSimulator AppSim = null;
+        protected override bool Hook() {
+            if (IsHooked) return false;
+            if (IsConsole) {
+                AppSim = ApplicationSimulator.Create();
+                AppSim.Invoke(()=>hook(
+                    AppSim.InvokeReturn(() => 
+                        NativeWin32.LoadLibrary("user32.dll"))
+                    ));
+            } else 
                 hook(NativeWin32.LoadLibrary("user32.dll"));
-            IsStarted = true;
+            return true;
         }
 
-        public override void Stop() {
-            if (IsStarted == false) 
-                return;
-            if (IsConsole)
-                app.Stop();
-            else
-                unhook(Handle);
-            IsStarted = false;
+        protected override bool Unhook() {
+            if (!IsHooked) return false;
+            if (IsConsole) {
+                AppSim.Invoke(() => { unhook(); AppSim.Close(); });
+                AppSim = null;
+            } else
+                unhook();
+            return true;
         }
 
-        internal static void hook(IntPtr hInstance) {
+        private void hook(IntPtr hInstance) {
             callbackDelegate = new keyboardHookProc(hookProc);
             GC.KeepAlive(callbackDelegate);
-            Handle = NativeWin32.SetWindowsHookEx(WH_KEYBOARD_LL, callbackDelegate, hInstance, 0);
+            HHook = NativeWin32.SetWindowsHookEx(WH_KEYBOARD_LL, callbackDelegate, hInstance, 0);
+            if (HHook == IntPtr.Zero)
+                throw new Win32Exception(Marshal.GetLastWin32Error());
         }
 
         /// <summary>
         ///     Uninstalls the global hook
         /// </summary>
-        internal static void unhook(IntPtr hhook) {
-            NativeWin32.UnhookWindowsHookEx(hhook);
+        private void unhook() {
+            if (NativeWin32.UnhookWindowsHookEx(HHook) == false) {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
         }
+
+        private bool rctrl, ralt, rshift;
+        private bool lctrl, lalt, lshift;
+        private Keys tmp_key;
+        private ModKeys tmp_mods;
+        private bool was_down = false;
+        private bool[] duplicatetags = new bool[256];
+        private bool[] presstags= new bool[256];
 
         /// <summary>
         ///     The callback for the keyboard hook
@@ -207,37 +106,90 @@ namespace nucs.Windows.Keyboard {
         /// <param name="code">The hook code, if it isn't >= 0, the function shouldn't do anyting</param>
         /// <param name="wParam">The event type</param>
         /// <param name="lParam">The keyhook event information</param>
-        /// <returns></returns>
-        internal static int hookProc(int code, int wParam, ref keyboardHookStruct lParam) {
-            if (code >= 0) {
-                var key = (Keys) lParam.vkCode;
-                if (HookedKeys.Contains(key)) {
-                    var kea = new KeyEventArgs(key);
-                    if ((wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) && (KeyDown != null)) {
-                        KeyDown(null, kea);
-                    } else if ((wParam == WM_KEYUP || wParam == WM_SYSKEYUP) && (KeyUp != null)) {
-                        KeyUp(null, kea);
+        internal int hookProc(int code, int wParam, ref keyboardHookStruct lParam) {
+            var keyc = ((KeyCode)lParam.vkCode);
+            var key = keyc.ToKeys();
+            var modifier = ModKeys.None;
+            if (code >= 0 && (!SuppressKeyHold || duplicatetags[(int)keyc] != (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN))) {
+                #region Modifier Switches
+                if (keyc.IsModifier()) {
+                    switch (keyc) {
+                        case KeyCode.RControl:
+                            rctrl = wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN; //is key down? otherwise false.
+                            break;
+                        case KeyCode.LControl:
+                            lctrl = wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN; //is key down? otherwise false.
+                            break;
+                        case KeyCode.RAlt:
+                            ralt = wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN; //is key down? otherwise false.
+                            break;
+                        case KeyCode.LAlt:
+                            lalt = wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN; //is key down? otherwise false.
+                            break;
+                        case KeyCode.RShift:
+                            rshift = wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN; //is key down? otherwise false.
+                            break;
+                        case KeyCode.LShift:
+                            lshift = wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN; //is key down? otherwise false.
+                            break;
                     }
-                    if (kea.Handled)
+                } else {
+                    if (rctrl) modifier |= ModKeys.RControl;
+                    if (lctrl) modifier |= ModKeys.LControl;
+                    if (rshift) modifier |= ModKeys.RControl;
+                    if (lshift) modifier |= ModKeys.LShift;
+                    if (ralt) modifier |= ModKeys.RAlt;
+                    if (lalt) modifier |= ModKeys.LAlt;
+                }
+
+
+                #endregion
+                #region Args and Event firing
+
+                //Console.WriteLine("(" + ((wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) ? "D" : "U") + ") " + modifier.ToString() + " + " + key.ToString());
+                
+                Hotkey hotk;
+                HotkeyEventArgs args = null;
+                if ((hotk = base._registers.FirstOrDefault(hk => hk.Key.Equals(key) && hk.Modifiers.Compare(modifier))) != null) {
+                    //keydown
+                    if ((wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)) {
+                        args = InvokeKeyDown(this, hotk);
+                    } else { //key up
+                        if ((wParam == WM_KEYUP || wParam == WM_SYSKEYUP)) {
+                            args = InvokeKeyUp(this, hotk);
+
+                            //if equals to last key event is up and equals to this key event -> KeyPress
+                            // hotkey mode: /*tmp_key.CompareModifiers(key) && tmp_mods.CompareModifiers(modifier) && !(wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)*/
+                            if (args == null || (args.Handled == false && presstags[(int)keyc])) {
+                                args = InvokeKeyPress(this, hotk);
+                            }
+                        }
+                    }
+
+                }
+
+                if (args != null && args.Handled)
                         return 1;
+
+                #endregion
+
+
+                presstags[(int) keyc] = wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN;
+                if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
+                    tmp_key = key;
+                    tmp_mods = modifier;
+                } else {
+                    tmp_key = Keys.None;
+                    tmp_mods = ModKeys.None;
                 }
             }
-            return NativeWin32.CallNextHookEx(Handle, code, wParam, ref lParam);
+            if ((wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) && duplicatetags[(int)keyc] == false)
+                duplicatetags[(int)keyc] = true;
+            else if ((wParam == WM_KEYUP || wParam == WM_SYSKEYUP) && duplicatetags[(int)keyc] == true)
+                duplicatetags[(int)keyc] = false;
+
+            
+            return NativeWin32.CallNextHookEx(HHook, code, wParam, ref lParam);
         }
-
-
-        public override bool Unregister(string description) {
-            return _registers.RemoveWhere(hk => hk.Description.Equals(description)) > 0;
-        }
-
-        public override bool Unregister(Keys key, Keys modifier) {
-            return _registers.RemoveWhere(hk => hk.Key == key && hk.Modifiers == modifier) > 0;
-        }
-
-        public override bool UnregisterAll() {
-            _registers.Clear();
-            return true;
-        }
-
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Input;
 using nucs.SystemCore;
 using nucs.Windows;
 using nucs.Windows.Keyboard;
@@ -12,7 +13,7 @@ public static class KeyCodeExtensions {
     #region Differentiating
 
         /// <summary>
-        /// Is the given KeyCode is a modifier
+        /// Is the given KeyCode is a modifier (regular or sided)
         /// </summary>
         public static bool IsModifier(this KeyCode kc) {
             var i = (ushort)kc;
@@ -44,26 +45,41 @@ public static class KeyCodeExtensions {
         /// <param name="kc"></param>
         /// <returns></returns>
         public static Keys ToKeys(this KeyCode kc) {
-/*            switch (kc) {
+            switch (kc) {
                 case KeyCode.LControl:
+                    return Keys.LControlKey;
                 case KeyCode.RControl:
-                    kc = KeyCode.Control;
-                    break;
+                    return Keys.RControlKey;
                 case KeyCode.LMenu:
+                    return Keys.LMenu;
                 case KeyCode.RMenu:
-                    kc = KeyCode.Menu;
-                    break;
+                    return Keys.RMenu;
                 case KeyCode.LShift:
+                    return Keys.LShiftKey;
                 case KeyCode.RShift:
-                    kc = KeyCode.Shift;
-                    break;
-            }*/
+                    return Keys.RShiftKey;
+                case KeyCode.Control:
+                    return Keys.Control;
+                case KeyCode.Menu:
+                    return Keys.Alt;
+                case KeyCode.Shift:
+                    return Keys.Shift;
+            }
             try {
                 return (Keys) kc;
-            } catch {
+            } catch (InvalidCastException) {
                 return Keys.None;
             }
         }
+    /// <summary>
+    /// Compares between two modifiers, where sided always equal to regular.
+    /// </summary>
+    public static bool CompareModifiers(this Keys key, Keys to) {
+        if (key == Keys.Control && (to == Keys.LControlKey || to == Keys.RControlKey)) return true;
+        if (key == Keys.Alt && (to == Keys.LMenu || to == Keys.RMenu)) return true;
+        if (key == Keys.Shift && (to == Keys.LShiftKey || to == Keys.RShiftKey)) return true;
+        return key.Equals(to);
+    }
 
         /// <summary>
         /// Converts a <see cref="Keys"/> Enum item to <see cref="KeyCode"/> of WinForm item. incase of missfit in conversion, <see cref="KeyCode.None"/> is returned

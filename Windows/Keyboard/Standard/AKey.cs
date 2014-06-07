@@ -13,11 +13,10 @@ using Z.ExtensionMethods.Object;
 
 namespace nucs.Windows.Keyboard {
 
-
-    [Serializable]
     /// <summary>
     /// My custom way of handling keys, and yes - Im sick with recreating things. Also this object is immutable
     /// </summary>
+    [Serializable]
     public class AKey : IDisposable {
 
         #region Properties And Construction

@@ -143,7 +143,6 @@ namespace nucs.Windows.Keyboard {
             } catch {}
             _disposed = true;
         }
-        private void Nothing() {}
     }
 
     
