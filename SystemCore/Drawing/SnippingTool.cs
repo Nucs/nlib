@@ -229,12 +229,12 @@ namespace nucs.SystemCore.Drawing {
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private MouseHook mhook;
+        private MouseListener mhook;
         protected override void OnLoad(EventArgs e) {
             base.OnLoad(e);
             if (SpecificWindowMode) {
                 this.Size = BackgroundImage.Size;
-                mhook = new MouseHook();
+                mhook = new MouseListener();
                 
                 mhook.Click += (sender, loc) => {
                                     if (loc.X > Location.X && loc.X < Location.X + Size.Width && loc.Y > Location.Y && loc.Y < Location.Y + Size.Height)

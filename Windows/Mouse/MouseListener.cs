@@ -9,7 +9,7 @@ namespace nucs.Windows.Hooking {
     /// <summary>
     /// Captures global mouse events
     /// </summary>
-    public class MouseHook : AbstractGlobalHook, IDisposable {
+    public class MouseListener : AbstractGlobalHook, IDisposable {
         #region MouseEventType Enum
 
         private enum MouseEventType {
@@ -37,7 +37,7 @@ namespace nucs.Windows.Hooking {
 
         #region Constructor
 
-        public MouseHook() {
+        public MouseListener() {
             _hookType = WH_MOUSE_LL;
         }
 
