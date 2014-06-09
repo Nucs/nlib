@@ -307,12 +307,12 @@
     <Compile Include="Threading\TaskTools.cs" />
     <Compile Include="SystemCore\String\StringTools.cs" />
     <Compile Include="Windows\Keyboard\Standard\Conversions.cs" />
-    <Compile Include="Windows\Hooking\GlobalHook.cs" />
+    <Compile Include="Windows\Mouse\Standard\GlobalHook.cs" />
     <Compile Include="Windows\Hooking\KeyboardHook.cs" />
-    <Compile Include="Windows\Keyboard\GlobalKeyboardHook.cs" />
+    <Compile Include="Windows\Keyboard\KeyboardListener.cs" />
     <Compile Include="Windows\Keyboard\Standard\BaseKeyboardManager.cs" />
     <Compile Include="Windows\Keyboard\KeyboardSimulator.cs" />
-    <Compile Include="Windows\Hooking\MouseHook.cs" />
+    <Compile Include="Windows\Mouse\MouseListener.cs" />
     <Compile Include="Windows\Keyboard\Standard\KeyCode.cs" />
     <Compile Include="Windows\Keyboard\Standard\ModKeys.cs" />
     <Compile Include="Windows\Keyboard\Standard\Hotkey.cs" />
@@ -325,6 +325,7 @@
     <Compile Include="Windows\Processes\ProcessFinder.cs" />
     <Compile Include="Windows\Processes\ProcessInfo.cs" />
     <Compile Include="Windows\Processes\WindowFinder.cs" />
+    <Compile Include="Windows\Registery\DefaultApplication.cs" />
     <Compile Include="Windows\Security\SecurityDiagnoser.cs" />
     <Compile Include="Windows\Startup\StartupManager.cs" />
     <Compile Include="Reduant\utils.cs" />
@@ -1100,9 +1101,7 @@
     <None Include="Images\refresh-icon.png" />
     <EmbeddedResource Include="Controls\WindowFinder\Resources\bmpFind.bmp" />
     <EmbeddedResource Include="Controls\WindowFinder\Resources\bmpFinda.bmp" />
-    <EmbeddedResource Include="Controls\WindowFinder\Resources\curTarget.cur">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\WindowFinder\Resources\curTarget.cur" />
     <EmbeddedResource Include="Controls\WindowFinder\Resources\WindowFinder.bmp" />
     <Content Include="Reduant\Network\SocketCommunication\Suggestions.txt" />
   </ItemGroup>

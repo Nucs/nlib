@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
@@ -516,6 +517,7 @@ namespace nucs.Controls {
             _onready_binded = true;
         }
 
+        [DebuggerStepThrough]
         private void _OnPaint(object sender, PaintEventArgs paintEventArgs) {
             if (_onready_binded) {
                 OnReadyForModifications();

@@ -63,9 +63,10 @@ namespace nucs.Windows.Keyboard {
         }
 
         /// <summary>
+        ///     (HAS BEEN SET TO INTERNAL BECAUSE INTEGRATION BECAME PROBLEMATIC) 
         ///     Should the keyevent cancel? a little bit buggy with the entire system. recommanded to avoid using it.
         /// </summary>
-        public bool Handled { get; set; }
+        internal bool Handled { get; set; }
 
         /// <summary>
         /// Description of the hotkey press
@@ -84,6 +85,7 @@ namespace nucs.Windows.Keyboard {
         private HotkeyEventArgs() { }
 
         public static HotkeyEventArgs Create(Hotkey hk) {
+            if (hk == null) return null;
             var args = new HotkeyEventArgs {Hotkey = hk};
             return args;
         }

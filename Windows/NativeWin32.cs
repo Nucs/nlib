@@ -499,6 +499,7 @@ namespace nucs.Windows {
 
     public delegate int keyboardHookProc(int code, int wParam, ref keyboardHookStruct lParam);
 
+    [Serializable]
     public struct keyboardHookStruct {
         public int vkCode;
         public int scanCode;

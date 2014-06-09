@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define DEBUG_KEYS
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -9,6 +11,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using nucs.Forms;
+using Z.ExtensionMethods.Object;
 
 namespace nucs.Windows.Keyboard {
     /// <summary>
@@ -62,6 +65,8 @@ namespace nucs.Windows.Keyboard {
                     ));
             } else 
                 hook(NativeWin32.LoadLibrary("user32.dll"));
+            if (IsThreadRunning == false)
+                ProcessorStart();
             return true;
         }
 
@@ -72,6 +77,7 @@ namespace nucs.Windows.Keyboard {
                 AppSim = null;
             } else
                 unhook();
+            ProcessorStop();
             return true;
         }
 
@@ -92,14 +98,6 @@ namespace nucs.Windows.Keyboard {
             }
         }
 
-        private bool rctrl, ralt, rshift;
-        private bool lctrl, lalt, lshift;
-        private Keys tmp_key;
-        private ModKeys tmp_mods;
-        private bool was_down = false;
-        private bool[] duplicatetags = new bool[256];
-        private bool[] presstags= new bool[256];
-
         /// <summary>
         ///     The callback for the keyboard hook
         /// </summary>
@@ -107,10 +105,77 @@ namespace nucs.Windows.Keyboard {
         /// <param name="wParam">The event type</param>
         /// <param name="lParam">The keyhook event information</param>
         internal int hookProc(int code, int wParam, ref keyboardHookStruct lParam) {
+            if (code>=0)
+                add_keyevent(new KeyEventProcessArgs() { wParam = wParam, lParam = lParam.DeepClone() });
+            return NativeWin32.CallNextHookEx(HHook, code, wParam, ref lParam);
+        }
+
+        #region Keyevent Async Processing
+
+        private void ProcessorStart() {
+            if (IsThreadRunning) return;
+            new Thread(Keyevent_Handler) {IsBackground = true,Priority = ThreadPriority.AboveNormal}
+                .Start();
+        }
+
+        private void ProcessorStop() {
+            if (IsThreadRunning) {
+                CloseToken = true;
+                AvailablityHolder.Set();
+            }
+        }
+
+        private struct KeyEventProcessArgs {
+            public int wParam;
+            public keyboardHookStruct lParam ;
+        }
+
+        private readonly Queue<KeyEventProcessArgs> KeyeventQueue = new Queue<KeyEventProcessArgs>(0);
+        private readonly AutoResetEvent AvailablityHolder = new AutoResetEvent(false);
+        private bool CloseToken;
+        private bool IsThreadRunning = false;
+        private object syncronizer = new object();
+        private bool Available {
+            get { return KeyeventQueue.Count > 0; }
+        }
+
+        private void add_keyevent(KeyEventProcessArgs e) {
+            KeyeventQueue.Enqueue(e);
+            AvailablityHolder.Set();
+        }
+
+        private void Keyevent_Handler() {
+            if (IsThreadRunning) return;
+            lock (syncronizer) {
+                IsThreadRunning = true;
+                while (true) {
+                    if (Available == false)
+                        AvailablityHolder.WaitOne();
+
+                    if (CloseToken) {
+                        CloseToken = false;
+                        break;
+                    }
+                    if (Available)
+                        process_keyevent(KeyeventQueue.Dequeue());
+                }
+                IsThreadRunning = false;
+            }
+        }
+
+        private bool rctrl, ralt, rshift;
+        private bool lctrl, lalt, lshift;
+        private bool was_down = false;
+        private bool[] duplicatetags = new bool[256];
+        private bool[] presstags = new bool[256];
+        private void process_keyevent(KeyEventProcessArgs e) {
+            int wParam = e.wParam;
+            var lParam = e.lParam;
+
             var keyc = ((KeyCode)lParam.vkCode);
             var key = keyc.ToKeys();
             var modifier = ModKeys.None;
-            if (code >= 0 && (!SuppressKeyHold || duplicatetags[(int)keyc] != (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN))) {
+            if ((!SuppressKeyHold || duplicatetags[(int)keyc] != (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN))) {
                 #region Modifier Switches
                 if (keyc.IsModifier()) {
                     switch (keyc) {
@@ -166,30 +231,32 @@ namespace nucs.Windows.Keyboard {
                         }
                     }
 
+
                 }
 
-                if (args != null && args.Handled)
-                        return 1;
+                /*if (args != null && args.Handled)
+                        return 1;*/
 
                 #endregion
 
 
                 presstags[(int) keyc] = wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN;
-                if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
-                    tmp_key = key;
-                    tmp_mods = modifier;
-                } else {
-                    tmp_key = Keys.None;
-                    tmp_mods = ModKeys.None;
-                }
+#if DEBUG_KEYS
+                Console.Clear();
+                Console.WriteLine("RCTRL " + rctrl + " | " + "LCTRL " + lctrl + " | " + "RAlt " + ralt + " | " + "LAlt " + lalt + " | ");
+                Console.WriteLine("RShift " + rshift + " | " + "LShift " + lshift);
+                Console.WriteLine(Hotkey.Create(key, modifier,"").ToString());
+#endif
             }
             if ((wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) && duplicatetags[(int)keyc] == false)
                 duplicatetags[(int)keyc] = true;
             else if ((wParam == WM_KEYUP || wParam == WM_SYSKEYUP) && duplicatetags[(int)keyc] == true)
                 duplicatetags[(int)keyc] = false;
 
-            
-            return NativeWin32.CallNextHookEx(HHook, code, wParam, ref lParam);
+
         }
+
+        #endregion
+
     }
 }
