@@ -74,6 +74,13 @@ namespace nucs.Collections.Extensions {
             }
         }
 
+        /// <summary>
+        /// Simple way to convert an single item to an IEnumerable and eventually any type of collection.
+        /// </summary>
+        public static IEnumerable<T> ToEnumerable<T>(this T obj) {
+            yield return obj;
+        }
+
 
     }
 }
