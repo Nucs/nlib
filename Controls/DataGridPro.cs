@@ -152,22 +152,41 @@ namespace nucs.Controls {
         }
 
         /// <summary>
-        /// Right click menu context, pass null to disable.
+        /// Right click menu context, shows when the press is on a row. pass null to disable.
         /// </summary>
-        public override ContextMenu ContextMenu {
+        public ContextMenu ItemContextMenu {
             get { return base.ContextMenu; }
             set {
                 if (value == null) {
-                    this.MouseDown -= _invokeOnClick;
+                    this.MouseDown -= _invokeOnItemClick;
                     return;
                 }
-                if (ContextMenu == null)
-                    this.MouseDown += _invokeOnClick;
+                if (ItemContextMenu == null)
+                    this.MouseDown += _invokeOnItemClick;
                 base.ContextMenu = value;
             }
         }
 
-        private void _invokeOnClick(object sender, MouseEventArgs e) {
+        private ContextMenu _offcontextmenu;
+
+        /// <summary>
+        /// Right click context menu, shows when the press is not on a row. pass null to disable.
+        /// </summary>
+        public ContextMenu EmptyContextMenu {
+            get { return _offcontextmenu; }
+            set {
+                if (value == null) {
+                    this.MouseDown -= _invokeOnIOffClick;
+                    return;
+                }
+                if (_offcontextmenu == null)
+                    this.MouseDown += _invokeOnIOffClick;
+                _offcontextmenu = value;
+            }
+        }
+
+        [DebuggerStepThrough]
+        private void _invokeOnItemClick(object sender, MouseEventArgs e) {
             if (e.Button != MouseButtons.Right || IsCurrentCellInEditMode)
                 return;
             var hti = HitTest(e.X, e.Y);
@@ -175,12 +194,21 @@ namespace nucs.Controls {
             if (_contextMenuMode == ContextMenuDisplayMode.OnCell && hti.RowIndex != -1 && hti.ColumnIndex != -1) {
                 ClearSelection();
                 Rows[hti.RowIndex].Selected = true;
-                ContextMenu.Show(this, e.Location);
+                ItemContextMenu.Show(this, e.Location);
             } else if (_contextMenuMode == ContextMenuDisplayMode.Anywhere)
-                ContextMenu.Show(this, e.Location);
-            
-            
+                ItemContextMenu.Show(this, e.Location);
+        }
 
+        [DebuggerStepThrough]
+        private void _invokeOnIOffClick(object sender, MouseEventArgs e) {
+            if (e.Button != MouseButtons.Right || IsCurrentCellInEditMode)
+                return;
+            var hti = HitTest(e.X, e.Y);
+            if (_contextMenuMode == ContextMenuDisplayMode.OnCell && hti.RowIndex == -1 && hti.ColumnIndex == -1) {
+                ClearSelection();
+                EmptyContextMenu.Show(this, e.Location);
+            } else if (_contextMenuMode == ContextMenuDisplayMode.Anywhere)
+                EmptyContextMenu.Show(this, e.Location);
         }
 
         #region Events
@@ -438,6 +466,7 @@ namespace nucs.Controls {
             _bound_mouseclick = true;
         }
 
+        [DebuggerStepThrough]
         private void _OnRowHeadGridMouseClick(object sender, MouseEventArgs e) {
             var dgv = (DataGridPro) sender;
             HitTestInfo ht = dgv.HitTest(e.X, e.Y);
@@ -445,6 +474,7 @@ namespace nucs.Controls {
                 dgv.ApplyEditAndEnd();
         }
 
+        [DebuggerStepThrough]
         private void _OnMouseStopEdit(object sender, MouseEventArgs e) {
             if (sender.GetType() == typeof (DataGridPro)) {
                 HitTestInfo ht = HitTest(e.X, e.Y);
