@@ -17,12 +17,14 @@ namespace nucs.SystemCore.Settings {
         static AppSettings() {
             serializer = new JavaScriptSerializer();
             serializer.RegisterConverters(typeof(SettingsConverterAttribute).GetAllAttributeHolders().Select(t=>t.CreateInstance<JavaScriptConverter>()));
-        } 
+        }
 
         /// <summary>
         /// The filename that was originally loaded from. saving to other file does not change this field!
         /// </summary>
-        public void Save() { serializer.Serialize(this).SaveAs(DEFAULT_FILENAME); }
+        public virtual void Save() {
+            serializer.Serialize(this).SaveAs(DEFAULT_FILENAME); 
+        }
 
         public static void Save(T pSettings, string fileName = DEFAULT_FILENAME) {
             serializer.Serialize(pSettings).SaveAs(fileName);

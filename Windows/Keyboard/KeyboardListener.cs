@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -98,13 +99,15 @@ namespace nucs.Windows.Keyboard {
             }
         }
 
+        
         /// <summary>
         ///     The callback for the keyboard hook
         /// </summary>
         /// <param name="code">The hook code, if it isn't >= 0, the function shouldn't do anyting</param>
         /// <param name="wParam">The event type</param>
         /// <param name="lParam">The keyhook event information</param>
-        internal int hookProc(int code, int wParam, ref keyboardHookStruct lParam) {
+        [DebuggerStepThrough]
+        internal int hookProc(int code, int wParam, ref keyboardHookStruct lParam)  {
             if (code>=0)
                 add_keyevent(new KeyEventProcessArgs() { wParam = wParam, lParam = lParam.DeepClone() });
             return NativeWin32.CallNextHookEx(HHook, code, wParam, ref lParam);
@@ -168,6 +171,7 @@ namespace nucs.Windows.Keyboard {
         private bool was_down = false;
         private bool[] duplicatetags = new bool[256];
         private bool[] presstags = new bool[256];
+        //[DebuggerStepThrough]
         private void process_keyevent(KeyEventProcessArgs e) {
             int wParam = e.wParam;
             var lParam = e.lParam;

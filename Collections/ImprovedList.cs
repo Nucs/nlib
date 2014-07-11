@@ -11,15 +11,27 @@ using nucs.Collections.Extensions;
 
 namespace nucs.Collections {
     /// <summary>
-    /// A list that have item-add handling using events
+    ///     A list that have item-add handling using events
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class ImprovedList<T> : List<T> {
         public delegate bool CompareItems(T item);
         public delegate void ItemAddedHandler(T Item);
         public delegate void ItemToBeAddedHandler(T Item, Bool Approval);
+        public delegate void ListAccessedHandler();
+        /// <summary>
+        ///     Post approval->item added to list
+        /// </summary>
         public event ItemAddedHandler ItemAdded = null;
-        public event ItemToBeAddedHandler ItemToBeAdded = null; 
+        /// <summary>
+        ///     Will ask for approval for adding the item to the list
+        /// </summary>
+        public event ItemToBeAddedHandler ItemToBeAdded = null;
+        /// <summary>
+        ///     Will invoke when item has been accessed. Read, written, added, delete and so on.
+        /// </summary>
+        public event ListAccessedHandler ListAccessed = null; 
+
         public bool IsEmpty { get { return Count == 0; } }
 
         public ImprovedList(IEnumerable<T> source) : base(source) {}
@@ -29,10 +41,12 @@ namespace nucs.Collections {
 
         public T this[long index] {
             get {
+                invokeAccessed();
                 return base[Convert.ToInt32(index)];
             }
             set {
-                base[Convert.ToInt32(index)] = value;
+                var i = Convert.ToInt32(index);
+                base[i] = value;
             }
         }
 
@@ -54,6 +68,7 @@ namespace nucs.Collections {
             base.Add(item);
             if (ItemAdded != null)
                 ItemAdded(item);
+            invokeAccessed();
         }
         public new void AddRange(IEnumerable<T> range) {
             var items = range.ToArray();
@@ -95,6 +110,7 @@ namespace nucs.Collections {
             base.Insert(index, item);
             if (ItemAdded != null)
                 ItemAdded(item);
+            invokeAccessed();
         }
         public new void InsertRange(int index, IEnumerable<T> range) {
             var items = range.ToArray();
@@ -116,6 +132,7 @@ namespace nucs.Collections {
             base.InsertRange(index, approved);
             if (ItemAdded != null)
                 Task.Run(() => items.ForEach(item => ItemAdded(item)));
+            invokeAccessed();
         }
 
         public T TakeFirst() {
@@ -134,6 +151,7 @@ namespace nucs.Collections {
                 throw new ArgumentOutOfRangeException("index", index, "index is outside the bounds of source array");
             var item = this[index];
             RemoveAt(index);
+            invokeAccessed();
             return item;
         }
 
@@ -142,10 +160,10 @@ namespace nucs.Collections {
         }
 
         /// <summary>
-        /// 
+        ///     Waits for arrival of an item for <param name="timeout"> milliseconds. </param>
         /// </summary>
-        /// <param name="comparer"></param>
-        /// <param name="timeout"></param>
+        /// <param name="comparer">The comparator for indentifying the wanted item</param>
+        /// <param name="timeout">The time in milliseconds to wait. set it to -1 for infinite</param>
         /// <returns></returns>
         public T WaitFor(CompareItems comparer, int timeout = -1) { //todo test it
             T res = default(T); //ignore default(T), it doesnt matter anyway
@@ -175,8 +193,13 @@ namespace nucs.Collections {
         public void ClearEventRegisterations() {
             ItemAdded = null;
             ItemToBeAdded = null;
+            ListAccessed = null;
         }
 
+        private void invokeAccessed() {
+            if (ListAccessed != null)
+                Task.Run(() => ListAccessed());
+        }
 
         #region Operators
         public static ImprovedList<T> operator +(ImprovedList<T> source, IEnumerable<T> toAdd) {

@@ -212,6 +212,7 @@
     <Compile Include="Network\NetCommsExtension.cs" />
     <Compile Include="Reduant\Network\BooleanHolder.cs" />
     <Compile Include="Reduant\Network\Commons.cs" />
+    <Compile Include="SystemCore\CodeGen.cs" />
     <Compile Include="SystemCore\Drawing\ColorExtensions.cs" />
     <Compile Include="SystemCore\Drawing\RectangleExtensions.cs" />
     <Compile Include="SystemCore\Drawing\SnippingTool.cs">
@@ -220,7 +221,9 @@
     <Compile Include="SystemCore\Drawing\SnippingTool.Designer.cs">
       <DependentUpon>SnippingTool.cs</DependentUpon>
     </Compile>
+    <Compile Include="SystemCore\Randomizer.cs" />
     <Compile Include="SystemCore\Reflection\AttributesTools.cs" />
+    <Compile Include="SystemCore\Reflection\NamespacesTools.cs" />
     <Compile Include="SystemCore\Settings\AppSettings.cs" />
     <Compile Include="SystemCore\UriExtensions.cs" />
     <Compile Include="Threading\SleepUtils.cs" />

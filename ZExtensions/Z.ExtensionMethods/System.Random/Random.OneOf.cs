@@ -43,4 +43,5 @@ public static partial class RandomExtension
     {
         return values[@this.Next(values.Length)];
     }
+
 }
