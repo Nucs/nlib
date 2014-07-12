@@ -18,6 +18,7 @@ using nucs.Collections.Extensions;
 using nucs.Forms;
 using nucs.SystemCore;
 using nucs.SystemCore.Dynamic;
+using Z.ExtensionMethods.Object;
 using DataGrid = nucs.Controls.DataGridPro;
 using Column = System.Windows.Forms.DataGridViewColumn;
 using Row = System.Windows.Forms.DataGridViewRow;
@@ -32,7 +33,6 @@ namespace nucs.Controls {
     public partial class DataGridPro : DataGridView {
 
         #region Constructor
-        
         /// <summary>
         /// DataGridPro is a prototype of DataGridView. It has many _bug fixes of it's original version and provides plenty of methods to help displaying the data (Adapter)
         /// </summary>
@@ -54,8 +54,11 @@ namespace nucs.Controls {
                                }; //used to force edit mode on double click.
             MouseClick += _OnRowHeadGridMouseClick;
             Font = new Font("Segoe UI", 8.125f);
+            //CellContentClick += this_CellContentClick;
+            CellValueChanged += this_CellValueChanged;
+            //Rows.CollectionChanged += (sender, args) => { if (args.Action == CollectionChangeAction.Add) OnRowAdded(this, (DataGridViewRow) args.Element); };
             //CurrentCell = null; //The grid, when first initializing, incorrectly attempts to set the current cell to the first cell (0,0) which when done makes the first column visible. You can work around this by manually setting the CurrentCell property.
-            #if DEBUG
+#if DEBUG
             DataError += OnDataError;
             #endif
         }
@@ -419,6 +422,25 @@ namespace nucs.Controls {
         }
 
         #endregion
+
+        #endregion
+
+        #region Custom Event Firing
+        private void this_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+            object cell = this[e.ColumnIndex, e.RowIndex];
+            ICustomControlEventLayout intrf = null;
+            try {
+                intrf = (ICustomControlEventLayout) cell;
+            } catch (InvalidCastException) {
+                return;
+            }
+            intrf.OnCellValueChanged(sender, ((DataGridViewCell)cell).Value);
+        }
+/*
+        public event EventHandler<DataGridViewRow> RowAdded;
+        protected void OnRowAdded(object sender, DataGridViewRow row) {
+            MessageBox.Show("lawl");
+        }*/
 
         #endregion
 

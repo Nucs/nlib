@@ -142,6 +142,7 @@ namespace nucs.Windows.Keyboard {
             get { return KeyeventQueue.Count > 0; }
         }
 
+        [DebuggerStepThrough]
         private void add_keyevent(KeyEventProcessArgs e) {
             KeyeventQueue.Enqueue(e);
             AvailablityHolder.Set();
@@ -171,7 +172,7 @@ namespace nucs.Windows.Keyboard {
         private bool was_down = false;
         private bool[] duplicatetags = new bool[256];
         private bool[] presstags = new bool[256];
-        //[DebuggerStepThrough]
+        [DebuggerStepThrough]
         private void process_keyevent(KeyEventProcessArgs e) {
             int wParam = e.wParam;
             var lParam = e.lParam;
