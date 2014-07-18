@@ -23,11 +23,15 @@ namespace nucs.SystemCore {
                     throw new ArgumentOutOfRangeException("_case");
             }
 
-            var arr = opts.ToCharArray();
+            return RandomString(opts, length);
+        }
+
+        public static string RandomString(string chars, uint length) {
+            var arr = chars.ToCharArray();
             var r = new Random();
             string res = "";
             for (int i = 0; i < length; i++)
-                res += arr[r.Next(0, opts.Length - 1)];
+                res += arr[r.Next(0, arr.Length - 1)];
             return res;
         }
 

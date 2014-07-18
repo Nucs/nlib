@@ -46,10 +46,8 @@ public static partial class StringExtension
     ///           }
     ///     </code>
     /// </example>
-    public static void SaveAs(this string @this, string fileName, bool append = false)
-    {
-        using (TextWriter tw = new StreamWriter(fileName, append))
-        {
+    public static void SaveAs(this string @this, string fileName, bool append = false) {
+        using (TextWriter tw = new StreamWriter(fileName, append)) {
             tw.Write(@this);
         }
     }

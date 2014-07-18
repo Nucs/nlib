@@ -233,11 +233,13 @@
     <Compile Include="SystemCore\Drawing\SnippingTool.Designer.cs">
       <DependentUpon>SnippingTool.cs</DependentUpon>
     </Compile>
+    <Compile Include="SystemCore\ISizeComparable.cs" />
     <Compile Include="SystemCore\Randomizer.cs" />
     <Compile Include="SystemCore\Reflection\AttributesTools.cs" />
     <Compile Include="SystemCore\Reflection\NamespacesTools.cs" />
     <Compile Include="SystemCore\Settings\AppSettings.cs" />
     <Compile Include="SystemCore\UriExtensions.cs" />
+    <Compile Include="SystemCore\Version.cs" />
     <Compile Include="Threading\SleepUtils.cs" />
     <Compile Include="Threading\TimeLimitedInspector.cs" />
     <Compile Include="Diagnostics\TimeMeasurer.cs" />
@@ -339,6 +341,7 @@
     <Compile Include="Windows\Keyboard\TypingTarget.cs" />
     <Compile Include="Windows\Processes\ProcessFinder.cs" />
     <Compile Include="Windows\Processes\ProcessInfo.cs" />
+    <Compile Include="Windows\Processes\Processy.cs" />
     <Compile Include="Windows\Processes\WindowFinder.cs" />
     <Compile Include="Windows\Registery\DefaultApplication.cs" />
     <Compile Include="Windows\Security\SecurityDiagnoser.cs" />

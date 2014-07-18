@@ -27,12 +27,18 @@ namespace nucs.Collections.Extensions {
         } 
 
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> list, Action<T> action) {
-            var forEach = new List<T>();
             foreach (var j in list) {
-                forEach.Add(j);
                 action.Invoke(j);
+                yield return j;
             }
-            return forEach;
+        }
+        public static IEnumerable<T> ForEachSafe<T>(this IEnumerable<T> list, Action<T> action) {
+            foreach (var j in list) {
+                try {
+                    action.Invoke(j);
+                } catch {}
+                yield return j;
+            }
         }
 
         public static IEnumerable<T> ForEachSelf<T>(this IEnumerable<T> list, Action<T[], T> action, object unknown) {
@@ -55,6 +61,14 @@ namespace nucs.Collections.Extensions {
         public static Array ForEach<T>(this T[] list, Action<T> action) {
             foreach (var j in list) {
                 action.Invoke(j);
+            }
+            return list;
+        }
+        public static Array ForEachSafe<T>(this T[] list, Action<T> action) {
+            foreach (var j in list) {
+                try {
+                    action.Invoke(j);
+                } catch {}
             }
             return list;
         }
