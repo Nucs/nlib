@@ -1,33 +1,42 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using System.Security;
+using System.Security.AccessControl;
+using System.Security.Permissions;
 using System.Text;
+using System.Windows.Forms;
 using Microsoft.Win32;
+using Z.ExtensionMethods.Object;
 
 namespace nucs.Windows.Startup {
     public static class StartupManager {
-        #region RegisterApplication Overloads
+
+        #region Register
 
         /// <summary>
-        /// Provides 3 different methods\types to register program's
+        ///     Provides 3 different methods\types to register program's
         /// startup to the computer.
         /// </summary>
         /// <param name="regtype">One of the three methods you will</param>
         /// <param name="folder">The folder that the file is located in (w/o the file name itself) for e.g. @"C:\Program Files\"</param>
         /// <param name="file">The file that the shortcut refers to, for e.g. "game.exe" or "2girls1cup.mkv"</param>
         /// <param name="applicationName">Represents the name of the shortcut or the program name in the registry</param>
-        public static void RegisterApplication(StartupType regtype, string folder, string file, string applicationName) {
-            if (applicationName == null) applicationName = "";
+        public static void Register(StartupType regtype, string folder, string file, string applicationName) {
+            if (applicationName == null) applicationName = AppDomain.CurrentDomain.FriendlyName;
             string path = Path.Combine(folder, file);
             if (string.IsNullOrEmpty(Path.GetFileName(path)))
                 throw new InvalidOperationException("Could not find a file name at the combined path \"" + path + "\"");
-            if (File.Exists(path) == false)
-                throw new IOException("Could not find file for shortcut creation at/in \"" + path + "\"");
+
 
             switch (regtype) {
                 case StartupType.DefaultStartupFolder:
+                    if (File.Exists(path) == false)
+                        throw new IOException("Could not find file for shortcut creation at/in \"" + path + "\"");
                     var link = (IShellLink) new ShellLink();
                     link.SetDescription("My Description");
                     link.SetPath(path);
@@ -63,43 +72,49 @@ namespace nucs.Windows.Startup {
                     throw new ArgumentOutOfRangeException("regtype");
             }
         }
-
+        
         /// <summary>
-        /// Provides 3 different methods\types to register program's
+        ///     Provides 3 different methods\types to register program's
         /// startup to the computer.
         /// </summary>
         /// <param name="regtype">One of the three methods you will</param>
-        /// <param name="fullpath">The folder and the file that is targeted for e.g. @"C:\Program Files\videogame.exe"</param>
+        /// <param name="info">The file location for e.g. @"C:\Program Files\2girls1cup.mkv" as FileInfo </param>
         /// <param name="applicationName">Represents the name of the shortcut or the program name in the registry</param>
-        public static void RegisterApplication(StartupType regtype, string fullpath, string applicationName) {
-            fullpath = fullpath.Replace('/', '\\');
-            string[] spl = fullpath.Split('\\');
-            string splfolder = fullpath.Remove(fullpath.IndexOf(spl.Last(), StringComparison.OrdinalIgnoreCase),
-                                               spl.Last().Length);
-            RegisterApplication(regtype, splfolder, spl.Last(), applicationName);
+        public static void Register(StartupType regtype, FileInfo info, string applicationName) {
+            Register(regtype, info.DirectoryName, info.Name, applicationName);
         }
 
-        public static bool RegisterApplicationSafe(StartupType regtype, string folder, string file,
-                                                   string applicationName) {
-            if (applicationName == null) applicationName = "";
-            try {
-                RegisterApplication(regtype, folder, file, applicationName);
-                return true;
-            }
-            catch (Exception e) {
-                return false;
-            }
+        /// <summary>
+        ///     Provides 3 different methods\types to register program's
+        /// startup to the computer.
+        /// </summary>
+        /// <param name="regtype">One of the three methods you will</param>
+        /// <param name="path">The file location for e.g. @"C:\Program Files\2girls1cup.mkv"</param>
+        /// <param name="applicationName">Represents the name of the shortcut or the program name in the registry</param>
+        public static void Register(StartupType regtype, string path, string applicationName) {
+            Register(regtype, Path.GetDirectoryName(path), Path.GetFileName(path), applicationName);
         }
 
-        public static bool RegisterApplicationSafe(StartupType regtype, string fullpath, string applicationName) {
-            try {
-                RegisterApplication(regtype, fullpath, applicationName);
-                return true;
-            }
-            catch (Exception e) {
-                return false;
-            }
+        /// <summary>
+        ///     Provides 3 different methods\types to register program's startup to the computer. 
+        /// </summary>
+        /// <param name="folder">The folder that the file is located in (w/o the file name itself) for e.g. @"C:\Program Files\"</param>
+        /// <param name="file">The file that the shortcut refers to, for e.g. "game.exe" or "2girls1cup.mkv"</param>
+        /// <param name="applicationName">Represents the name of the shortcut or the program name in the registry</param>
+        public static void Register(string folder, string file, string applicationName) {
+            Register(GetPreferedAllowedStartupType(Path.Combine(folder, file)), folder, file, applicationName);
         }
+
+        /// <summary>
+        ///     Provides 3 different methods\types to register program's startup to the computer. 
+        /// </summary>
+        /// <param name="path">The file location for e.g. @"C:\Program Files\2girls1cup.mkv"</param>
+        /// <param name="applicationName">Represents the name of the shortcut or the program name in the registry</param>
+        public static void Register(string path, string applicationName) {
+            Register(GetPreferedAllowedStartupType(path), Path.GetDirectoryName(path), Path.GetFileName(path), applicationName);
+        }
+
+        #region Shortcut Creating
 
         #region Nested type: IShellLink
 
@@ -144,121 +159,29 @@ namespace nucs.Windows.Startup {
 
         #endregion
 
-        #region IsRegistered Overloads
+        #endregion
+
+        #region IsRegistered
 
         /// <summary>
         /// Tests if the app is registered in all methods and returns if any detected.
         /// </summary>
         /// <param name="applicationName">The application name</param>
         /// <returns>if registered, returns the method, if not; StartupType.Null</returns>
-        public static StartupType IsApplicationRegisteredSafe(string applicationName) {
-            try {
-                return IsApplicationRegistered(applicationName);
-            }
-            catch {
-                return StartupType.Null;
-            }
-        }
-
-        /// <summary>
-        /// Tests if the app is registered in all methods and returns if any detected.
-        /// </summary>
-        /// <param name="applicationName">The application name</param>
-        /// <returns>if registered, returns the method, if not; StartupType.Null</returns>
-        public static StartupType IsApplicationRegistered(string applicationName) {
-            //case StartupType.DefaultStartupFolder:
-                try {
-                    if (File.Exists(Path.Combine(
-                        Environment.GetFolderPath(Environment.SpecialFolder.Startup),
-                        applicationName + ".lnk")))
-                        return StartupType.DefaultStartupFolder;
-                } catch (Exception e) {
-                    
-                }
-            //case StartupType.MachineStartupRegistry:
-                try {
-                    RegistryKey add = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-                    if (add == null)
-                        throw new Exception("Invalid registery path.");
-                    if (add.GetValue(applicationName) != null) return StartupType.MachineStartupRegistry;
-                } catch (Exception e) {
-                    
-                }
-            //case StartupType.LocalUserStartupRegistry:
-                try {
-                    RegistryKey ad = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-                    if (ad == null)
-                        throw new Exception("Invalid registery path.");
-                    if (ad.GetValue(applicationName) != null) return StartupType.LocalUserStartupRegistry;
-                } catch (Exception e) {
-                    
-                }
-
-            return StartupType.Null;
-        }
-
-        /// <summary>
-        /// Tests if the app is registered in a specific registeration method.
-        /// </summary>
-        /// <param name="regtype">The registeration method.</param>
-        /// <param name="applicationName">The application name</param>
-        /// <returns>if registered or not.</returns>
-        public static bool IsApplicationRegisteredSafe(StartupType regtype, string applicationName) {
-            try {
-                return IsApplicationRegistered(regtype, applicationName);
-            } catch (Exception) {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Tests if the app is registered in a specific registeration method. Beware of exceptions.
-        /// </summary>
-        /// <param name="regtype">The registeration method.</param>
-        /// <param name="applicationName">The application name</param>
-        /// <returns>if registered or not.</returns>
-        public static bool IsApplicationRegistered(StartupType regtype, string applicationName) {
-            if (regtype == StartupType.Null)
-                return false;
-            switch (regtype) {
-                case StartupType.DefaultStartupFolder:
-                    return File.Exists(
-                        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup),
-                                     applicationName + ".lnk")
-                        );
-                case StartupType.MachineStartupRegistry:
-                    RegistryKey add = Registry.LocalMachine.OpenSubKey(
-                        @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-                    if (add == null)
-                        throw new Exception("Invalid registery path.");
-                    return add.GetValue(applicationName) != null;
-                case StartupType.LocalUserStartupRegistry:
-                    RegistryKey ad = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run",
-                                                                     true);
-                    if (ad == null)
-                        throw new Exception("Invalid registery path.");
-                    return ad.GetValue(applicationName) != null;
-                default:
-                    throw new ArgumentOutOfRangeException("regtype");
-            }
+        public static AppStartupRegisteration IsRegistered(string applicationName) {
+            return GetRegisterations().FirstOrDefault(reg => reg.Name == applicationName);
         }
 
         #endregion
 
-        #region IsRegistered Overloads
+        #region Unregister
 
-        public static bool UnregisterApplicationSafe(StartupType regtype, string applicationName) {
-            if (regtype == StartupType.Null)
-                return false;
-            try {
-                return UnregisterApplication(regtype, applicationName);
-            }
-            catch (Exception) {
-                return false;
-            }
+        public static bool Unregister(string applicationName) {
+            var t = GetRegisterations().FirstOrDefault(reg => reg.Name.Equals(applicationName));
+            return Unregister(t == null ? StartupType.Null : t.Type, applicationName);
         }
 
-        public static bool UnregisterApplication(StartupType regtype, string applicationName) {
+        public static bool Unregister(StartupType regtype, string applicationName) {
             if (regtype == StartupType.Null)
                 return false;
             switch (regtype) {
@@ -278,8 +201,9 @@ namespace nucs.Windows.Startup {
                     add.DeleteValue(applicationName, true);
                     return true;
                 case StartupType.LocalUserStartupRegistry:
-                    RegistryKey ad = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run",
-                                                                     true);
+                    var ad = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.Delete);
+
+                    Registry.CurrentUser.DeleteValue(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\" + applicationName);
                     if (ad == null)
                         throw new Exception("Invalid registery path.");
                     ad.DeleteValue(applicationName, true);
@@ -304,44 +228,128 @@ namespace nucs.Windows.Startup {
         /// <returns></returns>
         public static StartupType GetPreferedAllowedStartupType(string pathToFile) {
             try {
-                RegisterApplication(StartupType.MachineStartupRegistry, pathToFile, "Nothing");
-                if (IsApplicationRegisteredSafe(StartupType.MachineStartupRegistry, "Nothing")) {
-                    UnregisterApplicationSafe(StartupType.MachineStartupRegistry, "Nothing");
-                    return StartupType.MachineStartupRegistry;
-                }
-            }
-            catch {}
+                Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.Default, RegistryRights.WriteKey);
+                return StartupType.MachineStartupRegistry;
+            } catch (SecurityException) { } 
+
             try {
-                RegisterApplication(StartupType.LocalUserStartupRegistry, pathToFile, "Nothing");
-                if (IsApplicationRegisteredSafe(StartupType.LocalUserStartupRegistry, "Nothing")) {
-                    UnregisterApplicationSafe(StartupType.LocalUserStartupRegistry, "Nothing");
-                    return StartupType.LocalUserStartupRegistry;
-                }
-            }
-            catch {}
+                Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.Default, RegistryRights.WriteKey);
+                return StartupType.LocalUserStartupRegistry;
+            } catch (SecurityException) { } 
+
+
             try {
-                RegisterApplication(StartupType.DefaultStartupFolder, pathToFile, "Nothing");
-                if (IsApplicationRegisteredSafe(StartupType.DefaultStartupFolder, "Nothing")) {
-                    UnregisterApplicationSafe(StartupType.DefaultStartupFolder, "Nothing");
-                    return StartupType.DefaultStartupFolder;
-                }
-            }
-            catch {}
+               new FileIOPermission(FileIOPermissionAccess.Write, Environment.GetFolderPath(Environment.SpecialFolder.Startup)).Demand();
+                return StartupType.DefaultStartupFolder;
+            } catch (SecurityException) {}
+
             return StartupType.Null;
         }
 
-        public static StartupType UnregisterApplicationSafe(string applicationName) {
+        /// <summary>
+        /// returns all startup registerations. 
+        /// </summary>
+        public static IEnumerable<AppStartupRegisteration> GetRegisterations() {
+            //read startup folder
+            foreach (var file in Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Startup)).Where(f=>f.EndsWith(".lnk"))) {
+                AppStartupRegisteration reg = null;
+                try {
+                    var target = getShortcutTarget(file);
+                    if (target == null) continue;
+                    reg = new AppStartupRegisteration(StartupType.DefaultStartupFolder, target, Path.GetFileNameWithoutExtension(file));
+                } catch {}
+                if (reg != null)
+                    yield return reg;
+            }
+            RegistryKey add;
+            //read registry user
             try {
-                StartupType t;
-                return UnregisterApplication(t = IsApplicationRegistered(applicationName), applicationName)
-                           ? t
-                           : StartupType.Null;
-            } catch {return StartupType.Null;}
+                add = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.Default, RegistryRights.ReadKey);
+            } catch (SecurityException) {
+                goto _next;
+            }
+            if (add == null)
+                goto _next;
+            foreach (var name in add.GetValueNames())
+                yield return new AppStartupRegisteration(StartupType.MachineStartupRegistry, add.GetValue(name).As<string>().Trim('\"'), name);
+            
+            //read registry machine
+            _next:
+            try {
+                add = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.Default, RegistryRights.ReadKey);
+            } catch (SecurityException) {
+                yield break;
+            }
+
+            if (add == null)
+                goto _next;
+            foreach (var name in add.GetValueNames())
+                yield return new AppStartupRegisteration(StartupType.LocalUserStartupRegistry, add.GetValue(name).As<string>().Trim('\"'), name);
         }
 
-        public static StartupType UnregisterApplication(string applicationName) {
-            StartupType t;
-            return UnregisterApplication(t = IsApplicationRegistered(applicationName), applicationName) ? t : StartupType.Null;
+        private static string getShortcutTarget(string file) {
+            try {
+                if (Path.GetExtension(file).ToLower() != ".lnk") 
+                    throw new FileFormatException("Supplied file must be a .LNK file");
+                FileStream fileStream = File.Open(file, FileMode.Open, FileAccess.Read);
+                using (BinaryReader fileReader = new BinaryReader(fileStream)) {
+                    fileStream.Seek(0x14, SeekOrigin.Begin);     // Seek to flags
+                    uint flags = fileReader.ReadUInt32();        // Read flags
+                    if ((flags & 1) == 1) {                      // Bit 1 set means we have to
+                                                                 // skip the shell item ID list
+                        fileStream.Seek(0x4c, SeekOrigin.Begin); // Seek to the end of the header
+                        uint offset = fileReader.ReadUInt16();   // Read the length of the Shell item ID list
+                        fileStream.Seek(offset, SeekOrigin.Current); // Seek past it (to the file locator info)
+                    }
+ 
+                    long fileInfoStartsAt = fileStream.Position; // Store the offset where the file info
+                    // structure begins
+                    uint totalStructLength = fileReader.ReadUInt32(); // read the length of the whole struct
+                    fileStream.Seek(0xc, SeekOrigin.Current); // seek to offset to base pathname
+                    uint fileOffset = fileReader.ReadUInt32(); // read offset to base pathname
+                    // the offset is from the beginning of the file info struct (fileInfoStartsAt)
+                    fileStream.Seek((fileInfoStartsAt + fileOffset), SeekOrigin.Begin); // Seek to beginning of
+                    // base pathname (target)
+                    long pathLength = (totalStructLength + fileInfoStartsAt) - fileStream.Position - 2; // read
+                    // the base pathname. I don't need the 2 terminating nulls.
+                    char[] linkTarget = fileReader.ReadChars((int) pathLength); // should be unicode safe
+                    var link = new string(linkTarget);
+ 
+                    int begin = link.IndexOf("\0\0");
+                    if (begin > -1) {
+                        int end = link.IndexOf("\\\\", begin + 2) + 2;
+                        end = link.IndexOf('\0', end) + 1;
+ 
+                        string firstPart = link.Substring(0, begin);
+                        string secondPart = link.Substring(end);
+ 
+                        return firstPart + secondPart;
+                    } else {
+                        return link;
+                    }
+                }
+            } catch {
+                return null;
+            }
+        }
+        
+    }
+
+    public class AppStartupRegisteration {
+        public StartupType Type { get; set; }
+        public string Path { get; set; }
+        public string Name { get; set; }
+
+        public AppStartupRegisteration() {}
+
+        public AppStartupRegisteration(StartupType type, string path, string name) {
+            Name = name;
+            Path = path;
+            Type = type;
+        }
+
+        public override string ToString() {
+            return (Name ?? "") + "@" + Type + ":" + (Path ?? "");
         }
     }
 
