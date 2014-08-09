@@ -2,6 +2,7 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -10,13 +11,31 @@ using nucs.Collections.Extensions;
 
 namespace nucs.SystemCore {
     public static class CodeGen {
-        
+
         /// <summary>
-        /// Generates code, into a dll or exe -
+        /// Used in debugging to see how the code was changed before it was compiled into a file.
         /// </summary>
-        /// <param name="code"></param>
-        /// <param name="filename"></param>
-        public static CodeGenerated Generate(string code, string filename, FileOutputExtension extension = FileOutputExtension.DLL) {
+        public static string CODE_PREGENERATION_OUTPUT = "D:/coderunner-genned.txt";
+        /// <summary>
+        /// How deep to include namespaces, "System.Images" is length of 2. "System.Images.Crazy" is length of 2.
+        /// </summary>
+        public static int NAMESPACE_LENGHT_LIMIT = 10;
+        private const string NL = "\n\r"; //newline:
+        /// <summary>
+        /// Location where to output generated code during debug, safe trycatch for invalid location.
+        /// </summary>
+        private const string OutputCodeTarget = "D:\\";
+
+        /// <summary>
+        ///     Generates code, into a dll or exe -
+        /// </summary>
+        /// <param name="code">the code to compile</param>
+        /// <param name="filename">the name of the outputted file</param>
+        /// <param name="includeNamespaces">
+        ///     At generation, the generator adds all possible namespaces to the top of the file.
+        ///     if you disable this, make sure to manually add the namespaces that you use the funcs in.
+        /// </param>
+        public static CodeGenerated Generate(string code, string filename, FileOutputExtension extension = FileOutputExtension.DLL, bool includeNamespaces = true) {
             var provider = new CSharpCodeProvider();
             var parameters = new CompilerParameters 
                 { GenerateInMemory = true
@@ -30,26 +49,27 @@ namespace nucs.SystemCore {
                 .Where(asmloc=>!string.IsNullOrEmpty(asmloc)).ToArray()
             );
 
+            code = PrepareCode(code, includeNamespaces);
+
             #if DEBUG
             try {
-                code = CodeGen.PrepareCode(code);
-                code.SaveAs("D:/coderunner-genned.txt");
+                code.SaveAs(OutputCodeTarget);
             } catch {} //safecatch
-            #endif
+#endif
 
             CompilerResults results = provider.CompileAssemblyFromSource(parameters, code);
             return new CodeGenerated(results);
         }
 
-        private const string NL = "\n\r"; //newline:
-        private const int NAMESPACE_LENGHT_LIMIT = 10; //newline:
         /// <summary>
-        /// Prepares the given <param name="code"> for runtime compilation</param>
+        ///     Prepares the given <param name="code"> for runtime compilation</param>
         /// </summary>
         /// <param name="code"></param>
+        /// <param name="includeNamespaces">Add all available namespaces to the top of the code</param>
         /// <returns></returns>
-        private static string PrepareCode(string code) {
-            code = PrepareNamespaces() + NL + PrepareMainAttribute() + NL + code;
+        private static string PrepareCode(string code, bool includeNamespaces) {
+
+            code = (includeNamespaces ? (PrepareNamespaces() + NL) : "") + PrepareMainAttribute() + NL + code;
             if (!code.Contains("main()", StringComparison.InvariantCultureIgnoreCase)) {
                 code += NL + @"namespace {0} {
 	                                 static class {1} {
@@ -68,7 +88,7 @@ namespace nucs.SystemCore {
         }
 
         /// <summary>
-        /// Returns the prepared namespaces for the runtime gen.
+        ///     Returns the prepared namespaces for the runtime gen.
         /// </summary>
         /// <returns></returns>
         private static string PrepareNamespaces() {
@@ -100,7 +120,7 @@ namespace nucs.SystemCore {
     }
 
     /// <summary>
-    /// Represents a compiled code.
+    ///     Represents a compiled code.
     /// </summary>
     public class CodeGenerated : IDisposable {
 
@@ -113,6 +133,12 @@ namespace nucs.SystemCore {
         /// The assembly that was generated from the given code. always null when compilation failed.
         /// </summary>
         public Assembly Assembly { get; private set; }
+
+        public FileInfo File {
+            get {
+                return Assembly == null ? null : new FileInfo(Assembly.CodeBase);
+            }
+        }
 
         /// <summary>
         /// Did the code compile currectly or are there any errors?

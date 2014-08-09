@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security;
@@ -11,6 +12,9 @@ using System.Security.Permissions;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using nucs.SystemCore;
+using nucs.SystemCore.Boolean;
+using nucs.SystemCore.String;
 using Z.ExtensionMethods.Object;
 
 namespace nucs.Windows.Startup {
@@ -28,6 +32,7 @@ namespace nucs.Windows.Startup {
         /// <param name="applicationName">Represents the name of the shortcut or the program name in the registry</param>
         public static void Register(StartupType regtype, string folder, string file, string applicationName) {
             if (applicationName == null) applicationName = AppDomain.CurrentDomain.FriendlyName;
+            folder = folder.Replace("file:\\", "");
             string path = Path.Combine(folder, file);
             if (string.IsNullOrEmpty(Path.GetFileName(path)))
                 throw new InvalidOperationException("Could not find a file name at the combined path \"" + path + "\"");
@@ -214,6 +219,8 @@ namespace nucs.Windows.Startup {
 
         #endregion
 
+        #region Tools
+
         /// <summary>
         /// Tests access for 3 types of startup and returns the most global startup option that is allowed. See 'StartupType'
         /// </summary>
@@ -332,7 +339,45 @@ namespace nucs.Windows.Startup {
                 return null;
             }
         }
-        
+
+        /// <summary>
+        /// Allows you to search for the registeration using and action.
+        /// </summary>
+        /// <param name="finder">Checks if the reg is the right one and returns bool.</param>
+        /// <returns>The found reg otherwise null.</returns>
+        public static AppStartupRegisteration FindRegisteration(BoolAction<AppStartupRegisteration> finder) {
+            return GetRegisterations().FirstOrDefault(finder.Invoke);
+        }
+
+        /// <summary>
+        ///     Removes any registers with the same name that does not match the given reg.
+        ///         useful when there is a chance that the app might be moved a lot.
+        /// </summary>
+        /// <param name="reg">The ideal registeration details.</param>
+        public static void KillMisfittingRegisters(AppStartupRegisteration reg) {
+            var n = GetRegisterations().Where(r => r.Name.Equals(reg.Name));
+            foreach (var miss in n.Where(r=>!r.Equals(reg)))
+                miss.Unregister();
+        }
+
+        /// <summary>
+        ///     Creates the startup registeration to the current software and to it's launching path.
+        /// </summary>
+        public static AppStartupRegisteration CreateToThisExecutable(StartupType type) {
+            if (type == StartupType.Null) return null;
+            return new AppStartupRegisteration(type, Assembly.GetExecutingAssembly().CodeBase, AppDomain.CurrentDomain.FriendlyName);
+        }
+
+        /// <summary>
+        ///     Creates the startup registeration to the current software and to it's launching path.
+        ///     also attempts to find the best startup type, otherwise - returns null.
+        /// </summary>
+        public static AppStartupRegisteration CreateToThisExecutable() {
+            return new AppStartupRegisteration(GetPreferedAllowedStartupType(Assembly.GetExecutingAssembly().CodeBase), Assembly.GetExecutingAssembly().CodeBase, AppDomain.CurrentDomain.FriendlyName);
+        }
+
+        #endregion
+
     }
 
     public class AppStartupRegisteration {
@@ -348,8 +393,38 @@ namespace nucs.Windows.Startup {
             Type = type;
         }
 
+        public bool IsRegistered() {
+            return StartupManager.FindRegisteration(t1 => t1.Equals(this)) != null;
+        }
+
+        public void Register() {
+            StartupManager.Register(Type, Path, Name);
+        }
+
+        public void Unregister() {
+            StartupManager.Unregister(Type, Name);
+        }
+
         public override string ToString() {
             return (Name ?? "") + "@" + Type + ":" + (Path ?? "");
+        }
+        protected bool Equals(AppStartupRegisteration other) {
+            return Type == other.Type && string.Equals(Path, other.Path) && string.Equals(Name, other.Name);
+        }
+
+        public override int GetHashCode() {
+            unchecked {
+                var hashCode = (int) Type;
+                hashCode = (hashCode*397) ^ (Path != null ? Path.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (Name != null ? Name.GetHashCode() : 0);
+                return hashCode;
+            }
+        }
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((AppStartupRegisteration) obj);
         }
     }
 

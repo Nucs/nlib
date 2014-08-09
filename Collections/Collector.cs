@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using nucs.SystemCore;
+using nucs.SystemCore.Boolean;
 
 namespace nucs.Collections {
     public class Collector<T> {

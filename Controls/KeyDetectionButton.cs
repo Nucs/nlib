@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using nucs.Collections.Extensions;
 using nucs.SystemCore;
+using nucs.SystemCore.Boolean;
 using nucs.Windows.Keyboard;
 
 namespace nucs.Controls {

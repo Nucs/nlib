@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using nucs.Collections.Extensions;
@@ -91,7 +92,7 @@ namespace nucs.SystemCore {
             return vals.Select(v => v.ToString()).Select(v => v.Split(':'))
                 .Select(v => v.Length == 2 
                         ? v[0].Split('.').StringJoin("")+"."+v[1] 
-                        : v[0].Split('.').StringJoin(""))
+                        : v[0])
                 .Select(Convert.ToDouble);
         }
 
@@ -105,3 +106,4 @@ namespace nucs.SystemCore {
         }
     }
 }
+*/

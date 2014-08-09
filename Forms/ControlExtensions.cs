@@ -23,7 +23,10 @@ namespace nucs.Forms {
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Invoke(this Form c, Action act) {
-            c.Invoke(new MethodInvoker(act));
+            if (c.IsHandleCreated == false)
+                Task.Run(() => { c.WaitForHandleCreation(); c.Invoke(new MethodInvoker(act)); });
+            else
+                c.Invoke(new MethodInvoker(act));
         }
 
         public static bool WaitForHandleCreation(this Control control, int timeout = -1) {
@@ -39,6 +42,7 @@ namespace nucs.Forms {
 
         public static bool WaitForHandleCreation(this Form control, int timeout = -1) {
             if (control.IsHandleCreated) return true;
+            
             var holder = new ManualResetEventSlim(false);
             EventHandler s = (sender, args) => ControlOnHandleCreated(holder);
             control.HandleCreated += s;

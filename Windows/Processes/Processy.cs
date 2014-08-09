@@ -17,7 +17,8 @@ namespace nucs.Windows.Processes {
         /// <param name="asAdmin">as administrator?</param>
         /// <exception cref="FileNotFoundException">Thrown when file is not found.</exception>
         /// <exception cref="Win32Exception">Unspecified Exception is thrown when file has not extension.</exception>
-        public static void Start(string file,string arguments = "", bool forceShellAvoidance = true, bool asAdmin = false) {
+        public static Process Start(string file,string arguments = "", bool forceShellAvoidance = true, bool asAdmin = false) {
+            Process p = null;
             if (File.Exists(file) == false) 
                 throw new FileNotFoundException("File '"+file+"' Could not be found.", file);
         _retry:
@@ -29,7 +30,7 @@ namespace nucs.Windows.Processes {
             if (arguments!="")
                 pinfo.Arguments = arguments;
             try {
-                Process.Start(pinfo);
+                p = Process.Start(pinfo);
             } catch (Win32Exception e) {
                 //handling error:
                 switch (e.NativeErrorCode) {
@@ -47,6 +48,7 @@ namespace nucs.Windows.Processes {
                         throw e;
                 }
             }
+            return p;
         }
 
     }
