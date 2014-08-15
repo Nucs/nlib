@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Z.ExtensionMethods.Object;
 
 namespace nucs.Forms {
     public static class ControlExtensions {
@@ -23,6 +24,8 @@ namespace nucs.Forms {
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Invoke(this Form c, Action act) {
+            if (c.IsNull())
+                throw new ArgumentNullException("c", "cannot invoke to a form, since it is null.");
             if (c.IsHandleCreated == false)
                 Task.Run(() => { c.WaitForHandleCreation(); c.Invoke(new MethodInvoker(act)); });
             else

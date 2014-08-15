@@ -35,7 +35,7 @@ namespace nucs.Windows.Processes {
                 //handling error:
                 switch (e.NativeErrorCode) {
                     case 1223:
-                        break; //cancelled by user
+                        return null;  //cancelled by user
                     case 740: //app itself is manifested for admin, open regularly.
                         if (asAdmin == false)
                             throw e; //unexpected error

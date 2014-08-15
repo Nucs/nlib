@@ -40,8 +40,7 @@ public static partial class StringExtension
     ///           }
     ///     </code>
     /// </example>
-    public static string EncryptRSA(this string @this, string key)
-    {
+    public static string EncryptRSA(this string @this, string key) {
         var cspp = new CspParameters {KeyContainerName = key};
         var rsa = new RSACryptoServiceProvider(cspp) {PersistKeyInCsp = true};
         byte[] bytes = rsa.Encrypt(Encoding.UTF8.GetBytes(@this), true);

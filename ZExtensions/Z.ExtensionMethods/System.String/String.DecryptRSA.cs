@@ -41,8 +41,7 @@ public static partial class StringExtension
     ///           }
     ///     </code>
     /// </example>
-    public static string DecryptRSA(this string @this, string key)
-    {
+    public static string DecryptRSA(this string @this, string key) {
         var cspp = new CspParameters {KeyContainerName = key};
         var rsa = new RSACryptoServiceProvider(cspp) {PersistKeyInCsp = true};
         string[] decryptArray = @this.Split(new[] {"-"}, StringSplitOptions.None);

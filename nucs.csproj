@@ -206,6 +206,7 @@
     </Compile>
     <Compile Include="Controls\WindowFinder\WindowFinderDesigner.cs" />
     <Compile Include="Controls\WindowFinder\WindowFinderResouceFinder.cs" />
+    <Compile Include="Cryptography\RijndaelCryptography.cs" />
     <Compile Include="Cryptography\EBCrypt\MOCrypt.cs" />
     <Compile Include="Cryptography\Extensions.cs" />
     <Compile Include="Diagnostics\AssertExtensions.cs" />
@@ -237,7 +238,9 @@
     <Compile Include="SystemCore\Randomizer.cs" />
     <Compile Include="SystemCore\Reflection\AttributesTools.cs" />
     <Compile Include="SystemCore\Reflection\NamespacesTools.cs" />
+    <Compile Include="SystemCore\Settings\EncryptedAppSettings.cs" />
     <Compile Include="SystemCore\Settings\AppSettings.cs" />
+    <Compile Include="SystemCore\Settings\SettingsExample.cs" />
     <Compile Include="SystemCore\UriExtensions.cs" />
     <Compile Include="SystemCore\Version.cs" />
     <Compile Include="Threading\SleepUtils.cs" />

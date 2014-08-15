@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -12,13 +13,11 @@ public static class AttributesTools {
     /// <param name="attribute">the type of the attribute.</param>
     /// <returns></returns>
     public static IEnumerable<Type> GetAllAttributeHolders(this Type attribute) {
-        foreach (var assmb in AppDomain.CurrentDomain.GetAssemblies()) {
-            foreach (var type in assmb.GetTypes()) {
-                if (type.GetCustomAttributes(attribute, true).Length > 0) {
-                    yield return type;
-                }
-            }
-        }
+        return from assmb in AppDomain.CurrentDomain.GetAssemblies() from type in gettypes(assmb) where type.GetCustomAttributes(attribute, true).Length > 0 select type;
+    }
+
+    private static Type[] gettypes(Assembly assmb) {
+            return !File.Exists(assmb.CodeBase) ? new Type[0] : assmb.GetTypes();
     }
 
     /// <summary>

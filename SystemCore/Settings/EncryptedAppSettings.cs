@@ -3,32 +3,45 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using nucs.Collections;
+using nucs.Cryptography;
 
 namespace nucs.SystemCore.Settings {
-    public abstract class AppSettings<T> where T : new() {
+    public abstract class EncryptedAppSettings<T> where T : new() {
         public const string DEFAULT_FILENAME = "settings.jsn";
 
-        // ReSharper disable once StaticFieldInGenericType
+// ReSharper disable once StaticFieldInGenericType
         private static readonly JavaScriptSerializer serializer;
-        static AppSettings() {
+        static EncryptedAppSettings() {
             serializer = new JavaScriptSerializer();
             serializer.RegisterConverters(typeof(SettingsConverterAttribute).GetAllAttributeHolders().Select(t=>t.CreateInstance<JavaScriptConverter>()));
         }
+
+        protected EncryptedAppSettings() {
+            Encryptor = new RijndaelEnhanced(GenerateSeed());
+        }
+
+        [ScriptIgnore]
+        private readonly RijndaelEnhanced Encryptor;
+
+        public abstract string GenerateSeed();
 
         /// <summary>
         /// The filename that was originally loaded from. saving to other file does not change this field!
         /// </summary>
         public virtual void Save() {
-            serializer.Serialize(this).SaveAs(DEFAULT_FILENAME); 
+            var serialized = serializer.Serialize(this);
+            Encryptor.Encrypt(serialized).SaveAs(DEFAULT_FILENAME);
         }
 
         public static void Save(T pSettings, string fileName = DEFAULT_FILENAME) {
-            serializer.Serialize(pSettings).SaveAs(fileName);
+            var serialized = serializer.Serialize(pSettings);
+            ((EncryptedAppSettings<T>)(object)pSettings).Encryptor.Encrypt(serialized).SaveAs(fileName);
         }
 
         /// <summary>
@@ -37,17 +50,13 @@ namespace nucs.SystemCore.Settings {
         /// <param name="fileName">File name, for example "settings.jsn". no path required, just a file name.</param>
         /// <returns>The loaded or freshly new saved object</returns>
         public static T Load(string fileName = DEFAULT_FILENAME) {
-            if (File.Exists(fileName)) 
-                return serializer.Deserialize<T>((File.ReadAllText(fileName)));
-            var t = new T();
-            Save(t, fileName);
-            return t;
+            if (File.Exists(fileName)) {
+                var t = new T();
+                return serializer.Deserialize<T>(((EncryptedAppSettings<T>)(object)t).Encryptor.Decrypt(File.ReadAllText(fileName)));
+            }
+            var n = new T();
+            Save(n, fileName);
+            return n;
         }
     }
-    
-    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
-    public sealed class SettingsConverterAttribute : Attribute {
-        public SettingsConverterAttribute() { }
-    }
-
 }
