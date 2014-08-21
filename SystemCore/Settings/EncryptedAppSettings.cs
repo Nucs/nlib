@@ -28,15 +28,18 @@ namespace nucs.SystemCore.Settings {
 
         [ScriptIgnore]
         private readonly RijndaelEnhanced Encryptor;
-
+	
+		/// <summary>
+        /// 	Generate a constant seed that will be used to encrypt the text.
+        /// </summary>
         public abstract string GenerateSeed();
 
         /// <summary>
         /// The filename that was originally loaded from. saving to other file does not change this field!
         /// </summary>
-        public virtual void Save() {
+        public virtual void Save(string filename = DEFAULT_FILENAME) {
             var serialized = serializer.Serialize(this);
-            Encryptor.Encrypt(serialized).SaveAs(DEFAULT_FILENAME);
+            Encryptor.Encrypt(serialized).SaveAs(filename);
         }
 
         public static void Save(T pSettings, string fileName = DEFAULT_FILENAME) {

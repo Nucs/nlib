@@ -23,8 +23,8 @@ namespace nucs.SystemCore.Settings {
         /// <summary>
         /// The filename that was originally loaded from. saving to other file does not change this field!
         /// </summary>
-        public virtual void Save() {
-            serializer.Serialize(this).SaveAs(DEFAULT_FILENAME); 
+        public virtual void Save(string filename = DEFAULT_FILENAME) {
+            serializer.Serialize(this).SaveAs(filename); 
         }
 
         public static void Save(T pSettings, string fileName = DEFAULT_FILENAME) {
