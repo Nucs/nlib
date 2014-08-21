@@ -2,7 +2,10 @@
 // All rights reserved (http://jonathanmagnan.com/extension-methods-library).
 // Licensed under MIT License (MIT) (http://zextensionmethods.codeplex.com/license).
 
+using System;
 using System.IO;
+using System.Security;
+using System.Security.Permissions;
 
 public static partial class StringExtension
 {
@@ -47,9 +50,15 @@ public static partial class StringExtension
     ///     </code>
     /// </example>
     public static void SaveAs(this string @this, string fileName, bool append = false) {
-        using (TextWriter tw = new StreamWriter(fileName, append)) {
-            tw.Write(@this);
+        try {
+            new FileIOPermission(PermissionState.None) {AllLocalFiles = FileIOPermissionAccess.Write}.Demand();
+        } catch (SecurityException s) {
+            throw new UnauthorizedAccessException("Could not save file to "+fileName+" see inner exception.", s);
         }
+
+        using (TextWriter tw = new StreamWriter(fileName, append))
+            tw.Write(@this);
+        
     }
 
     /// <summary>

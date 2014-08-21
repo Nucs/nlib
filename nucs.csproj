@@ -58,7 +58,7 @@
   <ItemGroup>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\muauto\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -69,11 +69,11 @@
     <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\turtdl\packages\MySql.Data.6.8.3\lib\net45\MySql.Data.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NetworkCommsDotNetComplete">
       <HintPath>Libraries\MarcF-networkcomms.net\NetworkCommsDotNetComplete.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Owin">
       <HintPath>C:\Users\ELI-PC\Documents\Visual Studio 2013\Projects\MuAutomater\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>

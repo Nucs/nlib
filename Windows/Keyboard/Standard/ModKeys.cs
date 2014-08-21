@@ -73,7 +73,8 @@ namespace nucs.Windows.Keyboard {
         }
 
         public static ModKeys ToModKeys(this IEnumerable<KeyCode> kc) {
-            return kc.Select(k => k.ToModKeys()).Aggregate((a, b) => a | b);
+            var kk = kc.ToList();
+            return kk.Count==0 ? ModKeys.None : kk.Select(k => k.ToModKeys()).Aggregate((a, b) => a | b);
         }
 
         /// <summary>
