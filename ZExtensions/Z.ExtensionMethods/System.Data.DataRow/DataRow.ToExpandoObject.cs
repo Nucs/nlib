@@ -1,6 +1,7 @@
 // Copyright (c) 2014 Jonathan Magnan (http://jonathanmagnan.com).
 // All rights reserved (http://jonathanmagnan.com/extension-methods-library).
 // Licensed under MIT License (MIT) (http://zextensionmethods.codeplex.com/license).
+#if NET_4_5|| NET_4_0
 
 using System.Collections.Generic;
 using System.Data;
@@ -28,3 +29,4 @@ public static partial class DataRowExtension
         return expandoDict;
     }
 }
+#endif

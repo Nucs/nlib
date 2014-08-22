@@ -1,6 +1,8 @@
-﻿using System;
+﻿#if NET_4_5|| NET_4_0
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
@@ -154,7 +156,11 @@ namespace nucs.SystemCore.Dynamic {
                 try {
                     var variable = _typeVariables[prop.Key];
                     if (variable.MemberType == MemberTypes.Property)
-                        ((PropertyInfo)variable).SetValue(obj, prop.Value);
+#if NET_4_5 || NET_4_51
+                                        ((PropertyInfo)variable).SetValue(obj, prop.Value);
+#else
+                        ((PropertyInfo)variable).SetValue(obj, prop.Value,null);
+#endif
                     else
                         ((FieldInfo)variable).SetValue(obj, prop.Value);
                 }
@@ -173,7 +179,11 @@ namespace nucs.SystemCore.Dynamic {
                 case MemberTypes.Property:
                     return ((PropertyInfo) info).PropertyType;
                 case MemberTypes.TypeInfo:
+#if NET_4_5
                     return ((TypeInfo) info).AsType();
+#else
+                    return info.ReflectedType;
+#endif
             }
             return null;
         }
@@ -255,7 +265,12 @@ namespace nucs.SystemCore.Dynamic {
                 try {
                     var variable = _typeVariables[prop.Key];
                     if (variable.MemberType == MemberTypes.Property)
+#if NET_4_5 || NET_4_51
                         ((PropertyInfo)variable).SetValue(obj, prop.Value);
+#else
+                        ((PropertyInfo)variable).SetValue(obj, prop.Value,null);
+
+#endif
                     else
                         ((FieldInfo)variable).SetValue(obj, prop.Value);
                 } catch {}
@@ -322,3 +337,4 @@ namespace nucs.SystemCore.Dynamic {
     public struct AcceptAnyValue { }
 
 }
+#endif

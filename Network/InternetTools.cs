@@ -5,8 +5,12 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Text;
+#if NET_4_5
 using System.Threading.Tasks;
-
+using System.Threading;
+#else
+using nucs.Mono.System.Threading;
+#endif
 namespace nucs.Network {
     public static class InternetTools {
         [DllImport("wininet.dll")]
@@ -97,7 +101,7 @@ namespace nucs.Network {
         /// </summary>
         /// <param name="_ip">The IP address</param>
         /// <returns>List of aliases to this IP</returns>
-        public static async Task<List<IPAddress>> GetDnsAliases(string _ip) {
+        public static Task<List<IPAddress>> GetDnsAliases(string _ip) {
             if (string.IsNullOrEmpty(_ip)) return null;
             if (_ip == "localhost" || _ip == "::1") _ip = "127.0.0.1"; //GetHostAddresses doesn't recognize localhost.
 
@@ -108,7 +112,7 @@ namespace nucs.Network {
                     return null;
                 }
             });
-            return await t;
+            return t;
         }
 
         /// <summary>
@@ -117,11 +121,21 @@ namespace nucs.Network {
         /// <param name="_ip"></param>
         /// <param name="pingAttempts"></param>
         /// <returns></returns>
+#if NET_4_5
         public static async Task<List<IPAddress>> GetConnectableAliases(string _ip, int pingAttempts = 1) {
             var ips = await GetDnsAliases(_ip);
             if (ips == null || ips.Count == 0)
                 return null;
             return ips.AsParallel().Where(i => TestHostConnection(i, pingAttempts)).ToList();
+#else
+        public static Task<List<IPAddress>> GetConnectableAliases(string _ip, int pingAttempts = 1) {
+            return Task.Run(() => {
+                        var ips = GetDnsAliases(_ip).Result;
+                        if (ips == null || ips.Count == 0)
+                            return null;
+                        return ips.AsParallel().Where(i => TestHostConnection(i, pingAttempts)).ToList();
+                });
+#endif
         } 
 
     }

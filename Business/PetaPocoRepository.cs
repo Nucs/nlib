@@ -1,3 +1,4 @@
+#if NET_4_5 || NET_4_0
 using System;
 using System.Collections.Generic;
 using PetaPoco;
@@ -77,3 +78,4 @@ namespace nucs.Business {
         }
     }
 }
+#endif

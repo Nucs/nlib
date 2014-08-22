@@ -2,6 +2,7 @@
 
 using BotSuite;
 using nucs.Windows;
+using Thread = System.Threading.Thread;
 
 #region NAMESPACES
 

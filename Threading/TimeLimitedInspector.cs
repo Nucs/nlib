@@ -1,4 +1,6 @@
 ﻿using System.Threading;
+using ManualResetEventSlim = System.Threading.ManualResetEventSlim;
+using Thread = System.Threading.Thread;
 
 namespace nucs.Threading {
 

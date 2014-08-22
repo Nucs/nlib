@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET_4_5
+using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +9,7 @@ using System.Reflection;
 using System.Threading;
 using Microsoft.CSharp;
 using nucs.Collections.Extensions;
+using Thread = System.Threading.Thread;
 
 namespace nucs.SystemCore {
     public static class CodeGen {
@@ -222,3 +224,4 @@ namespace nucs.SystemCore {
     }
 
 }
+#endif

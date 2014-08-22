@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
 namespace nucs.ADO.NET.MySql {
@@ -55,7 +54,7 @@ namespace nucs.ADO.NET.MySql {
         public static string TranslateErrorCode(MySqlException err) {
             var errortxt = "";
             switch (err.Number) {
-                #region ErrorSwitching
+#region ErrorSwitching
                 case 175:
                     errortxt = "The specific provider could not be found";
                     break;

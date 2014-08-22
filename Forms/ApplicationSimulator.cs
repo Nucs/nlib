@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
+using ApartmentState = System.Threading.ApartmentState;
+using ManualResetEventSlim = System.Threading.ManualResetEventSlim;
+using Thread = System.Threading.Thread;
 
 namespace nucs.Forms {
     /// <summary>

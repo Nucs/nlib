@@ -1,3 +1,4 @@
+#if NET_4_5 || NET_4_0
 /* PetaPoco - A Tiny ORMish thing for your POCO's.
  * Copyright © 2011-2012 Topten Software.  All Rights Reserved.
  * 
@@ -3957,3 +3958,4 @@ namespace PetaPoco {
         }
     }
 }
+#endif

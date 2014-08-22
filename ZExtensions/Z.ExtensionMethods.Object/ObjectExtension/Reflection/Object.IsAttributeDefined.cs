@@ -28,7 +28,12 @@ namespace Z.ExtensionMethods.Object.Reflection
         /// <param name="inherit">true to inherit.</param>
         /// <returns>true if attribute defined, false if not.</returns>
         public static bool IsAttributeDefined(this object @this, string attributeTypeName, bool inherit) {
+#if NET_4_5
             return @this.GetType().CustomAttributes.Select(attr => attr.AttributeType.Name).Any(t => t.Equals(attributeTypeName));
+#else
+            var a = AppDomain.CurrentDomain.GetAssemblies().SelectMany(asm => asm.GetTypes()).FirstOrDefault(t => t.Name.Contains(attributeTypeName));
+            return @this.GetType().GetCustomAttribute(a, inherit) != null; //.CustomAttributes.Select(attr => attr.AttributeType.Name).Any(t => t.Equals(attributeTypeName));
+#endif
         }
 
         /// <summary>

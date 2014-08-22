@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Linq;
 using nucs.Collections.Extensions;
+using Interlocked = System.Threading.Interlocked;
 
 namespace nucs.Collections {
     /// <summary>

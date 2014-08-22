@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Forms;
 using nucs.Collections;
@@ -11,7 +12,7 @@ namespace nucs.Windows.Keyboard {
 
         protected readonly ImprovedList<Hotkey> _registers = new ImprovedList<Hotkey>();
 
-        public IReadOnlyCollection<Hotkey> Registers {
+        public ReadOnlyCollection<Hotkey> Registers {
             get { return _registers.AsReadOnly(); }
         }
 

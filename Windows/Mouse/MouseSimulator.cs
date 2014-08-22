@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using Thread = System.Threading.Thread;
 
 namespace nucs.Windows.Mouse {
     /// <summary>

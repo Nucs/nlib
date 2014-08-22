@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET_4_5 || NET_4_51
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,3 +58,4 @@ namespace nucs.SystemCore {
     
 
 }
+#endif

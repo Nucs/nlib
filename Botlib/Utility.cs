@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Drawing;
+using Thread = System.Threading.Thread;
 
 namespace BotSuite {
     /// <summary>

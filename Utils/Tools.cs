@@ -18,6 +18,7 @@ using MySql.Data.Types;
 using nucs.ADO.NET;
 using nucs.ADO.NET.MySql;
 using nucs.Windows.Keyboard.CardReader.Forms;
+using Thread = System.Threading.Thread;
 using Timer = System.Windows.Forms.Timer;
 
 namespace nucs.Utils {

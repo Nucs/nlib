@@ -11,7 +11,8 @@
     <AssemblyName>nucslib</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -34,12 +35,19 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_4_0</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v2.0' ">NET_2_0</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v3.0' ">NET_3_0</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v3.5' ">NET_3_5</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">NET_4_0</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.5' ">NET_4_5</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.5.1' ">NET_4_5</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -57,8 +65,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack">
-      <HintPath>..\muauto\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>Libraries\HtmlAgilityPack.1.4.6\Net20\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -66,10 +73,9 @@
       <HintPath>..\turtdl\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+    <Reference Include="MySql.Data, Version=6.7.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\turtdl\packages\MySql.Data.6.8.3\lib\net45\MySql.Data.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>Libraries\mysql-connector-net-6.9.2-noinstall\v2.0\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="NetworkCommsDotNetComplete">
       <HintPath>Libraries\MarcF-networkcomms.net\NetworkCommsDotNetComplete.dll</HintPath>
@@ -220,6 +226,13 @@
     <Compile Include="Forms\UserConnectionDetailsRequester.Designer.cs">
       <DependentUpon>UserConnectionDetailsRequester.cs</DependentUpon>
     </Compile>
+    <Compile Include="Mono\System.Threading\AtomicBoolean.cs" />
+    <Compile Include="Mono\System.Threading\CancellationToken.cs" />
+    <Compile Include="Mono\System.Threading\CancellationTokenRegisteration.cs" />
+    <Compile Include="Mono\System.Threading\CancellationTokenSource.cs" />
+    <Compile Include="Mono\System.Threading\ManualResetEventSlim.cs" />
+    <Compile Include="Mono\System.Threading\SpinOnce.cs" />
+    <Compile Include="Mono\System.Threading\Tasks.cs" />
     <Compile Include="Network\Mail\Gmail.cs" />
     <Compile Include="Network\InternetTools.cs" />
     <Compile Include="Network\NetCommsExtension.cs" />
@@ -1082,6 +1095,7 @@
     </None>
     <None Include="ADO.NET\PetaPoco\Models\Generated\PetaPoco.Core.ttinclude" />
     <None Include="ADO.NET\PetaPoco\Models\Generated\PetaPoco.Generator.ttinclude" />
+    <None Include="App.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -1131,6 +1145,10 @@
     <Folder Include="Business\Interface\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

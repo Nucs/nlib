@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Interlocked = System.Threading.Interlocked;
 
 namespace nucs.Collections {
 

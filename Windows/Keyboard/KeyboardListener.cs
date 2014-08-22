@@ -13,6 +13,9 @@ using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using nucs.Forms;
 using Z.ExtensionMethods.Object;
+using AutoResetEvent = System.Threading.AutoResetEvent;
+using Thread = System.Threading.Thread;
+using ThreadPriority = System.Threading.ThreadPriority;
 
 namespace nucs.Windows.Keyboard {
     /// <summary>

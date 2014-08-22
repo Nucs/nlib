@@ -1,12 +1,14 @@
 // Copyright (c) 2014 Jonathan Magnan (http://jonathanmagnan.com).
 // All rights reserved (http://jonathanmagnan.com/extension-methods-library).
 // Licensed under MIT License (MIT) (http://zextensionmethods.codeplex.com/license).
+#if NET_4_5|| NET_4_0
 
 using System.Collections.Generic;
 using System.Dynamic;
 
-public static partial class IDictionaryExtension
-{
+public static partial class IDictionaryExtension {
+
+
     /// <summary>
     ///     An IDictionary&lt;string,object&gt; extension method that converts the @this to an expando.
     /// </summary>
@@ -33,3 +35,5 @@ public static partial class IDictionaryExtension
         return expando;
     }
 }
+
+#endif

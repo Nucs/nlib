@@ -1,15 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using System.Text;
+#if NET_4_5
 using System.Threading.Tasks;
+#else
+using nucs.Mono.System.Threading;
+#endif
 
 namespace nucs.Threading {
     public static class TaskTools {
+        
+#if NET_4_5
         /// <summary>
         /// Might not work.. do not use
         /// </summary>
-        public async static Task<T> TimeoutAfter<T>(Task<T> task, int milliseconds, T TimeoutToken) {
+        public async static Task<T> TimeoutAfter<T>(System.Threading.Tasks.Task<T> task, int milliseconds, T TimeoutToken) {
             if (task == await Task.WhenAny(task, Task.Delay(milliseconds))) 
                 return await task;
             return await Task.Run(() => TimeoutToken);
@@ -30,6 +37,8 @@ namespace nucs.Threading {
             }
         }
 
-
+#else
+        //TODO implement it to other versions
+#endif
     }
 }

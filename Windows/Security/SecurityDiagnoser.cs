@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Permissions;
 using System.Text;
-using System.Threading.Tasks;
 using nucs.Windows.Startup;
 
 namespace nucs.Windows.Security {

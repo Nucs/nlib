@@ -280,10 +280,17 @@ namespace nucs.ADO.NET {
         #endregion
 
         #region Database Operations
-
+#if !NET_4_5
+        private bool singrun = false;
+#endif
         public int Load() {
+#if !NET_4_5
+            if (singrun) return -1;
+            singrun=true;
+#else
             if (SingleRun.HasAlreadyRan(GetHashCode()))
                 return 0;
+#endif
             ds = new DataSet();
             Open();
             int res = Adapter.Fill(ds);

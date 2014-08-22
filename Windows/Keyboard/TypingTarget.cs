@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
+#if NET_4_5
 using System.Threading;
 using System.Threading.Tasks;
+#else
+using nucs.Mono.System.Threading;
+#endif
 using nucs.Windows.Processes;
 
 namespace nucs.Windows.Keyboard {
@@ -41,8 +45,11 @@ namespace nucs.Windows.Keyboard {
         }*/
 
         public bool IsRunning { get { return (typer == null); } }
-
+#if NET_4_5
         private Task typer;
+#else
+        private VoidTask typer;
+#endif
         public bool Disposed {get { return _disposed; } }
         private bool _disposed = false;
 
@@ -85,53 +92,71 @@ namespace nucs.Windows.Keyboard {
         }
 
         private CancellationTokenSource CancelToken;
+
+#if (NET_4_5_1 || NET_4_5)
         public async Task<bool> StartSending(string text, uint delay) {
-            delay = (uint) (delay - delay*0.08);
-            if (Disposed) return false;
-            if (CancelToken != null && CancelToken.IsCancellationRequested && typer != null)
-                await typer;
-            uint tickPeroid = delay;
-            if (_ticks != 0)
-                tickPeroid = (uint) Convert.ToInt32(delay / _ticks);
-            CancelToken = new CancellationTokenSource();
-            var token = CancelToken.Token;
-            typer = Task.Run(
-                async () => {
-                          var builder = new StringBuilder(text);
-                          var sw = new Stopwatch();
-                          while (true) {
-                              try {
-                                  var slimTickPeroid = tickPeroid/8;
-                                  sw.Restart();
-                                  for (var i = (_ticks == 0) ? -1 : 1; i <= _ticks; i++) {
-                                      
-                                      for (var j = 0; j < 8; j++) {
-                                          token.ThrowIfCancellationRequested();
-                                          await Task.Delay((int) slimTickPeroid);
-                                      }
-                                      if (_ticks != 0)
-                                          OnTick(i);
-                                      if (i == _ticks) {
-                                          Task.Run(()=>SendMessage(builder.ToString(), ProcessBeingFocused != null));
-                                          OnMessageSent(DateTime.Now, builder);
-                                      }
-                                  }
+            return await Task.Run(async () => {
+#else
+        public Task<bool> StartSending(string text, uint delay) {
+            return Task.Run(() => {
+#endif
+                delay = (uint) (delay - delay*0.08);
+                if (Disposed) return false;
+                if (CancelToken != null && CancelToken.IsCancellationRequested && typer != null)
+#if NET_4_5
+                    await typer;
+#else
+                    typer.Wait();
+#endif
+                uint tickPeroid = delay;
+                if (_ticks != 0)
+                    tickPeroid = (uint) Convert.ToInt32(delay/_ticks);
+                CancelToken = new CancellationTokenSource();
+                var token = CancelToken.Token;
+                typer = Task.Run(() => {
+                                        var builder = new StringBuilder(text);
+                                        var sw = new Stopwatch();
+                                        while (true) {
+                                            try {
+                                                var slimTickPeroid = tickPeroid/8;
+                                                sw.Restart();
+                                                for (var i = (_ticks == 0) ? -1 : 1; i <= _ticks; i++) {
 
-                                  Debug.Print(sw.ElapsedMilliseconds.ToString());
+                                                    for (var j = 0; j < 8; j++) {
+                                                        token.ThrowIfCancellationRequested();
+                                                        Task.Delay((int) slimTickPeroid);
+                                                    }
+                                                    if (_ticks != 0)
+                                                        OnTick(i);
+                                                    if (i == _ticks) {
+                                                        Task.Run(() => SendMessage(builder.ToString(), ProcessBeingFocused != null));
+                                                        OnMessageSent(DateTime.Now, builder);
+                                                    }
+                                                }
 
-                              } catch {
-                                  break;
-                              }
-                          }
-                        typer = null;
-                }, token);
-            return true;
+                                                Debug.Print(sw.ElapsedMilliseconds.ToString());
+
+                                            } catch {
+                                                break;
+                                            }
+                                        }
+                                        typer = null;
+                                    }, token);
+                return true;
+            });
         }
-
-        public async Task<bool> StopSending() {
+        #if NET_4_5
+        public async System.Threading.Tasks.Task<bool> StopSending() {
+#else
+        public bool StopSending() {
+#endif
             if (Disposed || CancelToken == null ||CancelToken.IsCancellationRequested)
                 return false;
+#if NET_4_5
             await typer;
+#else
+            typer.Wait();
+#endif
             CancelToken.Cancel();
             return true;
         }

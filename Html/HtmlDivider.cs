@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using HtmlAgilityPack;
 using nucs.SystemCore.String;
@@ -98,7 +97,9 @@ namespace nucs.Html {
                 //TODO check status code
                 string contentType = response.ContentType;
                 response.Close();
+#if NET_4_5 || NET_4_51
                 response.Dispose();
+#endif
                 return contentType;
             } catch {
                 return null;

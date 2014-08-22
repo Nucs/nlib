@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -95,7 +94,7 @@ namespace nucs.Windows.Keyboard {
         /// Converts the modifiers list into a string, for example "RCtrl+LAlt+..."
         /// </summary>
         public string StringifyModifiers() {
-            return string.Join("+", (Modifiers = (Modifiers ?? new List<KeyCode>(0))).Select(k => k.ToStringSafe().Replace("Menu", "Alt")));
+            return string.Join("+", (Modifiers = (Modifiers ?? new List<KeyCode>(0))).Select(k => k.ToStringSafe().Replace("Menu", "Alt")).ToArray());
         }
 
         /// <summary>

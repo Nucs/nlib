@@ -1,11 +1,11 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using nucs.Collections;
 using nucs.SystemCore;
 
@@ -67,7 +67,7 @@ using nucs.SystemCore;
  * 
  * 
  * 
- */
+ #1#
 /////////////////////////////////////////////////
 
 namespace nucs.Cryptography.EBCrypt {
@@ -157,7 +157,7 @@ namespace nucs.Cryptography.EBCrypt {
 
 
 
-                for ( /*i is set above*/; i < l_c; Controller(ref i)) {
+                for ( /*i is set above#1#; i < l_c; Controller(ref i)) {
                     if (StepsByPush == false && steps == n) { break; } //once done doing steps //todo consider making this on value pushing, not actual steps
                     var v = l[i].toByte(); //value 0-3.
                     FigureState(v);
@@ -287,7 +287,7 @@ namespace nucs.Cryptography.EBCrypt {
                     break;
                 case 3:
                     break;
-            }*/
+            }#1#
 
             private enum State : byte {
                 None = 0,
@@ -422,3 +422,4 @@ namespace nucs.Cryptography.EBCrypt {
         #endregion
     }
 }
+*/

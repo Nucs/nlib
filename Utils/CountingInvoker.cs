@@ -1,6 +1,14 @@
 ﻿using System;
-using System.Threading.Tasks;
 using nucs.Collections.Extensions;
+#if NET_4_5
+using System.Threading;
+using System.Threading.Tasks;
+#else
+using System.Threading;
+using nucs.Mono.System.Threading;
+using Task = nucs.Mono.System.Threading.Task;
+#endif
+
 namespace nucs.Utils {
 
     /// <summary>

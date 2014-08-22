@@ -10,12 +10,18 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+
 using System.Windows.Forms;
 using nucs.Network;
 using nucs.SystemCore.String;
 using nucs.Utils;
+#if NET_4_5
+using System.Threading;
+using System.Threading.Tasks;
+#else
+using System.Threading;
+using nucs.Mono.System.Threading;
+#endif
 
 namespace nucs.Forms {
 

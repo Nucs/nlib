@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using nucs.SystemCore;
 using nucs.Collections.Extensions;
 using nucs.SystemCore.Boolean;
+
+#if NET_4_5
+using System.Threading;
+using System.Threading.Tasks;
+#else
+using System.Threading;
+using nucs.Mono.System.Threading;
+#endif
 
 namespace nucs.Collections {
     /// <summary>
@@ -141,7 +146,6 @@ namespace nucs.Collections {
         }
 
         public T TakeLast() {
-            var b = new ConcurrentBag<T>();
             return Take(Count - 1);
         }
 

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 public static class AttributesTools {
     /// <summary>
@@ -20,6 +19,7 @@ public static class AttributesTools {
             return !File.Exists(assmb.CodeBase) ? new Type[0] : assmb.GetTypes();
     }
 
+#if NET_4_5
     /// <summary>
     /// Finds a method within the assemblies with the given attribute name (full name, 'MyAttribute') and returns the matching methods
     /// </summary>
@@ -32,5 +32,5 @@ public static class AttributesTools {
                 .Where(m => m.CustomAttributes.Any(attr => attr.AttributeType.Name.Equals(attributeName)))
                 .ToArray();
     }
-
+#endif
 }

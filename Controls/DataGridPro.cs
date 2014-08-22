@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if NET_4_5|| NET_4_0
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,6 +25,7 @@ using DataGrid = nucs.Controls.DataGridPro;
 using Column = System.Windows.Forms.DataGridViewColumn;
 using Row = System.Windows.Forms.DataGridViewRow;
 using Cell = System.Windows.Forms.DataGridViewCell;
+using Interlocked = System.Threading.Interlocked;
 
 namespace nucs.Controls {
     public delegate void ReadyForModificationsHandler(object sender, int TimesInvoked);
@@ -144,7 +147,14 @@ namespace nucs.Controls {
         ///     Represents the name-changes of HeaderText of the columns inside of the dictionary. To add new title change use
         ///     method 'ChangeTitle(string, string)';
         /// </summary>
+#if NET_4_5
         public ReadOnlyDictionary<string, string> CustomNames { get { return new ReadOnlyDictionary<string, string>(_customNames); } }
+#elif NET_4_0
+        public ReadOnlyCollection<KeyValuePair<string, string>> CustomNames { get { return new List<KeyValuePair<string, string>>(_customNames).AsReadOnly(); } }
+#endif
+
+
+
         [DefaultValue(false)]
         public bool IgnoreOnReadyForModifications { get; set; }
 
@@ -585,3 +595,4 @@ namespace nucs.Controls {
         OnCell
     }
 }
+#endif

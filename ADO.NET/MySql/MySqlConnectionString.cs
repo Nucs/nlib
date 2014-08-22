@@ -203,13 +203,20 @@ namespace nucs.ADO.NET.MySql {
 
         #region Design Methods
         
-
+#if NET_4_5||NET_4_51
         private string IfNullThrow(MySqlConnectionStringNameValuePair nv, [CallerMemberName] string memberName = "") {
             if (nv == null)
                 throw new InvalidOperationException("Could not return string inside method "+memberName+" because the tested NameValue is null");
             return nv.ToString();
         }
+#else
 
+        private string IfNullThrow(MySqlConnectionStringNameValuePair nv, string methodname = "(unspecified)") {
+            if (nv == null)
+                throw new InvalidOperationException("Could not return string inside method " + methodname + " because the tested NameValue is null");
+            return nv.ToString();
+        }
+#endif
         private string IfNotNull(MySqlConnectionStringNameValuePair nv) {
             if (nv == null)
                 return "";

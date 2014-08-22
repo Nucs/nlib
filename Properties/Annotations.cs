@@ -17,6 +17,11 @@
 using System;
 using System.ComponentModel;
 
+[AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
+internal sealed class MonoTODOAttribute : Attribute {
+    public MonoTODOAttribute() {}
+}
+
 namespace nucs.Annotations
 {
   /// <summary>

@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Reflection;
-using System.Threading.Tasks;
 using System;
 using System.IO;
 using System.Runtime.Serialization;
@@ -23,7 +22,11 @@ namespace nucs.SystemCore.Reflection {
         }*/
 
         public static Dictionary<string, object> GetNotDefaultValues(object obj) { //todo test it, might not work, cant recall..
+#if NET_4_5
             return (obj.GetType().GetProperties().Where(prop => GetDefaultValue(prop.PropertyType).Equals(prop.GetValue(obj)) == false)).ToDictionary(p => p.Name, p => p.GetValue(obj));
+#else
+            return (obj.GetType().GetProperties().Where(prop => GetDefaultValue(prop.PropertyType).Equals(prop.GetValue(obj, null)) == false)).ToDictionary(p => p.Name, p => p.GetValue(obj, null));
+#endif
         } 
 
         public static object GetDefaultValue(Type type) {  //todo test it, might not work, cant recall..

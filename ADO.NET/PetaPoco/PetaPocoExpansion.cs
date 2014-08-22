@@ -1,10 +1,11 @@
-﻿using System;
+﻿#if NET_4_5|| NET_4_0
+
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Text;
-using System.Threading.Tasks;
 using PetaPoco.Internal;
 using nucs.ADO.NET.MySql;
 using nucs.SystemCore.Dynamic;
@@ -179,3 +180,4 @@ namespace PetaPoco {
         }
     }
 }
+#endif

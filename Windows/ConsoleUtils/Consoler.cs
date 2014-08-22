@@ -6,8 +6,8 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
-using System.Threading.Tasks;
 using nucs.Collections.Extensions;
+using Thread = System.Threading.Thread;
 
 namespace nucs.Windows.ConsoleUtils {
     public static class Consoler {

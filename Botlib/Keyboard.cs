@@ -4,6 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Linq;
+using System.Threading;
 
 namespace BotSuite {
     /// <summary>
@@ -232,7 +233,7 @@ namespace BotSuite {
             const int KEY_UP_EVENT = 0x0002;
 
             NativeMethods.keybd_event((byte) key, 0, KEY_DOWN_EVENT, 0);
-            System.Threading.Thread.Sleep(duration);
+            Thread.Sleep(duration);
             NativeMethods.keybd_event((byte) key, 0, KEY_UP_EVENT, 0);
         }
 

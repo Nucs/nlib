@@ -1,9 +1,9 @@
-﻿using System;
+﻿#if NET_4_5|| NET_4_0
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace nucs.Collections
 {
@@ -30,3 +30,4 @@ namespace nucs.Collections
 
     }
 }
+#endif

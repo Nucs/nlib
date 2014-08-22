@@ -1,11 +1,12 @@
-﻿using System;
+﻿#if NET_4_5|| NET_4_0
+
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 using nucs.SystemCore.Reflection;
 using nucs.Collections.Extensions;
 
@@ -20,7 +21,12 @@ namespace nucs.SystemCore.Dynamic {
                 return (ExpandoObject)dynamicObject;
             var obj = (object)dynamicObject;
             if (Dynamic.IsObjectAnonymous(dynamicObject))
+#if NET_4_5
                 return obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(p => p.Name, p => p.GetValue(obj));
+#else
+                return obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(p => p.Name, p => p.GetValue(obj,null));
+#endif
+
             if (obj.GetType().GetInterfaces().Any(i => i.Name.Contains("IDictionary`2"))) 
                 try {
                     return (IDictionary<string, object>) dynamicObject;
@@ -144,3 +150,4 @@ namespace nucs.SystemCore.Dynamic {
         }
     }
 }
+#endif

@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+
 using System.Windows.Forms;
 using Z.ExtensionMethods.Object;
+
+#if NET_4_5
+using System.Threading;
+using System.Threading.Tasks;
+#else
+using System.Threading;
+using nucs.Mono.System.Threading;
+#endif
 
 namespace nucs.Forms {
     public static class ControlExtensions {
@@ -18,11 +25,16 @@ namespace nucs.Forms {
             return c.RightToLeft == RightToLeft.Inherit ? (c.Parent != null && IsRightToLeft(c.Parent)) : c.RightToLeft == RightToLeft.Yes;
         }
 
+#if NET_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static void Invoke(this Control c, Action act) {
             c.Invoke(new MethodInvoker(act));
         }
+
+#if NET_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static void Invoke(this Form c, Action act) {
             if (c.IsNull())
                 throw new ArgumentNullException("c", "cannot invoke to a form, since it is null.");

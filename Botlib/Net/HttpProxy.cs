@@ -10,7 +10,6 @@
 
 namespace BotSuite.Net {
     using System;
-    using System.Diagnostics.Contracts;
     using System.Net;
 
     /// <summary>
@@ -47,8 +46,6 @@ namespace BotSuite.Net {
         /// <param name="username">username for proxy, if applicable</param>
         /// <param name="password">password for proxy, if applicable</param>
         public HttpProxy(Uri address, String username = null, String password = null) {
-            Contract.Requires(address != null);
-
             this._Address = address;
             if (username != null) {
                 if (password == null) {
