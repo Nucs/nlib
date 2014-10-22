@@ -51,10 +51,10 @@ namespace nucs.SystemCore.Settings {
         /// </summary>
         /// <param name="fileName">File name, for example "settings.jsn". no path required, just a file name.</param>
         /// <returns>The loaded or freshly new saved object</returns>
-        public static T Load(string fileName = DEFAULT_FILENAME) {
+        public static T Load(string fileName = DEFAULT_FILENAME, bool encrypted = true) {
             if (File.Exists(fileName)) {
                 var t = new T();
-                return serializer.Deserialize<T>(((EncryptedAppSettings<T>)(object)t).Encryptor.Decrypt(File.ReadAllText(fileName)));
+                return serializer.Deserialize<T>(encrypted ? ((EncryptedAppSettings<T>)(object)t).Encryptor.Decrypt(File.ReadAllText(fileName)) : File.ReadAllText(fileName));
             }
             var n = new T();
             Save(n, fileName);

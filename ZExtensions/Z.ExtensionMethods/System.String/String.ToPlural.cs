@@ -2,6 +2,7 @@
 // All rights reserved (http://jonathanmagnan.com/extension-methods-library).
 // Licensed under MIT License (MIT) (http://zextensionmethods.codeplex.com/license).
 
+using System.Data.Entity.Design.PluralizationServices;
 using System.Globalization;
 
 public static partial class StringExtension

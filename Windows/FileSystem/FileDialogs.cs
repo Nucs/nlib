@@ -7,6 +7,16 @@ using System.Windows.Forms;
 
 namespace nucs.Windows.FileSystem {
     public static class FileDialogs {
+        
+        public static DirectoryInfo GetDirectory(string description = null, bool showNewFolderButton = true) {
+            using (var fd = new FolderBrowserDialog()) {
+                fd.Description = description ?? "Select a Directory";
+                fd.ShowNewFolderButton = showNewFolderButton;
+                return fd.ShowDialog() == DialogResult.OK ? new DirectoryInfo(fd.SelectedPath) : null;
+            }
+            
+        }
+
         public static FileInfo GetFile(OpenFileDialog fileDialog, FileFilter filter = null) {
             if (filter != null && filter.Count > 0) {
                 fileDialog.Filter = filter.ToString();

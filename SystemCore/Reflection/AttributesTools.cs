@@ -15,6 +15,36 @@ public static class AttributesTools {
         return from assmb in AppDomain.CurrentDomain.GetAssemblies() from type in gettypes(assmb) where type.GetCustomAttributes(attribute, true).Length > 0 select type;
     }
 
+/*
+    /// <summary>
+    /// Gives you all the MethodInfo that has <param name="attribute"></param> attached to it in the entire <see cref="AppDomain"/>.
+    /// </summary>
+    /// <param name="attribute">the type of the attribute.</param>
+    /// <returns></returns>
+    public static IEnumerable<Type> GetMethodsWithAttribute(this Type attribute) {
+        //return from assmb in AppDomain.CurrentDomain.GetAssemblies() from type in gettypes(assmb) where type.GetCustomAttributes(attribute, true).Length > 0 select type;
+
+        var methods = AppDomain.CurrentDomain.GetAssemblies().SelectMany(gettypes).SelectMany(t=>t.GetMethods());
+
+        List<KeyValuePair<String, MethodInfo>> items =
+            new List<KeyValuePair<string, MethodInfo>>();
+
+        foreach (MethodInfo method in methods)
+        {
+            var token = Attribute.GetCustomAttribute(method,
+                attribute, false);
+            if (token == null)
+                continue;
+
+            items.Add(new KeyValuePair<String, MethodInfo>(
+                token., method));
+
+        }
+
+
+    }
+*/
+
     private static Type[] gettypes(Assembly assmb) {
             return !File.Exists(assmb.CodeBase) ? new Type[0] : assmb.GetTypes();
     }

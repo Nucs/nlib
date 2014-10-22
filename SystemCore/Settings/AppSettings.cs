@@ -36,8 +36,22 @@ namespace nucs.SystemCore.Settings {
         /// <param name="fileName">File name, for example "settings.jsn". no path required, just a file name.</param>
         /// <returns>The loaded or freshly new saved object</returns>
         public static T Load(string fileName = DEFAULT_FILENAME) {
-            if (File.Exists(fileName)) 
-                return serializer.Deserialize<T>((File.ReadAllText(fileName)));
+            if (File.Exists(fileName))
+                try {
+                    var fc = File.ReadAllText(fileName);
+                    if (string.IsNullOrEmpty((fc ?? "").Trim()))
+                        goto _save;
+                    return serializer.Deserialize<T>(fc);
+                } catch (InvalidOperationException e) {
+                    if (e.Message.Contains("Cannot convert"))
+                        throw new Exception("Unable to deserialize settings file, value<->type mismatch. see inner exception", e);
+                    throw e;
+                } catch (System.ArgumentException e) {
+                    if (e.Message.StartsWith("Invalid"))
+                        throw new Exception("Settings file is corrupt.");
+                    throw e;
+                }
+            _save:
             var t = new T();
             Save(t, fileName);
             return t;

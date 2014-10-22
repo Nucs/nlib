@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Security;
 using System.Security.Permissions;
+using System.Text;
 
 public static partial class StringExtension
 {
@@ -49,16 +50,17 @@ public static partial class StringExtension
     ///           }
     ///     </code>
     /// </example>
-    public static void SaveAs(this string @this, string fileName, bool append = false) {
-        try {
-            new FileIOPermission(PermissionState.None) {AllLocalFiles = FileIOPermissionAccess.Write}.Demand();
-        } catch (SecurityException s) {
-            throw new UnauthorizedAccessException("Could not save file to "+fileName+" see inner exception.", s);
+    public static void SaveAs(this string @this, string fileName, bool append = false)
+    {
+        var toadd = "";
+        if (File.Exists(fileName))
+        {
+            if (append)
+                toadd = File.ReadAllText(fileName);
+            File.SetAttributes(fileName, FileAttributes.Normal);
+            File.Delete(fileName);
         }
-
-        using (TextWriter tw = new StreamWriter(fileName, append))
-            tw.Write(@this);
-        
+        File.WriteAllText(fileName, @this + toadd, Encoding.UTF8);
     }
 
     /// <summary>
@@ -101,11 +103,14 @@ public static partial class StringExtension
     ///           }
     ///     </code>
     /// </example>
-    public static void SaveAs(this string @this, FileInfo file, bool append = false)
-    {
-        using (TextWriter tw = new StreamWriter(file.FullName, append))
-        {
-            tw.Write(@this);
+    public static void SaveAs(this string @this, FileInfo fileName, bool append = false) {
+        var toadd = "";
+        if (fileName.Exists) {
+            if (append) 
+                toadd = File.ReadAllText(fileName.ToString());
+            File.SetAttributes(fileName.ToString(), FileAttributes.Normal);
+            File.Delete(fileName.ToString());
         }
+        File.WriteAllText(fileName.ToString(), @this + toadd, Encoding.UTF8);
     }
 }

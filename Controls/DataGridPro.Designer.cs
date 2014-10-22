@@ -1,6 +1,9 @@
-﻿namespace nucs.Controls
+﻿#if NET_4_5
+using System.Windows.Forms;
+
+namespace nucs.Controls
 {
-    partial class DataGridPro
+    partial class DataGridPro : DataGridView
     {
         /// <summary>
         /// Required designer variable.
@@ -34,3 +37,4 @@
         #endregion
     }
 }
+#endif

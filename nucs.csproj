@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>nucs</RootNamespace>
     <AssemblyName>nucslib</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -54,10 +54,14 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>1</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>
+    </DocumentationFile>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>
@@ -271,11 +275,6 @@
     <Compile Include="SystemCore\AggregatableObject.cs" />
     <Compile Include="SystemCore\Bit.cs" />
     <Compile Include="SystemCore\Math.cs" />
-    <Compile Include="ADO.NET\PetaPoco\Models\Generated\Database.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Database.tt</DependentUpon>
-    </Compile>
     <Compile Include="ADO.NET\PetaPoco\PetaPoco.cs" />
     <Compile Include="Reduant\SomeNiceNetworkingCode.cs" />
     <Compile Include="Properties\Annotations.cs" />
@@ -307,6 +306,7 @@
     </Compile>
     <Compile Include="Windows\Graphics\BitmapIO.cs" />
     <Compile Include="Windows\Graphics\Screenshot.cs" />
+    <Compile Include="Windows\Keyboard\SendMKeys.cs" />
     <Compile Include="Windows\Keyboard\Standard\AKey.cs" />
     <Compile Include="Windows\Keyboard\CardReader\CRManager.cs" />
     <Compile Include="Windows\Keyboard\CardReader\InputDevice.cs" />
@@ -360,6 +360,7 @@
     <Compile Include="Windows\Processes\Processy.cs" />
     <Compile Include="Windows\Processes\WindowFinder.cs" />
     <Compile Include="Windows\Registery\DefaultApplication.cs" />
+    <Compile Include="Windows\Security\Impersonator.cs" />
     <Compile Include="Windows\Security\SecurityDiagnoser.cs" />
     <Compile Include="Windows\Startup\StartupManager.cs" />
     <Compile Include="Reduant\utils.cs" />
@@ -1089,12 +1090,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="ADO.NET\PetaPoco\Models\Generated\Database.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Database.cs</LastGenOutput>
-    </None>
-    <None Include="ADO.NET\PetaPoco\Models\Generated\PetaPoco.Core.ttinclude" />
-    <None Include="ADO.NET\PetaPoco\Models\Generated\PetaPoco.Generator.ttinclude" />
     <None Include="App.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>

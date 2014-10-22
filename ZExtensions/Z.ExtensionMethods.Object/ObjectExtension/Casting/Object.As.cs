@@ -2,6 +2,8 @@
 // All rights reserved (http://jonathanmagnan.com/extension-methods-library).
 // Licensed under MIT License (MIT) (http://zextensionmethods.codeplex.com/license).
 
+using System.Windows.Forms;
+
 namespace Z.ExtensionMethods.Object
 {
     public static partial class ObjectExtension {

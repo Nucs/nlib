@@ -3,10 +3,12 @@
 // Licensed under MIT License (MIT) (http://zextensionmethods.codeplex.com/license).
 
 using System;
+using System.Diagnostics;
 using System.Text;
 
 public static partial class StringExtension
 {
+    [DebuggerStepThrough]
     /// <summary>
     ///     A string extension method that decode a Base64 String.
     /// </summary>

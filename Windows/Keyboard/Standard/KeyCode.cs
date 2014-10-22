@@ -621,6 +621,10 @@ namespace nucs.Windows.Keyboard {
         Tab = (ushort)9,
         Clear = (ushort)12,
         Return = (ushort)13,
+        /// <summary>
+        /// Equivalent to Return
+        /// </summary>
+        Enter = Return,
         Shift = (ushort)16,
         Control = (ushort)17,
         /// <summary>

@@ -3,11 +3,20 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using nucs.Forms;
 
 namespace nucs.Windows.Processes {
     public static class Processy {
+
+        public static bool BringToTop(this Process process) {
+            return NativeWin32.SetForegroundWindow(process.MainWindowHandle);
+        }
+        public static bool BringToTop(this ProcessInfo process) {
+            return NativeWin32.SetForegroundWindow(process.ToProcess().MainWindowHandle);
+        }
+
         /// <summary>
         ///     Customized Launcher allowing to open applications as administrator and handling some errors.
         /// </summary>

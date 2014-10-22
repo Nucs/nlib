@@ -24,6 +24,7 @@ namespace nucs.Windows.Security {
         public static StartupType GetPreferedAllowedStartupType(string pathToFile) {
             return StartupManager.GetPreferedAllowedStartupType(pathToFile);
         }
+
         /// <summary>
         /// Tests all partitions for writing access, reading access and deleting and returns the partition for e.g. "C:\\". returns null if none was found.
         /// </summary>

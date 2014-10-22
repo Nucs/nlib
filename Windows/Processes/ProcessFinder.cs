@@ -62,8 +62,7 @@ namespace nucs.Windows.Processes {
                 case ProcessSearchMethod.ProcessInfo:
                     if (value is ProcessInfo == false) throw new ArgumentException("Incorrect value was passed compared to the method (" + method + ")");
                     var pi = value as ProcessInfo;
-                    var proc = pi.ToProcess();
-                    return proc == null ? new Process[0] : new[] {proc};
+                    return Find(ProcessSearchMethod.ProcessName, pi.Name);
                 case ProcessSearchMethod.Process:
                     if (value is Process == false) throw new ArgumentException("Incorrect value was passed compared to the method ("+method+")");
                     var process = (Process)value;

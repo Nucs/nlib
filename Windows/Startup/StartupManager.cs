@@ -207,8 +207,14 @@ namespace nucs.Windows.Startup {
                     return true;
                 case StartupType.LocalUserStartupRegistry:
                     var ad = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.Delete);
-
-                    Registry.CurrentUser.DeleteValue(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\" + applicationName);
+                    try {
+                        Registry.CurrentUser.DeleteValue(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\" +
+                                                         applicationName);
+                    }
+                    catch (ArgumentException e) {
+                        if (e.Message.Contains("No value exists"))
+                            return false;
+                    }
                     if (ad == null)
                         throw new Exception("Invalid registery path.");
                     ad.DeleteValue(applicationName, true);

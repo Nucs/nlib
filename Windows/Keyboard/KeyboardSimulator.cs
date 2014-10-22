@@ -46,6 +46,11 @@ namespace nucs.Windows.Keyboard {
             KeyUp(key);
         }
 
+        public static void Print(string text) {
+            KeysConverter kv = new KeysConverter();
+            kv.ConvertFromString("abc");
+        }
+
         public static void SimulateStandardShortcut(StandardShortcut shortcut) {
             switch (shortcut) {
                 case StandardShortcut.Copy:

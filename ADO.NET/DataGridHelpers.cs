@@ -1,4 +1,6 @@
-﻿/*
+﻿
+#if NET_4_5
+/*
  * nucs.Controls.DataGridPro - by nucs, (C) EB Programming 2013
  Todo Add option for static width, that wont change and will be included in calculations 
  Todo custom sort for custom layers and regular layers
@@ -15,8 +17,8 @@ using System.Windows.Forms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using nucs.Collections;
 using nucs.Collections.Extensions;
+using nucs.Controls;
 using nucs.SystemCore;
-using DataGrid = nucs.Controls.DataGridPro;
 using Column = System.Windows.Forms.DataGridViewColumn;
 using Row = System.Windows.Forms.DataGridViewRow;
 using Cell = System.Windows.Forms.DataGridViewCell;
@@ -51,7 +53,7 @@ namespace nucs.ADO.NET {
         private bool _refresh_doPreDisplay;
         public IDbConnection Connection { get; set; }
         public IDbDataAdapter Adapter { get; set; }
-        public DataGrid DataGrid { get; set; }
+        public DataGridPro DataGrid { get; set; }
         public BindingSource BindingSource { get; private set; }
         /// <summary>
         ///     Set to true after Adapter.Load(); (After binding, designing and display went successful).
@@ -70,7 +72,7 @@ namespace nucs.ADO.NET {
         public event BindingAndLoadingCompletedHandler BindingAndLoadingCompleted;
         public event BindingAndLoadingCompletedHandler LoadingCompleted;
         
-        public DataGridAdapter(DataGrid grid, IDbConnection connection, IDbDataAdapter da, DbCommandBuilder builder) {
+        public DataGridAdapter(DataGridPro grid, IDbConnection connection, IDbDataAdapter da, DbCommandBuilder builder) {
             DataGrid = grid;
             Connection = connection;
             Adapter = da;
@@ -84,7 +86,7 @@ namespace nucs.ADO.NET {
             grid.ReadyForModifications += _OnReadyForModifications;
         }
         
-        private DataGrid grid {
+        private DataGridPro grid {
             get { return DataGrid; }
         }
 
@@ -661,3 +663,5 @@ namespace nucs.ADO.NET {
 
     #endregion
 }
+
+#endif
