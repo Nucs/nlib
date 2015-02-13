@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient.Memcached;
 using NetworkCommsDotNet;
+using NetworkCommsDotNet.Connections.TCP;
 
 namespace nucs.Network {
     public delegate void ClientApprovalRequestedHandler(Connection conn, string clientName, BooleanHolder ToApprove);
@@ -213,3 +215,4 @@ namespace nucs.Network {
         #endregion
     }
 }
+*/

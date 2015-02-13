@@ -35,7 +35,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET_4_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;</DefineConstants>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v2.0' ">NET_2_0</DefineConstants>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v3.0' ">NET_3_0</DefineConstants>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v3.5' ">NET_3_5</DefineConstants>
@@ -55,6 +55,12 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v2.0' ">NET_2_0</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v3.0' ">NET_3_0</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v3.5' ">NET_3_5</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">NET_4_0</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.5' ">NET_4_5</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.5.1' ">NET_4_5</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>1</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -68,25 +74,43 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>Libraries\HtmlAgilityPack.1.4.6\Net20\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="Common.Logging">
+      <HintPath>..\ProphecyManager\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\ProphecyManager\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.9.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TurtSearchCore\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Owin, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\turtdl\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+      <HintPath>..\TurtSearchCore\packages\Microsoft.Owin.3.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="MySql.Data, Version=6.7.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+    <Reference Include="MySql.Data, Version=6.9.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\mysql-connector-net-6.9.2-noinstall\v2.0\MySql.Data.dll</HintPath>
+      <HintPath>..\TurtSearchCore\packages\MySql.Data.6.9.5\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="NetworkCommsDotNetComplete">
-      <HintPath>Libraries\MarcF-networkcomms.net\NetworkCommsDotNetComplete.dll</HintPath>
+    <Reference Include="NetworkCommsDotNetComplete, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\NetworkComms\DLLs\Net40\Merged\NetworkCommsDotNetComplete.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\TurtSearchCore\packages\NLog.3.2.0.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TurtSearchCore\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Owin">
-      <HintPath>C:\Users\ELI-PC\Documents\Visual Studio 2013\Projects\MuAutomater\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    <Reference Include="protobuf-net">
+      <HintPath>..\TurtSearchCore\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz">
+      <HintPath>..\ProphecyManager\packages\Quartz.2.3.1\lib\net40\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -96,6 +120,7 @@
     <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
@@ -174,9 +199,11 @@
     <Compile Include="Collections\ConcurrentDict.cs" />
     <Compile Include="Collections\ConcurrentHashSet.cs" />
     <Compile Include="Collections\ConcurrentList.cs" />
+    <Compile Include="Collections\DynamicEqualityComparer.cs" />
     <Compile Include="Collections\EnumerationPartitioner.cs" />
     <Compile Include="Collections\Extensions\DictionaryExtensions.cs" />
     <Compile Include="Collections\Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Collections\ImprovedSortedSet.cs" />
     <Compile Include="Collections\ImprovedList.cs" />
     <Compile Include="Collections\SynchronizedList.cs" />
     <Compile Include="Collections\ThreadSafeList.cs" />
@@ -230,6 +257,10 @@
     <Compile Include="Forms\UserConnectionDetailsRequester.Designer.cs">
       <DependentUpon>UserConnectionDetailsRequester.cs</DependentUpon>
     </Compile>
+    <Compile Include="Html\HtmlDividerAsync.cs" />
+    <Compile Include="Html\HttpFile.cs" />
+    <Compile Include="Logger\Logy.cs" />
+    <Compile Include="Logger\Logier.cs" />
     <Compile Include="Mono\System.Threading\AtomicBoolean.cs" />
     <Compile Include="Mono\System.Threading\CancellationToken.cs" />
     <Compile Include="Mono\System.Threading\CancellationTokenRegisteration.cs" />
@@ -242,7 +273,12 @@
     <Compile Include="Network\NetCommsExtension.cs" />
     <Compile Include="Reduant\Network\BooleanHolder.cs" />
     <Compile Include="Reduant\Network\Commons.cs" />
+    <Compile Include="SystemCore\AttachedObjects\PentaObject.cs" />
+    <Compile Include="SystemCore\AttachedObjects\TriObject .cs" />
+    <Compile Include="SystemCore\AttachedObjects\QuadObject.cs" />
+    <Compile Include="SystemCore\AttachedObjects\DuoObject.cs" />
     <Compile Include="SystemCore\CodeGen.cs" />
+    <Compile Include="SystemCore\Time\DateTimeExt.cs" />
     <Compile Include="SystemCore\Drawing\ColorExtensions.cs" />
     <Compile Include="SystemCore\Drawing\RectangleExtensions.cs" />
     <Compile Include="SystemCore\Drawing\SnippingTool.cs">
@@ -258,6 +294,8 @@
     <Compile Include="SystemCore\Settings\EncryptedAppSettings.cs" />
     <Compile Include="SystemCore\Settings\AppSettings.cs" />
     <Compile Include="SystemCore\Settings\SettingsExample.cs" />
+    <Compile Include="SystemCore\String\Regex\CommonRegex.cs" />
+    <Compile Include="SystemCore\String\Regex\VerbalExpressions.cs" />
     <Compile Include="SystemCore\UriExtensions.cs" />
     <Compile Include="SystemCore\Version.cs" />
     <Compile Include="Threading\SleepUtils.cs" />
@@ -304,6 +342,7 @@
     <Compile Include="Windows\FileSystem\FileOpeningDialogForm.Designer.cs">
       <DependentUpon>FileOpeningDialogForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Windows\FileSystem\FilePointer.cs" />
     <Compile Include="Windows\Graphics\BitmapIO.cs" />
     <Compile Include="Windows\Graphics\Screenshot.cs" />
     <Compile Include="Windows\Keyboard\SendMKeys.cs" />
@@ -362,6 +401,7 @@
     <Compile Include="Windows\Registery\DefaultApplication.cs" />
     <Compile Include="Windows\Security\Impersonator.cs" />
     <Compile Include="Windows\Security\SecurityDiagnoser.cs" />
+    <Compile Include="Windows\IdGenerator.cs" />
     <Compile Include="Windows\Startup\StartupManager.cs" />
     <Compile Include="Reduant\utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1091,9 +1131,10 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="App.config" />
-    <None Include="packages.config">
+    <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -1138,6 +1179,7 @@
   <ItemGroup>
     <Folder Include="backups\" />
     <Folder Include="Business\Interface\" />
+    <Folder Include="Windows\Serial\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

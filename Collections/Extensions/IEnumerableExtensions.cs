@@ -94,6 +94,39 @@ namespace nucs.Collections.Extensions {
             yield return obj;
         }
 
+        /// <summary>
+        ///     Does action, used to do something in a fluent typin
+        /// </summary>
+        public static IEnumerable<T> Do<T>(this IEnumerable<T> list, Action<T[]> action) {
+            var l = list.ToArray();
+            action(l);
+            return l;
+        }
 
+        public static IEnumerable<T> EvaluateLinq<T>(this IEnumerable<T> list) {
+            return list.ToArray();
+        }
+
+        public delegate TT ObjectCascader<T, TT>(T obj);
+        /// <summary>
+        ///     If <paramref name="obj"/> is the default value, returns the default, otherwise calls the action and returns the result.
+        /// </summary>
+        public static TT IfNotNull<T, TT>(this T obj, ObjectCascader<T, TT> act) {
+            if (Equals(obj, default(T)))
+                return default(TT);
+            return act(obj);
+        }
+
+        /// <summary>
+        ///     Filters all null values using .equals
+        /// </summary>
+        public static IEnumerable<T> FilterNulls<T>(this IEnumerable<T> list) {
+            if (list == null) {
+                yield break;
+            }
+
+            foreach (var t in list.Where(t => t.Equals(null) == false))
+                yield return t;
+        }
     }
 }

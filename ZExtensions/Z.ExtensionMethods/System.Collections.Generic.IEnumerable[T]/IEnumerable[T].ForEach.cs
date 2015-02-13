@@ -19,7 +19,7 @@ public static partial class IEnumerableExtension
         foreach (T t in @this)
         {
             action(t);
+            yield return t;
         }
-        return @this;
     }
 }

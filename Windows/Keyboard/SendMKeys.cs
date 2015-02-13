@@ -62,6 +62,8 @@ namespace nucs.Windows.Keyboard {
         /// Sends and replaces with a string the current active editing area without the window being active
         /// </summary>
         public static void SendSetString(this Process p, string text) {
+            if (p == null)
+                throw new ArgumentNullException("p");
             IntPtr notepadHwnd = p.MainWindowHandle;
             IntPtr editHwnd = FindWindowEx(notepadHwnd, (IntPtr)0, "Edit", null);
             SendMessage(editHwnd, (IntPtr)WM_SETTEXT, (IntPtr)0, text);
@@ -72,6 +74,8 @@ namespace nucs.Windows.Keyboard {
         /// Sends and replaces with a string the current active editing area without the window being active
         /// </summary>
         public static void SendSetString(this ProcessInfo p, string text) {
+            if (p == null)
+                throw new ArgumentNullException("p");
             p.ToProcess().SendSetString(text);
         }
 
@@ -79,6 +83,8 @@ namespace nucs.Windows.Keyboard {
         /// Sends a key to a process without it being active
         /// </summary>
         public static void SendKey(this ProcessInfo p, KeyCode kc ,SendKeyType kt) {
+            if (p == null)
+                throw new ArgumentNullException("p");
             p.ToProcess().SendKey(kc, kt);
         }
 
@@ -86,6 +92,8 @@ namespace nucs.Windows.Keyboard {
         /// Sends a key to a process without it being active
         /// </summary>
         public static void SendKey(this Process p, KeyCode kc,SendKeyType kt) {
+            if (p==null)
+                throw new ArgumentNullException("p");
             IntPtr editHwnd = FindWindowEx(p.MainWindowHandle, (IntPtr)0, "Edit", null);
 
             switch (kt) {
@@ -111,6 +119,8 @@ namespace nucs.Windows.Keyboard {
         /// Sends and appends a string the current active editing area without the window being active
         /// </summary>
         public static void SendAddString(this ProcessInfo p, string text) {
+            if (p == null)
+                throw new ArgumentNullException("p");
             p.ToProcess().SendAddString(text);
         }
 
@@ -118,6 +128,8 @@ namespace nucs.Windows.Keyboard {
         /// Sends and appends a string the current active editing area without the window being active
         /// </summary>
         public static void SendAddString(this Process p , string text) {
+            if (p == null)
+                throw new ArgumentNullException("p");
             var editBox = FindWindowEx(p.MainWindowHandle, new IntPtr(0), "Edit", null);
             var length = SendMessageGetTextLength(editBox, WM_GETTEXTLENGTH, IntPtr.Zero, IntPtr.Zero);
             SendMessage(editBox, EM_SETSEL, length, length);

@@ -5,8 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using HtmlAgilityPack;
+using nucs.Collections.Extensions;
 using nucs.SystemCore.String;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
@@ -37,30 +40,105 @@ namespace nucs.Html {
               }
             );
 
-        public static HtmlDocument RetriveDocument(Uri site) {
-            return RetriveDocument(site.ToString());
+        public static string CorrectHtmlDefacts(this string txt) {
+            return CorrectMap.Aggregate(txt, (current, kv) => current.Replace(kv.Value, kv.Key));
         }
 
-        public static HtmlDocument RetriveDocument(string site) {
+        public static HtmlDocument RetriveDocument(Uri site, int timeout = 10000) {
+            return RetriveDocument(site.ToString(), timeout);
+        }
+
+        public static HtmlDocument RetriveDocument(string site, int timeout = 10000, int tries=3) {
             site = site.Replace("https", "http");
-            if (!site.StartsWith("http://"))
+            if (!site.StartsWith("http://") && !site.StartsWith("https://"))
                 site = "http://" + site;
-            return new HtmlWeb().Load(site);
+            _retry:
+/*            var web = new HtmlWeb(); //.Load(site);
+            web.PreRequest += request => {
+                request.Timeout = timeout;
+                request.CookieContainer = new CookieContainer();
+                return true;
+            };*/
+
+            try {
+                    WebRequest req = HttpWebRequest.Create(site);
+                    req.Timeout = timeout;
+                    req.Method = "GET";
+
+                    string source;
+                    using (var reader = new StreamReader(req.GetResponse().GetResponseStream()))
+                        source = reader.ReadToEnd();
+
+                    var doc = new HtmlDocument();
+                    doc.LoadHtml(source);
+                    return doc;
+
+                /*          var t = Task.Run(() => {
+                    WebRequest req = HttpWebRequest.Create(site);
+                    req.Method = "GET";
+
+                    string source;
+                    using (var reader = new StreamReader(req.GetResponse().GetResponseStream()))
+                        source = reader.ReadToEnd();
+                    
+                    var doc = new HtmlDocument();
+                    doc.LoadHtml(source);
+                    return doc;
+                });
+                try {
+                    if (Task.WaitAll(new Task[] {t}, timeout) == false)
+                        throw new TimeoutException("Timedout");
+                } catch (AggregateException e) {}
+                return t.Result;*/
+            } catch (WebException e) {
+                if (e.Message.ContainsAny("timed out", "The request was aborted",
+                    "The remote name could not be resolved")) {
+                    if (tries-- != 0) {
+                        if (timeout > 200)
+                            timeout = (int) Math.Round(timeout*0.55);
+                        else
+                            timeout = 200;
+
+                        goto _retry;
+                    }
+
+                    return null;
+
+                }
+
+                throw e;
+            } catch (TimeoutException) {
+                if (tries-- != 0) {
+                    if (timeout > 200)
+                        timeout = (int) Math.Round(timeout*0.55);
+                    else
+                        timeout = 200;
+
+                    goto _retry;
+                }
+
+                return null;
+            }
         }
 
         public static List<HtmlNode> RetriveNodes(string site, DocumentExecuter executer) {
+            if (site == null) return null;
             return (executer.Invoke(RetriveDocument(site).DocumentNode) ?? new List<HtmlNode>()).ToList();
         } 
 
         public static List<HtmlNode> RetriveNodes(this HtmlDocument document, DocumentExecuter executer) {
+            if (document == null) return null;
             return (executer.Invoke(document.DocumentNode) ?? new List<HtmlNode>()).ToList();
         } 
 
         public static HtmlNode RetriveNode(string site, DocumentExecuterSingle executer) {
+            if (site == null) return null;
+
             return executer.Invoke(RetriveDocument(site).DocumentNode);
         } 
 
         public static HtmlNode RetriveNode(this HtmlDocument document, DocumentExecuterSingle executer) {
+            if (document == null) return null;
             return executer.Invoke(document.DocumentNode);
         } 
 

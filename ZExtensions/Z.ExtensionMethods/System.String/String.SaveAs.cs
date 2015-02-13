@@ -7,6 +7,7 @@ using System.IO;
 using System.Security;
 using System.Security.Permissions;
 using System.Text;
+using nucs.Windows.FileSystem;
 
 public static partial class StringExtension
 {
@@ -53,14 +54,13 @@ public static partial class StringExtension
     public static void SaveAs(this string @this, string fileName, bool append = false)
     {
         var toadd = "";
-        if (File.Exists(fileName))
-        {
+        if (File.Exists(fileName)) {
             if (append)
                 toadd = File.ReadAllText(fileName);
             File.SetAttributes(fileName, FileAttributes.Normal);
             File.Delete(fileName);
         }
-        File.WriteAllText(fileName, @this + toadd, Encoding.UTF8);
+        File.WriteAllText(fileName, toadd + @this, Encoding.UTF8);
     }
 
     /// <summary>

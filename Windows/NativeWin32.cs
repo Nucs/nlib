@@ -8,7 +8,8 @@ using nucs.Windows.Mouse;
 namespace nucs.Windows {
 
     public static partial class NativeWin32 {
-
+        [DllImport("kernel32.dll")]
+        public static extern int FreeConsole();
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool IsWindow(IntPtr hWnd);

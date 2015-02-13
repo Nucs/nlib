@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using nucs.SystemCore;
@@ -16,10 +17,12 @@ using nucs.Mono.System.Threading;
 #endif
 
 namespace nucs.Collections {
+
     /// <summary>
     ///     A list that have item-add handling using events
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [DebuggerStepThrough]    
     public sealed class ImprovedList<T> : List<T> {
         public delegate bool CompareItems(T item);
         public delegate void ItemAddedHandler(T Item);
@@ -204,6 +207,18 @@ namespace nucs.Collections {
         private void invokeAccessed() {
             if (ListAccessed != null)
                 Task.Run(() => ListAccessed());
+        }
+
+        public void Distinct() {
+            var newly = this.ToArray().Distinct();
+            this.Clear();
+            base.AddRange(newly);
+        }
+
+        public void Distinct(IEqualityComparer<T> comparer) {
+            var newly = this.ToArray().Distinct(comparer);
+            this.Clear();
+            base.AddRange(newly);
         }
 
         #region Operators
