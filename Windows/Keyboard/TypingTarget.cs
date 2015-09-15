@@ -1,4 +1,7 @@
-﻿using System;
+﻿#if !AV_SAFE
+#if !(NET_3_5 || NET_3_0 || NET_2_0)
+
+using System;
 using System.Diagnostics;
 using System.Text;
 #if NET_4_5
@@ -209,3 +212,6 @@ namespace nucs.Windows.Keyboard {
 
     }*/
 }
+#endif
+
+#endif

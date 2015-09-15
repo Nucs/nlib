@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,20 +7,32 @@ using nucs.SystemCore;
 using nucs.SystemCore.Boolean;
 
 namespace nucs.Collections {
-    public class Collector<T> {
+    public class Collector<T> : IEnumerable<T>, ICollectorAdder<T> {
         public delegate void ItemAddedToApproveHandler(T item, int itemnumber, bool isLast, Bool Approve);
         public delegate void ItemAddedApprovedHandler(T item, int itemnumber, bool isLast);
 
         public event ItemAddedToApproveHandler ItemAddedToApprove;
         public event ItemAddedApprovedHandler ItemAddedApproved;
         public readonly ArrayQueue<T> Queue = new ArrayQueue<T>(); //explanations: http://www.tutorialspoint.com/csharp/csharp_queue.htm
-        internal readonly object lock_take = new object();
+        internal readonly object syncer = new object();
         /// <summary>
         /// Represents how many items were added regardless to their approval
         /// </summary>
         public int Counter { get; private set; }
-        public int ItemsLeft { get { return Queue.Count; } }
+
+        /// <summary>
+        /// Equivalent to <see cref="IList.Count"/>
+        /// </summary>
+        public int ItemsLeft {
+            get {
+                {}
+                return Queue.Count;
+            }
+        }
+
         public bool IsClosed { get; private set; }
+
+        public object Syncronizer {get{ return syncer; }}
 
         public Collector() {
             IsClosed = false;
@@ -39,48 +52,82 @@ namespace nucs.Collections {
                 if (approval == false)
                     return;
                 _approved:
-                lock (lock_take) Queue.Enqueue(item);
+                lock (syncer) Queue.Enqueue(item);
                 if (ItemAddedApproved != null) ItemAddedApproved(item, Counter, isLast);
             }
         }
 
+        public void AddRange(IEnumerable<T> items, bool isLast = false) {
+            lock (lock_add) {
+                foreach (var item in items) {
+                    Add(item, false);
+                }
+            }
+            if (isLast == true)
+                IsClosed = true;
+        }
+
         public T TakeFirst() {
-            lock (lock_take) {
+            lock (syncer) {
                 return Queue.Dequeue();
             }
         }
 
         public T Take(int index) {
-            lock (lock_take) {
+            lock (syncer) {
                 return Queue.Take(index);
             }
         }
 
+        private Random _rand=null;
+        public T TakeRandom() {
+            return TakeRandom(_rand ?? (_rand = new Random()));
+        }
+
+        public T TakeRandom(Random rand) {
+            lock (syncer) {
+                return Queue.Take(rand.Next(0, Queue.Count - 1));
+            }
+        }
+
         public T PeakFirst() {
-            lock (lock_take) {
+            lock (syncer) {
                 return Queue.PeekFirst();
             }
         }
 
         public T Peak(int index) {
-            lock (lock_take) {
+            lock (syncer) {
                 return Queue.Peek(index);
             }
         }
 
         public bool Remove(T item) {
-            lock (lock_take) {
+            lock (syncer) {
                 Queue.Remove(item);
             }
             return false;
         }
 
         public void RemoveAt(int index) {
-            lock (lock_take) {
+            lock (syncer) {
                 Queue.RemoveAt(index);
             }
         }
 
+        public IEnumerator<T> GetEnumerator() {
+            T[] arr;
+            lock (syncer)
+                arr = Queue.ToArray();
+            return ((IEnumerable<T>) arr).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            T[] arr;
+            lock (syncer)
+                arr = Queue.ToArray();
+            return ((IEnumerable<T>)arr).GetEnumerator();
+        }
     }
 
     public class CollectorPump<T> {

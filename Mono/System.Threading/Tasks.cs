@@ -36,17 +36,42 @@ namespace nucs.Mono.System.Threading {
             return tr;
 
         }
-        public static Task<Task<TResult>> WhenAny<TResult>(ICollection<Task<TResult>> tasks) {
-
+        public static Task<Task<TResult>> WhenAny<TResult>(this ICollection<Task<TResult>> tasks) {
+#if NET_3_5 || NET_3_0 || NET_2_0
+            throw new NotImplementedException();
+#else
             if (tasks.Count == 0)
                 throw new ArgumentException("The tasks argument contains no tasks", "tasks");
             return Run(() => tasks.AsParallel().FirstOrDefault(t => { t.Wait(); return true; }));
+#endif
         }
-        public static Task<Task<TResult>> WaitAll<TResult>(ICollection<Task<TResult>> tasks) {
-            //todo
-            throw new NotImplementedException();
+        public static void WaitAll<TResult>(this IEnumerable<Task<TResult>> tasks) {
+            foreach (var t in tasks) {
+                t.Wait();
+            }
         }
 
+        public static void WaitAll<TResult>(this IEnumerable<Task<TResult>> tasks, uint timeoutms) {
+            var ts = TimeSpan.FromMilliseconds(timeoutms);
+            var end = DateTime.Now + ts;
+            foreach (var t in tasks) {
+                t.Wait(end-DateTime.Now);
+            }
+        }
+
+        public static void WaitAll(this IEnumerable<VoidTask> tasks) {
+            foreach (var t in tasks.ToArray()) {
+                t.Wait();
+            }
+        }
+
+        public static void WaitAll(this IEnumerable<VoidTask> tasks, uint timeoutms) {
+            var ts = TimeSpan.FromMilliseconds(timeoutms);
+            var end = DateTime.Now + ts;
+            foreach (var t in tasks) {
+                t.Wait(end-DateTime.Now);
+            }
+        }
     }
     
 

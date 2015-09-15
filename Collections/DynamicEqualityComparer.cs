@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DIPClient
 {
+    public delegate bool EqualsDelegate<in T>(T x, T y);
+    public delegate int GetHashCodeDelegate<in T>(T obj);
     public class DynamicEqualityComparer<T> : IEqualityComparer<T> {
-        public delegate bool EqualsDelegate<T>(T x, T y);
-        public delegate int GetHashCodeDelegate<T>(T obj);
+
 
         public EqualsDelegate<T> EqualityMethod;
         public GetHashCodeDelegate<T> GetHashCodeMethod;

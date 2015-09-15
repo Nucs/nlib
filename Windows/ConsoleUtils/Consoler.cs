@@ -96,7 +96,7 @@ namespace nucs.Windows.ConsoleUtils {
                     if (!att.IsAlias)
                         strings.Add("   -"+t.Name + (!string.IsNullOrEmpty(att.Description) ? " - "+att.Description : ""));
                 }
-                Console.WriteLine( helpCommand = string.Join("\n\r", strings));
+                Console.WriteLine( helpCommand = string.Join("\n\r", strings.ToArray()));
             }
 
             [ConsolerMethod(true)]

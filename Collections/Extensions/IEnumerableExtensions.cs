@@ -103,8 +103,9 @@ namespace nucs.Collections.Extensions {
             return l;
         }
 
-        public static IEnumerable<T> EvaluateLinq<T>(this IEnumerable<T> list) {
-            return list.ToArray();
+        public static void EvaluateLinq<T>(this IEnumerable<T> list) {
+            var e = list.GetEnumerator();
+            while (e.MoveNext()) ;
         }
 
         public delegate TT ObjectCascader<T, TT>(T obj);
@@ -128,5 +129,22 @@ namespace nucs.Collections.Extensions {
             foreach (var t in list.Where(t => t.Equals(null) == false))
                 yield return t;
         }
+
+        public static IEnumerable<T> PrintEach<T>(this IEnumerable<T> list) {
+            foreach (var obj in list) {
+                Console.WriteLine(obj);
+                yield return obj;
+            }
+        } 
+
+        public static IEnumerable<T> PrintEachIfDebug<T>(this IEnumerable<T> list) {
+
+            foreach (var obj in list) {
+#if DEBUG
+                Console.WriteLine(obj);
+#endif
+                yield return obj;
+            }
+        } 
     }
 }

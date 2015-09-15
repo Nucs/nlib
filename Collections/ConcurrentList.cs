@@ -5,9 +5,9 @@ using Interlocked = System.Threading.Interlocked;
 
 namespace nucs.Collections {
 
-    
+    public delegate void ItemAddedToCollectionHandler<T>(T item, int index);
+
     public sealed class ConcurrentList<T> : ThreadSafeList<T> {
-        public delegate void ItemAddedToCollectionHandler<T>(T item, int index);
         public event ItemAddedToCollectionHandler<T> ItemAddedEvent;  
         private static readonly int[] Sizes;
         private static readonly int[] Counts;

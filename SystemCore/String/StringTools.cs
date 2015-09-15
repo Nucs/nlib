@@ -492,6 +492,9 @@ namespace nucs.SystemCore.String {
 
         }
 
+        public static string BetweenQuotation(this string text) {
+            return text.GetBetween("\"", "\"");
+        }
         #endregion
     }
 }

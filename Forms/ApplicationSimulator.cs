@@ -12,7 +12,6 @@ namespace nucs.Forms {
     /// </summary>
     public class ApplicationSimulator : InvisibleForm {
 
-
         public delegate void MessageArrivalHandler(ref Message msg);
 
         /// <summary>
@@ -59,7 +58,7 @@ namespace nucs.Forms {
         public static ApplicationSimulator Create() {
             ApplicationSimulator instace_holder = null;
 
-            var holder = new ManualResetEventSlim(false);
+            var holder = new ManualResetEvent(false);
             var t = new Thread(()=> Application.Run(
                 instace_holder = new ApplicationSimulator(inst => {
                                                               instace_holder = (ApplicationSimulator)inst; holder.Set();
@@ -69,7 +68,13 @@ namespace nucs.Forms {
             t.SetApartmentState(ApartmentState.STA);
             t.IsBackground = true;
             t.Start();
-            holder.Wait(); //wait for init.
+            _rewait:
+            try {
+                holder.WaitOne(); //wait for init.
+            } catch {
+                Thread.Sleep(5);
+                goto _rewait;
+            }
             return instace_holder;
         }
     }

@@ -42,10 +42,18 @@ namespace nucs.Windows.FileSystem {
             destination.Create();
 
             foreach (
+#if (NET_3_5 || NET_3_0 || NET_2_0)
+                string sourceSubDirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
+#else
                 string sourceSubDirPath in Directory.EnumerateDirectories(sourcePath, "*", SearchOption.AllDirectories))
-                Directory.CreateDirectory(sourceSubDirPath.Replace(sourcePath, destinationPath));
+#endif
+                    Directory.CreateDirectory(sourceSubDirPath.Replace(sourcePath, destinationPath));
+#if (NET_3_5 || NET_3_0 || NET_2_0)
 
+            foreach (string file in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
+#else
             foreach (string file in Directory.EnumerateFiles(sourcePath, "*", SearchOption.AllDirectories))
+#endif
                 File.Copy(file, file.Replace(sourcePath, destinationPath), overwrite);
 
             return destination;
@@ -92,12 +100,12 @@ namespace nucs.Windows.FileSystem {
         /// <summary>
         ///     Searches all directories and file inside the <paramref name="directory"/>.
         /// </summary>
-        /// <param name="filename">The filename, with extension or without</param>
+        /// <param name="filename">The filename without extension</param>
         /// <param name="directory">The directory to search, search will be performed to subdirectories</param>
         /// <param name="extension">Possible specification for the extension, for example "exe" or "doc" </param>
         public static string[] SearchFile(string filename, string directory, string extension = null) {
                 return Directory.GetFiles(directory, (extension == null ? "" : "*." + extension), SearchOption.AllDirectories)
-                        .Where(f => f.EndsWith(filename))
+                        .Where(f => f.EndsWith(filename+"."+extension))
                         .ToArray();
         }
 

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using nucs.Collections;
 
 namespace nucs.SystemCore.Settings {
-    public abstract class AppSettings<T> where T : new() {
+    public abstract class AppSettings<T> : ISaveable where T : new() {
         public const string DEFAULT_FILENAME = "settings.jsn";
 
         // ReSharper disable once StaticFieldInGenericType
@@ -24,6 +24,13 @@ namespace nucs.SystemCore.Settings {
         /// </summary>
         public virtual void Save(string filename = DEFAULT_FILENAME) {
             serializer.Serialize(this).SaveAs(filename); 
+        }
+
+        /// <summary>
+        /// The filename that was originally loaded from. saving to other file does not change this field!
+        /// </summary>
+        public virtual void Save() {
+            serializer.Serialize(this).SaveAs(DEFAULT_FILENAME); 
         }
 
         public static void Save(T pSettings, string fileName = DEFAULT_FILENAME) {

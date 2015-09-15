@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if NET_4_5
+
+using System;
 using System.Data;
 using MySql.Data.MySqlClient;
 
@@ -133,3 +135,4 @@ namespace nucs.ADO.NET.MySql {
 
 
 }
+#endif

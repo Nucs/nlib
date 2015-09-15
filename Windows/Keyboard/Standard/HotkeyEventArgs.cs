@@ -1,6 +1,10 @@
-﻿using System;
+﻿#if !AV_SAFE
+using System;
 using System.Linq;
 using System.Windows.Forms;
+#if (NET_3_5 || NET_3_0 || NET_2_0)
+using nucs.SystemCore.Enums;
+#endif
 
 namespace nucs.Windows.Keyboard {
 
@@ -98,6 +102,7 @@ namespace nucs.Windows.Keyboard {
             return new HotkeyEventArgs {Hotkey = Hotkey.Create(k, description)};
         }
 
-        public override string ToString() { return (Hotkey != null ? Description+": "+Hotkey : ""); }
+        public override string ToString() { return (Hotkey != null ? (Description!=null ? Description + ": " : "") + Hotkey : ""); }
     }
 }
+#endif

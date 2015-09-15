@@ -7,7 +7,6 @@ using System.Linq;
 using System.Management.Instrumentation;
 using System.Text;
 using PetaPoco.Internal;
-using nucs.ADO.NET.MySql;
 using nucs.SystemCore.Dynamic;
 using nucs.SystemCore.Reflection;
 using nucs.SystemCore.String;

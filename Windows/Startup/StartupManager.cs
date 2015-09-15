@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !AV_SAFE
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -126,7 +127,7 @@ namespace nucs.Windows.Startup {
         [ComImport]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         [Guid("000214F9-0000-0000-C000-000000000046")]
-        internal interface IShellLink {
+        public interface IShellLink {
             void GetPath([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile, int cchMaxPath, out IntPtr pfd,
                          int fFlags);
 
@@ -158,7 +159,7 @@ namespace nucs.Windows.Startup {
 
         [ComImport]
         [Guid("00021401-0000-0000-C000-000000000046")]
-        internal class ShellLink {}
+        public class ShellLink {}
 
         #endregion
 
@@ -441,3 +442,5 @@ namespace nucs.Windows.Startup {
         LocalUserStartupRegistry = 3
     }
 }
+
+#endif

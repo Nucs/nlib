@@ -32,6 +32,12 @@ namespace nucs.Forms {
             c.Invoke(new MethodInvoker(act));
         }
 
+        public static T Invoke<T>(this Control c, Func<T> act) {
+            T res = default(T);
+            c.Invoke(new MethodInvoker(()=>res = act()));
+            return res;
+        }
+
 #if NET_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -46,10 +52,10 @@ namespace nucs.Forms {
 
         public static bool WaitForHandleCreation(this Control control, int timeout = -1) {
             if (control.IsHandleCreated) return true;
-            var holder = new ManualResetEventSlim(false);
+            var holder = new ManualResetEvent(false);
             EventHandler s = (sender, args) => ControlOnHandleCreated(holder);
             control.HandleCreated += s;
-            holder.Wait(timeout);
+            holder.WaitOne(timeout);
             control.HandleCreated -= s;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             return control.IsHandleCreated;
@@ -58,17 +64,45 @@ namespace nucs.Forms {
         public static bool WaitForHandleCreation(this Form control, int timeout = -1) {
             if (control.IsHandleCreated) return true;
             
-            var holder = new ManualResetEventSlim(false);
+            var holder = new ManualResetEvent(false);
             EventHandler s = (sender, args) => ControlOnHandleCreated(holder);
             control.HandleCreated += s;
-            holder.Wait(timeout);
+            holder.WaitOne(timeout);
             control.HandleCreated -= s;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             return control.IsHandleCreated;
         }
 
-        private static void ControlOnHandleCreated(ManualResetEventSlim holder) {
+        private static void ControlOnHandleCreated(ManualResetEvent holder) {
             holder.Set();
+        }
+
+        /// <summary>
+        ///     Iterates all children and children-childrens to collect all controls in the form.
+        /// </summary>
+        /// <param name="form">The form to search</param>
+        /// <returns>All the controls in the form</returns>
+        public static List<Control> GetChildControls(this Form form) {
+            return GetControls(null, form).ToList();
+        } 
+        
+        private static IEnumerable<Control> GetControls(Control c = null, Form form = null) {
+            if (c != null) {
+                if (c.Controls != null) {
+                    foreach (var cont in c.Controls.Cast<Control>()) {
+                        foreach (var co in GetControls(cont))
+                            yield return co;
+                        yield return cont;
+                    }
+                    
+                }
+                yield break;
+            }
+
+            foreach (Control control in form.Controls)
+                foreach (var cont in GetControls(control))
+                    yield return cont;
+                
         }
     }
 }

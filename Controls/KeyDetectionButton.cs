@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if !AV_SAFE
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -103,3 +105,4 @@ namespace nucs.Controls {
 
     }
 }
+#endif

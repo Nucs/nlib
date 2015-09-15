@@ -19,7 +19,7 @@ namespace nucs.Threading {
         private int _delay;
         public readonly object LockObject;
         private readonly ManualResetEventSlim reseter = new ManualResetEventSlim(true);
-        private readonly TimerCountDown counter;
+        private readonly CountdownTimer counter;
 
         public bool Waiting { get { return counter.Working; } }
         /// <summary>
@@ -30,8 +30,8 @@ namespace nucs.Threading {
         public TimedLocker(int delay, object lockObj = null) {
             _delay = delay;
             LockObject = lockObj ?? new object();
-            counter = new TimerCountDown(delay);
-            counter.Tick += interval => reseter.Set();
+            counter = new CountdownTimer(delay);
+            counter.Elapsed += () => reseter.Set();
         }
 
         /// <summary>
@@ -67,45 +67,7 @@ namespace nucs.Threading {
         }
 
 
-        internal class TimerCountDown {
-            internal delegate void TickHandler(int CurrentInterval);
-            internal TickHandler Tick;
-            internal bool Working { get { return t.Enabled; } }
-            internal bool Enabled { get { return enabled; } }
-            public int Interval {
-                get { return _interval; }
-                set { _interval = value;
-                    enabled = value > 0;
-                    if (value <= 0) {
-                        t.Interval = 1;
-                        return;
-                    }
-
-                    t.Interval = value;
-                }
-            }
-
-            internal bool enabled = false;
-            private int _interval;
-            private readonly System.Timers.Timer t;
-
-            public TimerCountDown(int interval) {
-                _interval = interval;
-                Tick += currentInterval => { };
-                enabled = interval > 0;
-                t = new Timer(interval <= 0 ? 1 : interval) {AutoReset = false, Enabled = false};
-
-                t.Elapsed += (sender, args) => Tick(Interval);
-            }
-            
-            public void Start() {
-                t.Start();
-            }
-
-            public void Stop() {
-                t.Stop();
-            }
-        }
+        
 
     }
 }

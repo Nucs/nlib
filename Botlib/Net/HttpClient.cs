@@ -569,7 +569,9 @@ namespace BotSuite.Net {
                         bw.Write(this._Cache);
                         ms.Seek(0, SeekOrigin.Begin);
                         retImg = Image.FromStream(ms);
+#if !(NET_3_5 || NET_3_0 || NET_2_0)
                         bw.Dispose();
+#endif
                     }
                 } catch {
                     return null;

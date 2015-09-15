@@ -5,7 +5,7 @@ namespace nucs.Windows.Keyboard {
         /// <summary>
         /// Takes a Virtual Key from a key press event and translates it into a char from the current keyboard language.
         /// </summary>
-        public static string VKCodeToUnicode(uint VKCode){
+        public static string VKCodeToUnicode(uint VKCode, IntPtr? keyboardLayout = null) {
             var sbString = new System.Text.StringBuilder();
 
             var bKeyState = new byte[255];
@@ -13,7 +13,7 @@ namespace nucs.Windows.Keyboard {
             if (!bKeyStateStatus)
                 return "";
             uint lScanCode = NativeWin32.MapVirtualKey(VKCode, 0);
-            var HKL = GetCurrentKeyboardLayout();
+            var HKL = keyboardLayout ?? GetCurrentKeyboardLayout();
 
             NativeWin32.ToUnicodeEx(VKCode, lScanCode, bKeyState, sbString, 5, 0, HKL);
             return sbString.ToString();

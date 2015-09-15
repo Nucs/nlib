@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if !AV_SAFE
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -40,8 +42,7 @@ namespace nucs.Windows.Keyboard {
         /// Stops the Hook and releases unmanaged resources.
         /// </summary>
         protected abstract bool Unhook();
-
-
+        
         /// <summary>
         /// Clears the registeration without unhooking.
         /// </summary>
@@ -153,3 +154,5 @@ namespace nucs.Windows.Keyboard {
 
     }
 }
+
+#endif

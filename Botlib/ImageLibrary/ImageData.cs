@@ -177,7 +177,7 @@ namespace BotSuite.ImageLibrary {
             ReturnBitmap.UnlockBits(bmpData);
 
             // Then, if necessary, we crop the generated rectangle to the new size:
-            if (!(L == 0 && T == 0 && W == Width && H == Height)) ;
+            if (!(L == 0 && T == 0 && W == Width && H == Height)) { }
             Rectangle cropRect = new Rectangle(L, T, W, H);
             Bitmap target = new Bitmap(cropRect.Width, cropRect.Height);
 
@@ -213,7 +213,7 @@ namespace BotSuite.ImageLibrary {
             ReturnBitmap.UnlockBits(bmpData);
 
             // Then, if necessary, we crop the generated rectangle to the new size:
-            if (!(L == 0 && T == 0 && W == Width && H == Height)) ;
+            if (!(L == 0 && T == 0 && W == Width && H == Height)) { }
             Rectangle cropRect = new Rectangle(L, T, W, H);
             Bitmap target = new Bitmap(cropRect.Width, cropRect.Height);
 

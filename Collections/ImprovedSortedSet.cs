@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !(NET_3_5 || NET_3_0 || NET_2_0)
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -195,3 +196,4 @@ namespace nucs.Collections {
 
     }
 }
+#endif

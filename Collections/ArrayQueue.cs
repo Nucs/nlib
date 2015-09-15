@@ -130,7 +130,7 @@ namespace nucs.Collections {
                 }
                 Array.Copy(_array, 0, array, index + _array.Length - _head, length3);
             }
-            catch (ArrayTypeMismatchException ex) {
+            catch (ArrayTypeMismatchException) {
                 throw new ArgumentException();
             }
         }

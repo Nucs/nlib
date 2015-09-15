@@ -40,8 +40,8 @@ namespace nucs.Forms {
             try {
                 base.SetVisibleCore(false);
             } catch { }
-
-            post_creation(this);
+            if (post_creation!=null)
+                post_creation(this);
             post_creation = null;
             Loaded = true;
         }

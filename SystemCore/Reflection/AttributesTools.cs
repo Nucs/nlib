@@ -46,7 +46,14 @@ public static class AttributesTools {
 */
 
     private static Type[] gettypes(Assembly assmb) {
-            return !File.Exists(assmb.CodeBase) ? new Type[0] : assmb.GetTypes();
+            return !File.Exists(AssemblyDirectory(assmb)) ? new Type[0] : assmb.GetTypes();
+    }
+
+    private static string AssemblyDirectory(Assembly asm) { 
+        string codeBase = asm.CodeBase;
+        UriBuilder uri = new UriBuilder(codeBase);
+        string path = Uri.UnescapeDataString(uri.Path);
+        return Path.GetDirectoryName(path);
     }
 
 #if NET_4_5
@@ -57,7 +64,7 @@ public static class AttributesTools {
         if (attributeName.EndsWith("Attribute") == false)
             attributeName = attributeName + "Attribute";
 
-        return assemblies.SelectMany(m => m.GetTypes())
+        return assemblies.SelectMany(m => m.GetTypes()).AsParallel()
                 .SelectMany(t => t.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))
                 .Where(m => m.CustomAttributes.Any(attr => attr.AttributeType.Name.Equals(attributeName)))
                 .ToArray();

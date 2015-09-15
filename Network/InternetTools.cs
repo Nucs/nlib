@@ -4,36 +4,40 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
-using System.Text;
 #if NET_4_5
 using System.Threading.Tasks;
 using System.Threading;
 #else
 using nucs.Mono.System.Threading;
+
 #endif
+
 namespace nucs.Network {
     public static class InternetTools {
         [DllImport("wininet.dll")]
-        private extern static bool InternetGetConnectedState(out int conn, int val);
+        private static extern bool InternetGetConnectedState(out int conn, int val);
 
         /// <summary>
-        /// Uses 'bool InternetGetConnectedState(out int conn, int val)' pinvoke to check if computer has internet connection.
+        ///     Uses 'bool InternetGetConnectedState(out int conn, int val)' pinvoke to check if computer has internet connection.
         /// </summary>
         /// <returns></returns>
         public static bool HasInternetConnection() {
             int Out;
-            return InternetGetConnectedState(out Out, 0);
+            return InternetGetConnectedState(out Out, 0) && NetworkInterface.GetIsNetworkAvailable();
         }
 
         /// <summary>
-        /// Peforms a ping towards an <see cref="IPAddress"/>
+        ///     Peforms a ping towards an <see cref="IPAddress" />
         /// </summary>
-        /// <param name="address">The <see cref="IPAddress"/> to ping</param>
+        /// <param name="address">The <see cref="IPAddress" /> to ping</param>
         /// <param name="times">how many times to ping, must be times > 0</param>
-        /// <param name="verifyLocalInternetConnection">Force checking of computer's internet connection, if false -> returns automatically false</param>
+        /// <param name="verifyLocalInternetConnection">
+        ///     Force checking of computer's internet connection, if false -> returns
+        ///     automatically false
+        /// </param>
         /// <returns>If the server has responded</returns>
         public static bool TestHostConnection(IPAddress address, int times, bool verifyLocalInternetConnection = false) {
-            if (times <= 0) 
+            if (times <= 0)
                 throw new ArgumentException("You can't perform " + times + " times a test.. wtf bro");
             if (address == null)
                 return false;
@@ -48,7 +52,7 @@ namespace nucs.Network {
                 return false;
             }
             //here we will ping the host
-            for (var i = 0; i < times; i++) {
+            for (var i = 0; i < times; i++)
                 try {
                     //send the ping 4 times to the host and record the returned data.
                     //The Send() method expects 4 items:
@@ -59,45 +63,54 @@ namespace nucs.Network {
                     PingReply pingReply;
                     try {
                         pingReply = ping.Send(address, 1000, buffer, pingOptions);
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
                         Console.WriteLine("HCT: " + string.Format("Connection Error: {0}", e.Message));
                         result = false;
                         continue;
                     }
 
                     //make sure we dont have a null reply
-                    if (pingReply != null) {
+                    if (pingReply != null)
                         switch (pingReply.Status) {
                             case IPStatus.Success:
                                 try {
-                                    Console.WriteLine("HCT: " + string.Format("Reply from {0}: bytes={1} time={2}ms TTL={3}", pingReply.Address, pingReply.Buffer.Length,
-                                                                    pingReply.RoundtripTime, (pingReply.Options==null ? "-1" : pingReply.Options.Ttl.ToString())));
+                                    Console.WriteLine("HCT: " +
+                                                      string.Format("Reply from {0}: bytes={1} time={2}ms TTL={3}",
+                                                          pingReply.Address, pingReply.Buffer.Length,
+                                                          pingReply.RoundtripTime,
+                                                          (pingReply.Options == null
+                                                              ? "-1"
+                                                              : pingReply.Options.Ttl.ToString())));
                                     result = true;
-                                } catch (Exception) {result = false;}
+                                }
+                                catch (Exception) {
+                                    result = false;
+                                }
                                 break;
                             case IPStatus.TimedOut:
                                 Console.WriteLine("HCT: " + "Connection has timed out...");
                                 result = false;
                                 break;
                             default:
-                                Console.WriteLine("HCT: " + string.Format("Ping failed: {0}", pingReply.Status.ToString()));
+                                Console.WriteLine("HCT: " + string.Format("Ping failed: {0}", pingReply.Status));
                                 result = false;
                                 break;
                         }
-                    } else {
+                    else {
                         Console.WriteLine("HCT: " + "Connection failed for an unknown reason...");
                         result = false;
                     }
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     Console.WriteLine("HCT: " + string.Format("Connection Error: {0}", ex.Message));
                     result = false;
                 }
-            }
             return result;
         }
 
         /// <summary>
-        /// Equalivent to Dns.GetHostAddresses(txt), but returned async.
+        ///     Equalivent to Dns.GetHostAddresses(txt), but returned async.
         /// </summary>
         /// <param name="_ip">The IP address</param>
         /// <returns>List of aliases to this IP</returns>
@@ -108,7 +121,8 @@ namespace nucs.Network {
             var t = Task.Run(() => {
                 try {
                     return Dns.GetHostAddresses(_ip).ToList();
-                } catch (Exception) {
+                }
+                catch (Exception) {
                     return null;
                 }
             });
@@ -116,7 +130,8 @@ namespace nucs.Network {
         }
 
         /// <summary>
-        /// Collects the IP Aliases to the given '_ip' then attempt to ping it for 'pingAttempts' times and return succesful pings
+        ///     Collects the IP Aliases to the given '_ip' then attempt to ping it for 'pingAttempts' times and return succesful
+        ///     pings
         /// </summary>
         /// <param name="_ip"></param>
         /// <param name="pingAttempts"></param>
@@ -130,13 +145,16 @@ namespace nucs.Network {
 #else
         public static Task<List<IPAddress>> GetConnectableAliases(string _ip, int pingAttempts = 1) {
             return Task.Run(() => {
-                        var ips = GetDnsAliases(_ip).Result;
-                        if (ips == null || ips.Count == 0)
-                            return null;
+                var ips = GetDnsAliases(_ip).Result;
+                if (ips == null || ips.Count == 0)
+                    return null;
+#if !(NET_3_5 || NET_3_0 || NET_2_0)
                         return ips.AsParallel().Where(i => TestHostConnection(i, pingAttempts)).ToList();
-                });
+#else
+                return ips.Where(i => TestHostConnection(i, pingAttempts)).ToList();
 #endif
-        } 
-
+            });
+#endif
+        }
     }
 }

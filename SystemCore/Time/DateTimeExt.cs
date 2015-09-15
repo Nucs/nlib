@@ -7,8 +7,12 @@ namespace nucs.SystemCore.Time {
             var dtoffset = TimeZone.CurrentTimeZone.GetUtcOffset(dt);
             return dt.ToUniversalTime().Add(dtoffset);
         }
+        
+        public static DateTime ToOffsetlessDateTime(this DateTimeOffset dto) {
+            var dt = dto.DateTime;
+            var dtoffset = TimeZone.CurrentTimeZone.GetUtcOffset(dt);
+            return dt.ToUniversalTime().Add(dtoffset);
+        }
 
-
-         
     }
 }

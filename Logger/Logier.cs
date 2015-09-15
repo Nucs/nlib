@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using NetworkCommsDotNet.Tools;
 
 namespace nucs.Logger {
-    public class Logier : ILogger {
+    public class Logier {
 
         public Logier() {
         }

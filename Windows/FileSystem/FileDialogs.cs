@@ -146,7 +146,7 @@ namespace nucs.Windows.FileSystem {
         public override string ToString() {
             if (filters.Count == 0)
                 return string.Empty;
-            return string.Join("|", filters.Select(f => string.Format("{0}({1})|{1}", f.Key, string.Join(";", f.Value))));
+            return string.Join("|", filters.Select(f => string.Format("{0}({1})|{1}", f.Key, string.Join(";", f.Value.ToArray()))).ToArray());
         }
     }
 }

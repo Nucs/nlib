@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if !AV_SAFE
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -191,3 +193,4 @@ namespace nucs.Windows.Keyboard {
         }
     }
 }
+#endif

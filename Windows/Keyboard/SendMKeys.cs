@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if !AV_SAFE
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -9,9 +11,7 @@ using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 using nucs.SystemCore.String;
 using nucs.Windows.ConsoleUtils;
 using nucs.Windows.Keyboard;
@@ -35,11 +35,11 @@ namespace nucs.Windows.Keyboard {
         private static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string lclassName, string windowTitle);
 
 
-        [DllImport("User32.dll")]
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, IntPtr Msg, IntPtr wParam, string lParam);
 
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern bool PostMessage(IntPtr hWnd, IntPtr Msg, int wParam, int lParam);
 
         private const int WM_GETTEXTLENGTH = 0x000E;
@@ -66,6 +66,7 @@ namespace nucs.Windows.Keyboard {
                 throw new ArgumentNullException("p");
             IntPtr notepadHwnd = p.MainWindowHandle;
             IntPtr editHwnd = FindWindowEx(notepadHwnd, (IntPtr)0, "Edit", null);
+            Console.WriteLine("Edit finder error: "+Marshal.GetLastWin32Error());
             SendMessage(editHwnd, (IntPtr)WM_SETTEXT, (IntPtr)0, text);
         }
 
@@ -144,3 +145,5 @@ namespace nucs.Windows.Keyboard {
         KeyPress
     }
 }
+
+#endif

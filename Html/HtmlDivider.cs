@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET_4_5
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -210,3 +211,4 @@ namespace nucs.Html {
         }
     }
 }
+#endif

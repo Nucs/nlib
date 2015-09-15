@@ -1,8 +1,11 @@
-﻿using System;
+﻿#if !AV_SAFE
+using System;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+#if (NET_3_5 || NET_3_0 || NET_2_0)
+using nucs.SystemCore.Enums;
+#endif
 namespace nucs.Windows.Keyboard {
     public class Hotkey {
         public Keys Key { get; private set; }
@@ -53,6 +56,10 @@ namespace nucs.Windows.Keyboard {
             return false;
         }
 
+        public override int GetHashCode() {
+            return ((int)this.Key)^((int)this.VKey)^(int) Modifiers ^ Description?.GetHashCode() ?? "".GetHashCode();
+        }
+
         public override string ToString() {
             var b = new StringBuilder();
             if (Modifiers.HasFlag(ModKeys.Control)) b.Append("C");
@@ -65,3 +72,4 @@ namespace nucs.Windows.Keyboard {
         }
     }
 }
+#endif

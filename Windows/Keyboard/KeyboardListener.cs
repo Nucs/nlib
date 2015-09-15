@@ -1,4 +1,5 @@
-﻿//#define DEBUG_KEYS
+﻿#if !AV_SAFE
+//#define DEBUG_KEYS
 
 using System;
 using System.Collections.Generic;
@@ -268,3 +269,4 @@ namespace nucs.Windows.Keyboard {
 
     }
 }
+#endif

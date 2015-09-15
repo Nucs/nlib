@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
+#if (NET_3_5 || NET_3_0 || NET_2_0)
+using nucs.Mono.System.Threading;
+#else
+using System.Threading.Tasks;
+#endif
 namespace nucs.Forms {
     public static class MessageBoxy {
         /// <summary>

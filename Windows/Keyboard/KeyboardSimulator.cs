@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿#if !AV_SAFE
+
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace nucs.Windows.Keyboard {
@@ -118,3 +120,4 @@ namespace nucs.Windows.Keyboard {
         #endregion
     }
 }
+#endif

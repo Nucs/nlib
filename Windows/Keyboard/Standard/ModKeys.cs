@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Windows.Input;
 using nucs.SystemCore.String;
+using ProtoBuf;
 
 namespace nucs.Windows.Keyboard {
     /// <summary>
@@ -14,6 +15,7 @@ namespace nucs.Windows.Keyboard {
     /// In order to compare two ModKeys, use the extension <see cref="ModKeysExtensions.Compare"/>
     /// </summary>
     [Flags]
+    
     public enum ModKeys : int {
         None = 0,
         /// <summary>

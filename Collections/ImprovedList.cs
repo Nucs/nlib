@@ -23,6 +23,7 @@ namespace nucs.Collections {
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [DebuggerStepThrough]    
+    [Serializable]
     public sealed class ImprovedList<T> : List<T> {
         public delegate bool CompareItems(T item);
         public delegate void ItemAddedHandler(T Item);

@@ -5,10 +5,14 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Permissions;
 using System.Text;
+#if !AV_SAFE
 using nucs.Windows.Startup;
-
+#endif
 namespace nucs.Windows.Security {
     public static class SecurityDiagnoser {
+        #if !AV_SAFE
+
+
         /// <summary>
         /// Tests access for 3 types of startup and returns the most global startup option that is allowed. See 'StartupType'
         /// </summary>
@@ -24,7 +28,7 @@ namespace nucs.Windows.Security {
         public static StartupType GetPreferedAllowedStartupType(string pathToFile) {
             return StartupManager.GetPreferedAllowedStartupType(pathToFile);
         }
-
+#endif
         /// <summary>
         /// Tests all partitions for writing access, reading access and deleting and returns the partition for e.g. "C:\\". returns null if none was found.
         /// </summary>

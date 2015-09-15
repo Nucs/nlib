@@ -72,7 +72,7 @@ namespace nucs.Threading {
                                         }
                                         Thread.Sleep(time_differentiate);
                                     }  while ((time_left -= time_differentiate) > 0);  
-                            _failed:
+                            //_failed:
                                     HasFinished = true;
                                     WasSuccessful = false;
                               _done:

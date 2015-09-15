@@ -218,7 +218,6 @@ namespace BotSuite.ImageLibrary {
             Color CurrentOuterPictureColor;
             Boolean allSimilar = true;
             //Point location = Point.Empty;
-            Boolean Found = false;
             var ToSkip = new List<Rectangle>();
             for (Int32 originalX = 0; originalX < Img.Width - Ref.Width; originalX++) {
                 for (Int32 originalY = 0; originalY < Img.Height - Ref.Height; originalY++) {
@@ -254,10 +253,10 @@ namespace BotSuite.ImageLibrary {
 
                     }
                     _continue_nextpixel_y:
-                    if (false) ;
+                    if (false) { }
                 }
                 _continue_rectintersect_x:
-                if (false) ;
+                if (false) { }
             }
             return RetVal;
         }

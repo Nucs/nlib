@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using nucs.SystemCore;
 using nucs.Windows.FileSystem;
 
@@ -35,7 +34,7 @@ namespace nucs.Logger {
                         stream.Write(PrefixGenerator() + txt + Environment.NewLine);
                     }
                 }
-                catch (Exception e) {
+                catch (Exception) { 
                     Thread.Sleep(10);
                     goto _retry;
                 }

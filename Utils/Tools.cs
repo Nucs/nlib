@@ -13,10 +13,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+#if NET_4_5
 using MySql.Data.MySqlClient;
 using MySql.Data.Types;
 using nucs.ADO.NET;
 using nucs.ADO.NET.MySql;
+#endif
 using nucs.Windows.Keyboard.CardReader.Forms;
 using Thread = System.Threading.Thread;
 using Timer = System.Windows.Forms.Timer;
@@ -151,6 +153,7 @@ namespace nucs.Utils {
             return s[0].Replace("/", "-")+" "+timeresult;*/
         }
 
+#if NET_4_5
 
         public static DateTime ToDateTime(string timeStamp) {
             return new MySqlDateTime(timeStamp).GetDateTime();
@@ -179,7 +182,7 @@ namespace nucs.Utils {
                     comm.ExecuteNonQuery();
                 }
         }
-
+#endif
         public static void validateOnlyLettersEvent(object sender, KeyPressEventArgs e) {
             if (!char.IsLetter(e.KeyChar) && (Keys)e.KeyChar != Keys.Back) {
                 SystemSounds.Beep.Play();

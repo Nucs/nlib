@@ -22,7 +22,7 @@ namespace nucs.Cryptography {
             return result;
         }
 
-        /// <param name="raw">raw as true will add '0x' at the beggining for e.g. 0x1ffa0</param>
+        /// <param name="raw">raw as false will add '0x' at the beggining for e.g. 0x1ffa0</param>
         public static string ToSHA1asHex(this string toEncrypt, bool raw = false) {
             return ToHex(ToSHA1(toEncrypt), raw);
         }

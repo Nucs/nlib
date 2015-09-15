@@ -9,7 +9,7 @@ namespace nucs.Windows.Registery {
            
 
             string openCommand = GetClassesRootKeyDefaultValue(
-                    Path.Combine(new[] { extensionId, "shell", "open", "command" }));
+                    new[] { extensionId, "shell", "open", "command" }.PathCombine());
 
             if (openCommand == null)
                 return null;

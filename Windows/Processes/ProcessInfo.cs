@@ -2,14 +2,30 @@
 using System.Diagnostics;
 using System.Linq;
 using nucs.SystemCore.String;
+using ProtoBuf;
 
 namespace nucs.Windows.Processes {
+
+    [ProtoContract]
     public class ProcessInfo {
+        [ProtoMember(1)]
         public int UniqueID { get; private set; }
+
+        [ProtoMember(2)]
         public string Name { get; private set; }
+
+        [ProtoMember(3)]
         public string MachineName { get; private set; }
 
-        public IntPtr Handle;
+        [ProtoMember(4)]
+        private long _handleSerialize {
+            get { return Handle.ToInt64(); }
+            set { Handle = new IntPtr(value);}
+        }
+
+
+
+        public IntPtr Handle = IntPtr.Zero;
 
         public ProcessInfo(Process proc) {
             if (proc == null)
@@ -19,6 +35,8 @@ namespace nucs.Windows.Processes {
             MachineName = proc.MachineName;
             Handle = proc.Handle;
         }
+
+        private ProcessInfo() { }
 
         public ProcessInfo(int UniqueID, string Name, string MachineName) {
             this.UniqueID = UniqueID;
