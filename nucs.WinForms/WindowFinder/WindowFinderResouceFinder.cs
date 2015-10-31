@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace nucs.Controls.WindowFinder
+﻿namespace nucs.WinForms.WindowFinder
 {
     /// <summary>
     /// Finds a resource within the project.

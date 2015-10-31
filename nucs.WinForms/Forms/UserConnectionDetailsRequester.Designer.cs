@@ -1,4 +1,4 @@
-﻿namespace nucs.Forms
+﻿namespace nucs.WinForms.Forms
 {
     partial class UserConnectionDetailsRequester
     {

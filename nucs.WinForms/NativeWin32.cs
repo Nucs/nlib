@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using nucs.Botting;
 using nucs.Windows.Keyboard;
-using nucs.Windows.Mouse;
 
-namespace nucs.Windows {
+namespace nucs.WinForms {
 
     internal static partial class NativeWin32 {
         [DllImport("kernel32.dll")]

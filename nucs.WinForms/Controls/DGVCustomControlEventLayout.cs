@@ -1,4 +1,4 @@
-﻿namespace nucs.Controls {
+﻿namespace nucs.WinForms.Controls {
     /// <summary>
     ///     Handler for cell changing value event.
     /// </summary>

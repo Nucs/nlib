@@ -1,7 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
-
-namespace nucs.Controls
+﻿namespace nucs.WinForms.Controls
 {
     partial class LogBox
     {

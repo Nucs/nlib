@@ -7,8 +7,8 @@ using System.Text;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using System.Windows.Input;
+using nucs.Settings;
 using nucs.SystemCore;
-using nucs.SystemCore.Settings;
 using nucs.SystemCore.String;
 using Z.ExtensionMethods.Object;
 

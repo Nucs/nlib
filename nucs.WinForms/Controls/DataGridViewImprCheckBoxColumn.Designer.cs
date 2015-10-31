@@ -1,4 +1,4 @@
-﻿namespace nucs.Controls
+﻿namespace nucs.WinForms.Controls
 {
     partial class DataGridViewImprCheckBoxColumn
     {

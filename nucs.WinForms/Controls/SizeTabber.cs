@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using nucs.SystemCore.String;
 
-namespace nucs.Controls {
+namespace nucs.WinForms.Controls {
     public partial class SizeTabber : TabControl {
         public readonly Form MainForm;
         public SizeTabber(Form MainForm, Size initialSize) {

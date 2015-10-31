@@ -1,4 +1,4 @@
-namespace nucs.Controls.WindowFinder
+namespace nucs.WinForms.WindowFinder
 {
     partial class WindowFinder
     {

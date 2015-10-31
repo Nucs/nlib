@@ -5,7 +5,6 @@
  Todo custom sort for custom layers and regular layers
  */
 
-
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,13 +14,11 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using nucs.Collections;
 using nucs.Collections.Extensions;
-using nucs.Controls;
-using nucs.SystemCore;
 using Column = System.Windows.Forms.DataGridViewColumn;
 using Row = System.Windows.Forms.DataGridViewRow;
 using Cell = System.Windows.Forms.DataGridViewCell;
 
-namespace nucs.ADO.NET {
+namespace nucs.WinForms.Controls {
     public delegate void BindingAndLoadingCompletedHandler(object sender, int rows);
     /* ORDER
         * 1-> Constructor

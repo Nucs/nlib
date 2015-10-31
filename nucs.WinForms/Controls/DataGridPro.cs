@@ -1,31 +1,24 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
-using nucs.ADO.NET;
 using nucs.Annotations;
 using nucs.Collections;
 using nucs.Collections.Extensions;
 using nucs.Forms;
 using nucs.SystemCore;
 using nucs.SystemCore.Dynamic;
-using Z.ExtensionMethods.Object;
-using DataGrid = nucs.Controls.DataGridPro;
 using Column = System.Windows.Forms.DataGridViewColumn;
-using Row = System.Windows.Forms.DataGridViewRow;
 using Cell = System.Windows.Forms.DataGridViewCell;
 using Interlocked = System.Threading.Interlocked;
 
-namespace nucs.Controls {
+namespace nucs.WinForms.Controls {
     public delegate void ReadyForModificationsHandler(object sender, int TimesInvoked);
 
     /// <summary>

@@ -52,16 +52,6 @@
     <Compile Include="StartupManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TFer.FilesystemAI\nucs.Filesystem.csproj">
-      <Project>{E97C0D95-437A-4D4B-9D21-815D2350A94B}</Project>
-      <Name>nucs.Filesystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TFer.Storage\nucs.Filesystem.EndFileStorage.csproj">
-      <Project>{a80e1451-267d-4525-b284-54afce333b66}</Project>
-      <Name>nucs.Filesystem.EndFileStorage</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Methods\" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +64,12 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\nucs.Filesystem\nucs.Filesystem.csproj">
+      <Project>{e97c0d95-437a-4d4b-9d21-815d2350a94b}</Project>
+      <Name>nucs.Filesystem</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

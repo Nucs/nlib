@@ -143,13 +143,13 @@
     <EmbeddedResource Include="WindowFinder\Resources\WindowFinder.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\nucslib\nucs.csproj">
-      <Project>{ac624321-8eb6-4d1f-acf0-c6f7cf5247a0}</Project>
-      <Name>nucs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\nucs.Settings\nucs.Settings.csproj">
       <Project>{CCFA4C21-2D5B-4E7B-B704-C866585FFA1B}</Project>
       <Name>nucs.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\nucs\nucs.csproj">
+      <Project>{ac624321-8eb6-4d1f-acf0-c6f7cf5247a0}</Project>
+      <Name>nucs</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

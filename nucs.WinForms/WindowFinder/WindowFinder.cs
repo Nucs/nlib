@@ -1,14 +1,10 @@
 using System;
-using System.Reflection;
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
+using System.Reflection;
 using System.Windows.Forms;
-using nucs.Windows;
-using nucs.Controls.WindowFinder;
 
-namespace nucs.Controls.WindowFinder
+namespace nucs.WinForms.WindowFinder
 {
     [DefaultEvent("WindowHandleChanged")]
     [ToolboxBitmap(typeof(WindowFinderResouceFinder), "nucs.Controls.WindowFinder.Resources.WindowFinder.bmp")]

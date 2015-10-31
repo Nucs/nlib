@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using nucs.Collections.Extensions;
 
-namespace nucs.Controls {
+namespace nucs.WinForms.Controls {
 
     public delegate void SelectionChangedHandler(CheckBox c, bool state);
     /// <summary>

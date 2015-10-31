@@ -48,13 +48,9 @@
     <Compile Include="SettingsExample.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TFer.Cryptography\nucs.Cryptography.csproj">
+    <ProjectReference Include="..\nucs.Cryptography\nucs.Cryptography.csproj">
       <Project>{4822ef60-52a9-405e-aca9-a0aca81c83ae}</Project>
       <Name>nucs.Cryptography</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TFer.Serialization\nucs.Serialization.csproj">
-      <Project>{a3a7cee1-0674-4bf7-a5ae-df6111df4397}</Project>
-      <Name>nucs.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

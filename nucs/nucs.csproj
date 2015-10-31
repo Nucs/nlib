@@ -1179,7 +1179,7 @@
     <Folder Include="Windows\Serial\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\nlib\nucs.Settings\nucs.Settings.csproj">
+    <ProjectReference Include="..\nucs.Settings\nucs.Settings.csproj">
       <Project>{CCFA4C21-2D5B-4E7B-B704-C866585FFA1B}</Project>
       <Name>nucs.Settings</Name>
     </ProjectReference>

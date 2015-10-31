@@ -4,15 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using nucs.Properties;
 using Control = System.Windows.Forms.Control;
 using Image = System.Drawing.Image;
 using ToolTip = System.Windows.Forms.ToolTip;
 
-namespace nucs.Controls {
+namespace nucs.WinForms.Controls {
     public class ErrorProviderTool : IDisposable {
 
         #region Declerations and Constructors

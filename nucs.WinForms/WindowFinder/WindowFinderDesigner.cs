@@ -1,9 +1,6 @@
-using System;
-using System.ComponentModel.Design;
-using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
-namespace nucs.Controls.WindowFinder
+namespace nucs.WinForms.WindowFinder
 {
     public class WindowFinderDesigner : ControlDesigner
     {

@@ -1,29 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Media;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using nucs.Forms;
 using nucs.Network;
 using nucs.SystemCore.String;
-using nucs.Utils;
 #if NET_4_5
 using System.Threading;
 using System.Threading.Tasks;
 #else
-using System.Threading;
-using nucs.Mono.System.Threading;
+
 #endif
 
-namespace nucs.Forms {
+namespace nucs.WinForms.Forms {
 
     /// <summary>
     /// A form that will request ip address from user and a port, use static method for this.
