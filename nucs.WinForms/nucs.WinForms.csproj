@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6ED71236-F99F-44D7-A009-28613DFAD6F7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>nucs.WinForms</RootNamespace>
+    <AssemblyName>nucs.WinForms</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.3.3.0\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.Core.3.3.0\lib\net40\Common.Logging.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\CheckBoxConnector.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DataGridHelpers.cs" />
+    <Compile Include="Controls\DataGridPro.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DataGridPro.Designer.cs">
+      <DependentUpon>DataGridPro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DataGridViewImprCheckBoxCell.cs" />
+    <Compile Include="Controls\DataGridViewImprCheckBoxCell.Designer.cs">
+      <DependentUpon>DataGridViewImprCheckBoxCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DataGridViewImprCheckBoxColumn.cs" />
+    <Compile Include="Controls\DataGridViewImprCheckBoxColumn.Designer.cs">
+      <DependentUpon>DataGridViewImprCheckBoxColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DGVCustomControlEventLayout.cs" />
+    <Compile Include="Controls\ErrorProviderTool.cs" />
+    <Compile Include="Forms\ModernMessageBox.cs" />
+    <Compile Include="Forms\UserConnectionDetailsRequester.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UserConnectionDetailsRequester.Designer.cs">
+      <DependentUpon>UserConnectionDetailsRequester.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\KeyDetectionButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\LogBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\LogBox.Designer.cs">
+      <DependentUpon>LogBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NativeWin32.cs" />
+    <Compile Include="Controls\SizeTabber.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SizeTabber.Designer.cs">
+      <DependentUpon>SizeTabber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StringUpDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\StringUpDown.Designer.cs">
+      <DependentUpon>StringUpDown.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WindowFinder\WindowFinder.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WindowFinder\WindowFinder.Designer.cs">
+      <DependentUpon>WindowFinder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WindowFinder\WindowFinderDesigner.cs" />
+    <Compile Include="WindowFinder\WindowFinderResouceFinder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\UserConnectionDetailsRequester.resx">
+      <DependentUpon>UserConnectionDetailsRequester.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SizeTabber.resx">
+      <DependentUpon>SizeTabber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\StringUpDown.resx">
+      <DependentUpon>StringUpDown.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WindowFinder\WindowFinder.resx">
+      <DependentUpon>WindowFinder.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WindowFinder\Resources\bmpFind.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WindowFinder\Resources\bmpFinda.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WindowFinder\Resources\curTarget.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WindowFinder\Resources\WindowFinder.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\nucslib\nucs.csproj">
+      <Project>{ac624321-8eb6-4d1f-acf0-c6f7cf5247a0}</Project>
+      <Name>nucs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\nucs.Settings\nucs.Settings.csproj">
+      <Project>{CCFA4C21-2D5B-4E7B-B704-C866585FFA1B}</Project>
+      <Name>nucs.Settings</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
