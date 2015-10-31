@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Web.Script.Serialization;
 
-namespace nucs.SystemCore.Settings {
+namespace nucs.Settings {
     public abstract class AppSettings<T> : ISaveable where T : new() {
         public const string DEFAULT_FILENAME = "settings.jsn";
 

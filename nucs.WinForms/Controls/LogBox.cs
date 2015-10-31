@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Media;
 using System.Text;
 using System.Windows.Forms;
-using nucs.Controls;
 using nucs.Forms;
 using nucs.Logger;
-using nucs.SystemCore.Settings;
+using nucs.Settings;
 
-namespace nucs.Controls {
-
+namespace nucs.WinForms.Controls {
     [DebuggerDisplay("LogBox Name={Name} Items={Items.Count}")]
     public partial class LogBox : ListBox, IBaseLogging {
         public event Action LogsCleared;
@@ -139,42 +137,42 @@ namespace nucs.Controls {
         #endregion
 
     }
-}
 
-public static class LogToBox {
-    /// <summary>
-    ///     Merges the text with string.join("",text) and then prints it into the logger.
-    /// </summary>
-    /// <param name="text">The strings that will be joined without space</param>
-    /// <param name="name">The name of the control</param>
-    public static bool Log(string name, params string[] text) {
-        var logger = LogBox.LogBoxes.FirstOrDefault(l => l.Name.Equals(name));
-        if (logger == null) return false;
-        logger.Log(text);
-        return true;
-    }
+    public static class LogToBox {
+        /// <summary>
+        ///     Merges the text with string.join("",text) and then prints it into the logger.
+        /// </summary>
+        /// <param name="text">The strings that will be joined without space</param>
+        /// <param name="name">The name of the control</param>
+        public static bool Log(string name, params string[] text) {
+            var logger = LogBox.LogBoxes.FirstOrDefault(l => l.Name.Equals(name));
+            if (logger == null) return false;
+            logger.Log(text);
+            return true;
+        }
 
-    /// <summary>
-    ///     Log with timestamp, calls <see cref="Log(string,string[])"/> after preparing a timestamp.
-    ///     Recommanded format is [DATE] text
-    /// </summary>
-    /// <param name="text">The strings that will be joined without space</param>
-    /// <param name="name">The name of the control</param>
-    public static bool LogTimed(string name, params string[] text) {
-        var logger = LogBox.LogBoxes.FirstOrDefault(l => l.Name.Equals(name));
-        if (logger == null) return false;
-        logger.LogTimed(text);
-        return true;
-    }
+        /// <summary>
+        ///     Log with timestamp, calls <see cref="Log(string,string[])"/> after preparing a timestamp.
+        ///     Recommanded format is [DATE] text
+        /// </summary>
+        /// <param name="text">The strings that will be joined without space</param>
+        /// <param name="name">The name of the control</param>
+        public static bool LogTimed(string name, params string[] text) {
+            var logger = LogBox.LogBoxes.FirstOrDefault(l => l.Name.Equals(name));
+            if (logger == null) return false;
+            logger.LogTimed(text);
+            return true;
+        }
 
-    /// <summary>
-    ///     Clears the logs
-    /// </summary>
-    /// <returns>Number of logs cleared.</returns>
-    /// <param name="name">The name of the control</param>
-    public static int ClearLogs(string name, params string[] text) {
-        var logger = LogBox.LogBoxes.FirstOrDefault(l => l.Name.Equals(name));
-        if (logger == null) return -1;
-        return logger.ClearLogs();
+        /// <summary>
+        ///     Clears the logs
+        /// </summary>
+        /// <returns>Number of logs cleared.</returns>
+        /// <param name="name">The name of the control</param>
+        public static int ClearLogs(string name, params string[] text) {
+            var logger = LogBox.LogBoxes.FirstOrDefault(l => l.Name.Equals(name));
+            if (logger == null) return -1;
+            return logger.ClearLogs();
+        }
     }
 }

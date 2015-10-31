@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using nucs.Cryptography;
 
-namespace nucs.SystemCore.Settings {
+namespace nucs.Settings {
 
     [Serializable]
     public abstract class EncryptedAppSettings<T> where T : new() {

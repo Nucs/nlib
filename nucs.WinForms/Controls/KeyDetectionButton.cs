@@ -1,19 +1,11 @@
 ﻿#if !AV_SAFE
 
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using nucs.Collections.Extensions;
-using nucs.SystemCore;
 using nucs.SystemCore.Boolean;
 using nucs.Windows.Keyboard;
 
-namespace nucs.Controls {
+namespace nucs.WinForms.Controls {
 
     public delegate void KeyDetectedHadler(KeyDetectionButton sender, KeyEventArgs args, AKey key);
 
