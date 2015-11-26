@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace nucs.Filesystem.Monitoring {
+namespace nucs.Monitoring {
 
     public delegate void EnteredHandler<in T>(T item);
     public delegate void LeftHandler<in T>(T item);
@@ -11,6 +11,7 @@ namespace nucs.Filesystem.Monitoring {
         ///     Core function to this pattern - fetches the items that are monitored to change.
         /// </summary>
         IEnumerable<T> FetchCurrent();
+
         /// <summary>
         ///     When in a new fetch, new items are entering, they will be passed in this event.
         /// </summary>

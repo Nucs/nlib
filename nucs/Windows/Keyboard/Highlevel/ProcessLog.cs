@@ -10,6 +10,7 @@ namespace nucs.Windows.Keyboard.Highlevel {
     [ProtoContract]
     public class ProcessLog {
         public CountdownTimer CDTimer { get; private set; }
+        public event Action<LoggedLine> LineClosed;
 
         [ProtoMember(1)]
         public ProcessInfo Process { get; set; }
@@ -27,6 +28,7 @@ namespace nucs.Windows.Keyboard.Highlevel {
             if (Control.ModifierKeys == Keys.None) {
                 //Console.WriteLine("[CDTimer] Row Closed");
                 CloseActiveLine();
+
             } else {
                 CDTimer.Reset();
                 //Console.WriteLine("[CDTimer] Timer Restarted, ctrl alt shift is held down.");
@@ -72,6 +74,7 @@ namespace nucs.Windows.Keyboard.Highlevel {
         private void CloseActiveLine() {
             if (Active == null) return;
             Active.EndRecording();
+            LineClosed?.Invoke(Active);
             Active = null;
         }
     }

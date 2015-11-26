@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace nucs.Windows.ConsoleUtils {
     public static class ConsoleHelper {
+        [DllImport("kernel32.dll")]
+        private static extern int FreeConsole();
+        [DllImport("kernel32")]
+        private static extern bool AllocConsole();
         public static void StartConsole() {
-            NativeWin32.FreeConsole();
-            NativeWin32.AllocConsole();
+            FreeConsole();
+            AllocConsole();
         }
 
         public static void StartConsole(string title) {
             StartConsole();
-            Console.Title = title;
+            try { 
+                Console.Title = title;
+            } catch (IOException) { }
         }
     }
 }

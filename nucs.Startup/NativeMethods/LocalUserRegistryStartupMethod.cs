@@ -73,16 +73,17 @@ namespace nucs.Startup.NativeMethods {
             get {
                 var alias = "potatoprog" + StringGenerator.Generate(5);
                 var file = new FileInfo("C:/" + alias + ".exe");
-                using (RegistryKey add = Registry.CurrentUser.OpenSubKey(RegistryKeyPath, true)) {
-                    if (add == null)
-                        return false;
-                    try {
+                try {
+                    using (RegistryKey add = Registry.CurrentUser.OpenSubKey(RegistryKeyPath, true)) {
+                        if (add == null)
+                            return false;
                         add.SetValue(alias, "\"" + file.FullName + "\"");
                         add.DeleteValue(alias);
-                    } catch {
-                        return false;
+                
+                        return true;
                     }
-                    return true;
+                } catch {
+                    return false;
                 }
             }
         }

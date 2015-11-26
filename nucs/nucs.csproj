@@ -95,7 +95,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\nlib\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
+      <HintPath>C:\Users\Library\Documents\Visual Studio 2015\Projects\svchost\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -233,6 +233,7 @@
       <DependentUpon>Fold.g.tt</DependentUpon>
     </Compile>
     <Compile Include="SystemCore\Linq\ForEach.cs" />
+    <Compile Include="SystemCore\Linq\ForEachParallel.cs" />
     <Compile Include="SystemCore\Linq\Generate.cs" />
     <Compile Include="SystemCore\Linq\GenerateByIndex.cs" />
     <Compile Include="SystemCore\Linq\GroupAdjacent.cs" />

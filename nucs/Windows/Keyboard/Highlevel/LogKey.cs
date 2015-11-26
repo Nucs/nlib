@@ -21,17 +21,18 @@ namespace nucs.Windows.Keyboard.Highlevel {
         /// <summary>
         ///     Is Shift key was held down when this character was hit.
         /// </summary>
-        public bool IsShiftPressed { get { return Modifiers.HasFlag(ModKeys.Shift) && (Modifiers.HasFlag(ModKeys.LKey) || Modifiers.HasFlag(ModKeys.RKey)); } }
+        public bool IsShiftPressed => Modifiers.HasFlag(ModKeys.Shift) && (Modifiers.HasFlag(ModKeys.LKey) || Modifiers.HasFlag(ModKeys.RKey));
+
         /// <summary>
         ///     Is control key was held down when this character was hit.
         /// </summary>
-        public bool IsCtrlPressed { get { return Modifiers.HasFlag(ModKeys.Control) && (Modifiers.HasFlag(ModKeys.LKey) || Modifiers.HasFlag(ModKeys.RKey)); } }
+        public bool IsCtrlPressed => Modifiers.HasFlag(ModKeys.Control) && (Modifiers.HasFlag(ModKeys.LKey) || Modifiers.HasFlag(ModKeys.RKey));
 
         /// <summary>
         ///     Is alt key was held down when this character was hit.
         ///     (Alt is equivalent to Menu key)
         /// </summary>
-        public bool IsAltPressed { get { return Modifiers.HasFlag(ModKeys.Alt) && (Modifiers.HasFlag(ModKeys.LKey) || Modifiers.HasFlag(ModKeys.RKey)); } }
+        public bool IsAltPressed => Modifiers.HasFlag(ModKeys.Alt) && (Modifiers.HasFlag(ModKeys.LKey) || Modifiers.HasFlag(ModKeys.RKey));
 
         //todo take capslock in count! if (Control.IsKeyLocked()
         public string AsChar {

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using nucs.Monitoring;
 using SHDocVw;
 
 namespace nucs.Filesystem.Monitoring.Windows {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management;
+using nucs.Monitoring;
 
 namespace nucs.Filesystem.Monitoring.Windows {
     public class DriveMonitor : MonitorBase<DriveInfo> {

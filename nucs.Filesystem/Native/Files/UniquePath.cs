@@ -35,6 +35,16 @@ namespace nucs.Filesystem {
         }
 
         /// <summary>
+        ///     Is GetUniqueFileName is the exe that is running
+        /// </summary>
+        public static bool IsExecutingTheUnique => new FileInfo(GetUniqueFileName).FullName.Equals(Paths.ExecutingExe.FullName);
+
+        /// <summary>
+        ///     Is The running exe inside unique dir.
+        /// </summary>
+        public static bool IsExecutingInUniqueDir => GetUniqueDirectory.FullName.Equals(Paths.ExecutingExe.Directory?.FullName);
+
+        /// <summary>
         ///     Fetches a unique file location.
         /// </summary>
         /// <returns></returns>

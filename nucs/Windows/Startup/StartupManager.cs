@@ -1,4 +1,4 @@
-﻿#if !AV_SAFE
+﻿/*#if !AV_SAFE
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -443,4 +443,4 @@ namespace nucs.Windows.Startup {
     }
 }
 
-#endif
+#endif*/

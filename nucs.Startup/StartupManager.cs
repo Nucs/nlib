@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using nucs.Filesystem;
+using nucs.SystemCore.Boolean;
 
 namespace nucs.Startup {
     public static class StartupManager {
@@ -17,7 +18,6 @@ namespace nucs.Startup {
             startupmethods_cache = new List<Type>();
             startupmethods_cache.AddRange(b);
         }
-
 
         private static readonly List<Type> startupmethods_cache;
         #endregion
@@ -42,6 +42,7 @@ namespace nucs.Startup {
         /// <param name="filename">The file that will start on startup</param>
         /// <param name="alias">The name inwhich the startup will be registered under, used to avoid collisions and can be null.</param>
         public static StartupAttachResult AttachBestNative(FileCall filename, string alias=null) {
+            alias = alias ?? filename.Alias;
             var methods = GetWorkingNativeStartupMethods();
             if (methods.Any(method=>method.IsAttached(filename))) return StartupAttachResult.AlreadyAttached;
             StartupAttachResult @result = StartupAttachResult.None;
@@ -83,6 +84,22 @@ namespace nucs.Startup {
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        ///     Enumerate all FileCalls from all the different methods
+        /// </summary>
+        public static IEnumerable<FileCall> Enumerate() {
+            var methods = GetNativeStartupMethods();
+            return methods.SelectMany(m => m.Attached);
+        }
+
+        /// <summary>
+        ///     Enumerate all FileCalls from all the different methods with where filter. 
+        /// </summary>
+        public static IEnumerable<FileCall> Enumerate(BoolAction<FileCall> where) {
+            var methods = GetNativeStartupMethods();
+            return methods.SelectMany(m => m.Attached).Where(fc=>where(fc));
         }
 
         public enum StartupAttachResult:int {

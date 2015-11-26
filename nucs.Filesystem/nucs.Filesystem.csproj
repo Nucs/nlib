@@ -56,8 +56,6 @@
     <Compile Include="Distribution\SpecificDirectoryDistributer.cs" />
     <Compile Include="Distribution\SubdirectoriesDistributer.cs" />
     <Compile Include="FileCall.cs" />
-    <Compile Include="Monitoring\IMonitor.cs" />
-    <Compile Include="Monitoring\MonitorBase.cs" />
     <Compile Include="Monitoring\Monitors.cs" />
     <Compile Include="Monitoring\ProcessRestartMonitor.cs" />
     <Compile Include="Monitoring\Windows\DriveMonitor.cs" />
@@ -70,7 +68,6 @@
     <Compile Include="nucslib.Inline\ArrayQueue.cs" />
     <Compile Include="nucslib.Inline\Bool.cs" />
     <Compile Include="nucslib.Inline\Collector.cs" />
-    <Compile Include="nucslib.Inline\DynamicComparer.cs" />
     <Compile Include="nucslib.Inline\ICollectorAdder.cs" />
     <Compile Include="nucslib.Inline\Mono\System.Threading\AtomicBoolean.cs" />
     <Compile Include="nucslib.Inline\Mono\System.Threading\CancellationToken.cs" />
@@ -79,6 +76,7 @@
     <Compile Include="nucslib.Inline\Mono\System.Threading\ManualResetEventSlim.cs" />
     <Compile Include="nucslib.Inline\Mono\System.Threading\SpinOnce.cs" />
     <Compile Include="nucslib.Inline\Mono\System.Threading\Tasks.cs" />
+    <Compile Include="nucslib.Inline\Processy.cs" />
     <Compile Include="nucslib.Inline\RandomExtensionMethods.cs" />
     <Compile Include="nucslib.Inline\Randomizer.cs" />
     <Compile Include="Paths.cs" />
@@ -117,6 +115,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Search\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\nucs.Monitor\nucs.Monitoring.csproj">
+      <Project>{f5b65e01-dc0c-4787-99c2-c615966e236f}</Project>
+      <Name>nucs.Monitoring</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

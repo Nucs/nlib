@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using nucs.Startup.Internal;
 using nucs.SystemCore.Boolean;
 
 namespace nucs.Filesystem {
@@ -10,11 +12,9 @@ namespace nucs.Filesystem {
     [Serializable]
     public class FileCall {
 
-        public bool Exists { get { return File.Exists(this.FileInfo.FullName); } }
+        public bool Exists => File.Exists(this.FileInfo.FullName);
 
-        public DirectoryInfo BaseDirectory {
-            get { return this.FileInfo.Directory; }
-        }
+        public DirectoryInfo BaseDirectory => this.FileInfo.Directory;
 
         public FileInfo FileInfo { get; }
 
@@ -22,9 +22,7 @@ namespace nucs.Filesystem {
 
         public string Arguments { get; set; }
 
-        public string FullName {
-            get { return FileInfo.FullName; }
-        }
+        public string FullName => FileInfo.FullName;
 
         public FileCall(FileInfo fi, string arguments="", string alias = null) {
             this.FileInfo = fi;
@@ -68,6 +66,14 @@ namespace nucs.Filesystem {
 
         public override int GetHashCode() {
             return this.FileInfo.FullName.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Starts the FileCall.
+        /// </summary>
+        /// <param name="asAdmin"></param>
+        public Process Start(bool asAdmin=false) {
+            return Processy.Start(FileInfo.FullName, Arguments, true, asAdmin, ProcessWindowStyle.Normal);
         }
     }
 }

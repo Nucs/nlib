@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F5B65E01-DC0C-4787-99C2-C615966E236F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>nucs.Monitoring</RootNamespace>
+    <AssemblyName>nucs.Monitoring</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IMonitorSingle.cs" />
+    <Compile Include="IMonitor.cs" />
+    <Compile Include="MonitorSingleBase.cs" />
+    <Compile Include="MonitorBase.cs" />
+    <Compile Include="Monitors\ForegroundWindowMonitor.cs" />
+    <Compile Include="Monitors\ClipboardStringMonitor.cs" />
+    <Compile Include="nucslib.Inline\ArrayQueue.cs" />
+    <Compile Include="nucslib.Inline\Bool.cs" />
+    <Compile Include="nucslib.Inline\Collector.cs" />
+    <Compile Include="nucslib.Inline\DynamicComparer.cs" />
+    <Compile Include="nucslib.Inline\ICollectorAdder.cs" />
+    <Compile Include="nucslib.Inline\Mono\System.Threading\AtomicBoolean.cs" />
+    <Compile Include="nucslib.Inline\Mono\System.Threading\CancellationToken.cs" />
+    <Compile Include="nucslib.Inline\Mono\System.Threading\CancellationTokenRegisteration.cs" />
+    <Compile Include="nucslib.Inline\Mono\System.Threading\CancellationTokenSource.cs" />
+    <Compile Include="nucslib.Inline\Mono\System.Threading\ManualResetEventSlim.cs" />
+    <Compile Include="nucslib.Inline\Mono\System.Threading\SpinOnce.cs" />
+    <Compile Include="nucslib.Inline\Mono\System.Threading\Tasks.cs" />
+    <Compile Include="nucslib.Inline\RandomExtensionMethods.cs" />
+    <Compile Include="nucslib.Inline\Randomizer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
