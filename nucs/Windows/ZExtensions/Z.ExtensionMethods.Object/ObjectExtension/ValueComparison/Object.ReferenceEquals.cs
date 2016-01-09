@@ -42,8 +42,7 @@ namespace Z.ExtensionMethods.Object
         ///           }
         ///     </code>
         /// </example>
-        public static bool ReferenceEquals(this System.Object objA, System.Object objB)
-        {
+        public new static bool ReferenceEquals(this System.Object objA, System.Object objB) {
             return System.Object.ReferenceEquals(objA, objB);
         }
     }

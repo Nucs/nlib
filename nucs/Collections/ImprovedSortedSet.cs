@@ -83,7 +83,9 @@ namespace nucs.Collections {
             }
         }
 
+#pragma warning disable CS0109 // Member does not hide an inherited member; new keyword is not required
         public new void AddRange(IEnumerable<T> range) {
+#pragma warning restore CS0109 // Member does not hide an inherited member; new keyword is not required
             var items = range.ToArray();
             if (ItemToBeAdded == null) {
                 //No need to be checked

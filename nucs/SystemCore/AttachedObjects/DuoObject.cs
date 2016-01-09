@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
 namespace nucs.SystemCore.AttachedObjects {
+    [DebuggerStepThrough]
     public class DuoObject<T1,T2> {
         
         public T1 First { get; set; }

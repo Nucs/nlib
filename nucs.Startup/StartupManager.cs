@@ -34,7 +34,28 @@ namespace nucs.Startup {
 
         public static List<IStartupMethod> GetWorkingNativeStartupMethods() {
             return GetNativeStartupMethods().Where(sm => sm.IsAttachable).OrderBy(sm=>sm.Priority).ToList();
-        } 
+        }
+
+        /// <summary>
+        ///     Attaches the file to the best prioritized startup method.
+        /// </summary>
+        /// <param name="filename">The file that will start on startup</param>
+        /// <param name="alias">The name inwhich the startup will be registered under, used to avoid collisions and can be null.</param>
+        public static StartupAttachResult AttachCurrentToBestNative(string alias = null) {
+            return AttachBestNative(Paths.ExecutingExe, alias);
+        }
+
+        /// <summary>
+        ///     Attaches the file to the best prioritized startup method.
+        /// </summary>
+        /// <param name="filename">The file that will start on startup</param>
+        /// <param name="alias">The name inwhich the startup will be registered under, used to avoid collisions and can be null.</param>
+        public static StartupAttachResult AttachBestNative(FileInfo filename, string alias = null) {
+            if (!File.Exists(filename.FullName)) 
+                throw new FileNotFoundException(filename.FullName, nameof(filename));
+
+            return AttachBestNative(new FileCall(filename), alias);
+        }
 
         /// <summary>
         ///     Attaches the file to the best prioritized startup method.
@@ -63,6 +84,12 @@ namespace nucs.Startup {
             return @result;
         }
 
+        /// <summary>
+        /// Disattaches the file from startup attempting all of the methods.
+        /// </summary>
+        public static bool DisattachCurrentFromNative() {
+            return DisattachNative(Paths.ExecutingExe);
+        }
 
         /// <summary>
         /// Disattaches the file from startup attempting all of the methods.

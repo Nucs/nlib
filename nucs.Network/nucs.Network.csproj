@@ -69,9 +69,16 @@
     <Compile Include="FastWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="IpMine.cs" />
     <Compile Include="IpResolver.cs" />
     <Compile Include="NetworkInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\nucs\nucs.csproj">
+      <Project>{ac624321-8eb6-4d1f-acf0-c6f7cf5247a0}</Project>
+      <Name>nucs</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

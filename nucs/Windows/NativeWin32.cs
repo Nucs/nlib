@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Windows;
 using nucs.Botting;
 using nucs.Windows.Keyboard;
 using nucs.Windows.Mouse;
@@ -8,6 +9,41 @@ using nucs.Windows.Mouse;
 namespace nucs.Windows {
 
     public static partial class NativeWin32 {
+
+        /// <summary>
+		///     The print window.
+		/// </summary>
+		/// <param name="hwnd">
+		///     The hwnd.
+		/// </param>
+		/// <param name="hdcBlt">
+		///     The hdc blt.
+		/// </param>
+		/// <param name="nFlags">
+		///     The n flags.
+		/// </param>
+		/// <returns>
+		///     The <see cref="bool" />.
+		/// </returns>
+		[DllImport("user32")]
+        public static extern bool PrintWindow(IntPtr hwnd, IntPtr hdcBlt, uint nFlags);
+        /// <summary>
+		///     The get window rect.
+		/// </summary>
+		/// <param name="hWnd">
+		///     The h wnd.
+		/// </param>
+		/// <param name="lpRect">
+		///     The lp rect.
+		/// </param>
+		/// <returns>
+		///     The <see cref="bool" />.
+		/// </returns>
+		[DllImport("user32")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
+
+
         [DllImport("kernel32.dll")]
         public static extern int FreeConsole();
         [DllImport("user32.dll")]

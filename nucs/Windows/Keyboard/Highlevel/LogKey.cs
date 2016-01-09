@@ -49,6 +49,8 @@ namespace nucs.Windows.Keyboard.Highlevel {
             get {
                 var kc = kc_instance ?? (kc_instance = new KeysConverter());
                 var converted = kc.ConvertToString(Key);
+                if (converted.CompareOrdinal("OemPeriod") == 0)
+                    return ".";
                 if (converted.Length==1) return AsChar;
                 return converted;
 

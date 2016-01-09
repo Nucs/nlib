@@ -1,6 +1,5 @@
 ﻿/* BOTTING LIBRARY NAMESPACES */
 
-using BotSuite;
 using nucs.Windows;
 using Thread = System.Threading.Thread;
 

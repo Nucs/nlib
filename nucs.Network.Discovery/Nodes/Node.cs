@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using NetworkCommsDotNet;
+using NetworkCommsDotNet.Connections.TCP;
 using ProtoBuf;
 
 namespace nucs.Network.Discovery {
@@ -27,6 +28,34 @@ namespace nucs.Network.Discovery {
 
         #endregion
 
+        #region Send & Receive Implementation
+        
+        /// <summary>
+        ///     Connects to the node through Discovery port.
+        /// </summary>
+        public TCPConnection Connect {
+            get {
+                try {
+                    return TCPConnection.GetConnection(new ConnectionInfo(this.IP, 35555));
+                } catch { return null; }
+            }
+        }
+
+        public void Send<T>(T o) {
+            if (Node.This == this)
+                throw new InvalidOperationException("Can't send data to self.");
+
+            this.Connect.SendObject("data"+this.GetHashCode(), new Data<T>(This.GetHashCode(), o));
+        }
+
+        public void Send<T>(string packetName, T o) {
+            if (Node.This == this)
+                throw new InvalidOperationException("Can't send data to self.");
+
+            this.Connect.SendObject(packetName, o);
+        }
+
+        #endregion 
         /// <summary>
         ///     Returns Node represting this machine.
         ///     Might take some time.

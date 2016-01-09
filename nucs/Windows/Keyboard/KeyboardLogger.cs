@@ -142,10 +142,8 @@ namespace nucs.Windows.Keyboard {
         private readonly AutoResetEvent AvailablityHolder = new AutoResetEvent(false);
         private bool CloseToken;
         private bool IsThreadRunning = false;
-        private object syncronizer = new object();
-        private bool Available {
-            get { return KeyeventQueue.Count > 0; }
-        }
+        private readonly object syncronizer = new object();
+        private bool Available => KeyeventQueue.Count > 0;
 
         [DebuggerStepThrough]
         private void add_keyevent(KeyEventProcessArgs e) {
@@ -175,8 +173,8 @@ namespace nucs.Windows.Keyboard {
         private bool rctrl, ralt, rshift;
         private bool lctrl, lalt, lshift;
         private bool was_down = false;
-        private bool[] duplicatetags = new bool[256];
-        private bool[] presstags = new bool[256];
+        private readonly bool[] duplicatetags = new bool[256];
+        private readonly bool[] presstags = new bool[256];
         [DebuggerStepThrough]
         private void process_keyevent(KeyEventProcessArgs e) {
             int wParam = e.wParam;

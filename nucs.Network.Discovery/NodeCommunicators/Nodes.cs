@@ -9,7 +9,7 @@ using NetworkCommsDotNet.DPSBase;
 using NetworkCommsDotNet.DPSBase.SevenZipLZMACompressor;
 
 namespace nucs.Network.Discovery {
-    public abstract class Nodes<T> where T : Node, new() {
+    public abstract class Nodes<T> : IDisposable where T : Node, new() {
         private readonly List<ConnectionListenerBase> __listeners = new List<ConnectionListenerBase>(0);
 
         protected Nodes() {
@@ -26,6 +26,10 @@ namespace nucs.Network.Discovery {
         /// </summary>
         public NodesList<T> KnownNodes { get; } = new NodesList<T>();
 
+        public T this[string key] {
+            get { return KnownNodes.FirstOrDefault(c => c.IP == key); }
+        }
+        
         /// <summary>
         ///     Opens up for communication, searches for new nodes and so on.
         /// </summary>
@@ -34,7 +38,8 @@ namespace nucs.Network.Discovery {
 
             try {
                 NetworkComms.AppendGlobalIncomingPacketHandler<NodesList<T>>("Discover", DiscoveryHandler);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 or.Exception = e;
                 or.Successful = false;
                 return or;
@@ -78,6 +83,7 @@ namespace nucs.Network.Discovery {
         /// </summary>
         public void Close() {
             NetworkComms.RemoveGlobalIncomingPacketHandler("Discover");
+
             __listeners.ToList().ForEach(@base => {
                 try {
                     Connection.StopListening(@base);
@@ -86,13 +92,14 @@ namespace nucs.Network.Discovery {
             __listeners.RemoveWhere(@base => !@base.IsListening);
         }
         
+
         public DiscoveryResult<T> Discover(T node) {
             var dr = new DiscoveryResult<T>();
             try {
 #if DEBUG
                 var n = NetworkComms.SendReceiveObject<NodesList<T>, NodesList<T>>("Discover", node.IP, Ports.DiscoveryPort, "DiscoverReply", -1, KnownNodes);
 #else
-                var n = NetworkComms.SendReceiveObject<NodesList<T>, NodesList<T>>("Discover", ((Node)(object)node).IP, Ports.DiscoveryPort, "DiscoverReply", 10000, KnownNodes);
+                var n = NetworkComms.SendReceiveObject<NodesList<T>, NodesList<T>>("Discover", node.IP, Ports.DiscoveryPort, "DiscoverReply", 10000, KnownNodes);
 #endif
                 dr.NodesList = n;
             } catch (Exception e) {
@@ -140,13 +147,13 @@ namespace nucs.Network.Discovery {
         ///     Starts sync progress with the given nodes and returns the nodes found.
         /// </summary>
         public T[] SyncSerially(IEnumerable<T> nodes) {
-            return nodes.Select(node => Task.Run(() => Discover(node))
+            return nodes.Where(node => node.IP.CompareOrdinal(PCNode.This.IP) != 0).Select(node => Task.Run(() => Discover(node))
                 .ContinueWith(task => {
                     if (task.IsFaulted)
                         return new T[0];
                     if (task.Result.Successful)
                         KnownNodes.MergeInto(task.Result.NodesList);
-                    return task.Result.NodesList.ToArray();
+                    return task.Result.NodesList?.ToArray() ?? new T[0];
                 })).SelectMany(task => task.Result).ToArray();
         }
 
@@ -158,5 +165,8 @@ namespace nucs.Network.Discovery {
             KnownNodes.ToArray().AsParallel().Select();
         }*/
 
+        public void Dispose() {
+            Close();
+        }
     }
 }

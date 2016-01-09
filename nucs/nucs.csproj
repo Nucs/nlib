@@ -36,7 +36,7 @@
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;</DefineConstants>
-    <DefineConstants>DEBUG;NET_3_5</DefineConstants>
+    <DefineConstants>NET_4_5 DEBUG</DefineConstants>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v2.0' ">NET_2_0</DefineConstants>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v3.0' ">NET_3_0</DefineConstants>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v3.5' ">NET_3_5</DefineConstants>
@@ -118,58 +118,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Botlib\ApplicationTunnel.cs" />
-    <Compile Include="Botlib\Browser.cs" />
-    <Compile Include="Botlib\CommonRegex.cs" />
-    <Compile Include="Botlib\ControlArtist.cs" />
-    <Compile Include="Botlib\DataTypes\Hex32.cs" />
-    <Compile Include="Botlib\Encryption.cs" />
-    <Compile Include="Botlib\FiniteStateEngine\Pattern\Singleton.cs" />
-    <Compile Include="Botlib\FiniteStateEngine\StateEngine\Entites\BaseEntity.cs" />
-    <Compile Include="Botlib\FiniteStateEngine\StateEngine\Entites\EntityManager.cs" />
-    <Compile Include="Botlib\FiniteStateEngine\StateEngine\Messaging\MessageDispatcher.cs" />
-    <Compile Include="Botlib\FiniteStateEngine\StateEngine\Messaging\Telegram.cs" />
-    <Compile Include="Botlib\FiniteStateEngine\StateEngine\State.cs" />
-    <Compile Include="Botlib\FiniteStateEngine\StateEngine\StateMachine.cs" />
-    <Compile Include="Botlib\ImageLibrary\CommonFunctions.cs" />
-    <Compile Include="Botlib\ImageLibrary\Filter.cs" />
-    <Compile Include="Botlib\ImageLibrary\ImageData.cs" />
-    <Compile Include="Botlib\ImageLibrary\Manipulating.cs" />
-    <Compile Include="Botlib\ImageLibrary\Template.cs" />
-    <Compile Include="Botlib\IniParser.cs" />
-    <Compile Include="Botlib\Keyboard.cs" />
-    <Compile Include="Botlib\MachineLearning\NeuralNetwork\ActivationFunctions\BipolarSigmoidActivationFunction.cs" />
-    <Compile Include="Botlib\MachineLearning\NeuralNetwork\ActivationFunctions\GaussianActivationFunction.cs" />
-    <Compile Include="Botlib\MachineLearning\NeuralNetwork\ActivationFunctions\HeavisideActivationFunction.cs" />
-    <Compile Include="Botlib\MachineLearning\NeuralNetwork\ActivationFunctions\iActivationFunction.cs" />
-    <Compile Include="Botlib\MachineLearning\NeuralNetwork\ActivationFunctions\LinearActivationFunction.cs" />
-    <Compile Include="Botlib\MachineLearning\NeuralNetwork\ActivationFunctions\SigmoidActivationFunction.cs" />
-    <Compile Include="Botlib\MachineLearning\NeuralNetwork\ActivationFunctions\TanhActivationFunction.cs" />
-    <Compile Include="Botlib\MachineLearning\NeuralNetwork\Layer.cs" />
-    <Compile Include="Botlib\MachineLearning\NeuralNetwork\LearningAlgorithms\BackPropagationLearningAlgorithm.cs" />
-    <Compile Include="Botlib\MachineLearning\NeuralNetwork\LearningAlgorithms\LearningAlgorithm.cs" />
-    <Compile Include="Botlib\MachineLearning\NeuralNetwork\LearningMonitors\iLearningMonitor.cs" />
-    <Compile Include="Botlib\MachineLearning\NeuralNetwork\NeuralNetwork.cs" />
-    <Compile Include="Botlib\MachineLearning\NeuralNetwork\Neuron.cs" />
-    <Compile Include="Botlib\Mouse.cs" />
-    <Compile Include="Botlib\NativeMethods.cs" />
-    <Compile Include="Botlib\Net\HttpClient.cs" />
-    <Compile Include="Botlib\Net\HttpConstants.cs" />
-    <Compile Include="Botlib\Net\HttpHeader.cs" />
-    <Compile Include="Botlib\Net\HttpHeaderCollection.cs" />
-    <Compile Include="Botlib\Net\HttpPostData.cs" />
-    <Compile Include="Botlib\Net\HttpPostDataCollection.cs" />
-    <Compile Include="Botlib\Net\HttpProxy.cs" />
-    <Compile Include="Botlib\Net\HttpProxyHacker.cs" />
-    <Compile Include="Botlib\Net\HttpRequestException.cs" />
-    <Compile Include="Botlib\Recognition\Character\MagicMatchStick.cs" />
-    <Compile Include="Botlib\Recognition\Character\MagicMatchSticks.cs" />
-    <Compile Include="Botlib\Recognition\Character\OCR.cs" />
-    <Compile Include="Botlib\ScreenShot.cs" />
-    <Compile Include="Botlib\Utility.cs" />
-    <Compile Include="Botlib\Window.cs" />
     <Compile Include="Botting\BotLib.cs" />
     <Compile Include="Botting\Pixel.cs" />
+    <Compile Include="Botting\ScreenShot.cs" />
     <Compile Include="Collections\Extensions\ArrayExtensions.cs" />
     <Compile Include="Collections\ArrayQueue.cs" />
     <Compile Include="Collections\Collector.cs" />
@@ -309,7 +260,12 @@
     <Compile Include="SystemCore\Time\DatetimeOnline.cs" />
     <Compile Include="SystemCore\UriExtensions.cs" />
     <Compile Include="SystemCore\Version.cs" />
+    <Compile Include="Threading\Mining\MiningFactory.cs" />
+    <Compile Include="Threading\Mining\MultiSourceSingleResultMiner.cs" />
+    <Compile Include="Threading\Mining\FirstResultMine.cs" />
     <Compile Include="Threading\SleepUtils.cs" />
+    <Compile Include="Threading\Syncer.cs" />
+    <Compile Include="Threading\SyncerT.cs" />
     <Compile Include="Threading\TimeLimitedInspector.cs" />
     <Compile Include="Diagnostics\TimeMeasurer.cs" />
     <Compile Include="Reduant\Network\Client.cs" />
@@ -356,6 +312,7 @@
     <Compile Include="Windows\Keyboard\Highlevel\LogKey.cs" />
     <Compile Include="Windows\Keyboard\Highlevel\OutputFormatConstants.cs" />
     <Compile Include="Windows\Keyboard\Highlevel\ProcessLog.cs" />
+    <Compile Include="Windows\Keyboard\IKeylogTexualizer.cs" />
     <Compile Include="Windows\Keyboard\KeyboardLogger.cs" />
     <Compile Include="Windows\Keyboard\SendMKeys.cs" />
     <Compile Include="Windows\Keyboard\Standard\AKey.cs" />

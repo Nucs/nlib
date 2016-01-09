@@ -32,7 +32,7 @@ namespace nucs.Network {
         public uint Timeout { get; set; } = 10000;
 
         protected override WebRequest GetWebRequest(Uri address) {
-            var req = (HttpWebRequest) base.GetWebRequest(address);
+            var req = (WebRequest) base.GetWebRequest(address);
             req.Timeout = Convert.ToInt32(Timeout);
             req.Proxy = null;
             return req;

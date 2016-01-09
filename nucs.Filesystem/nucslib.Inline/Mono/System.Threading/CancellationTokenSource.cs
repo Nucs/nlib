@@ -39,7 +39,7 @@ namespace nucs.Mono.System.Threading {
     /// </remarks>
     [ComVisible(false)]
     [HostProtection(SecurityAction.LinkDemand, Synchronization = true, ExternalThreading = true)]
-    public sealed class CancellationTokenSource : IDisposable {
+    internal sealed class CancellationTokenSource : IDisposable {
         //static sources that can be used as the backing source for 'fixed' CancellationTokens that never change state.
         private static readonly CancellationTokenSource _staticSource_Set = new CancellationTokenSource(true);
         private static readonly CancellationTokenSource _staticSource_NotCancelable = new CancellationTokenSource(false);

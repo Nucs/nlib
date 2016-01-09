@@ -12,7 +12,11 @@ namespace nucs.Network.Discovery {
         public static bool IsRunning { get; set; } = false;
 
         public static void StartPingService() {
-            IsRunning = Connection.StartListening(ConnectionType.UDP, new IPEndPoint(IPAddress.Any, Port)).Count>0;
+            try {
+                IsRunning = Connection.StartListening(ConnectionType.UDP, new IPEndPoint(IPAddress.Any, Port)).Count > 0;
+            } catch (CommsSetupShutdownException e) when (e.Message.Contains($":{Port}")) {
+                
+            }
         }
 
         public static void Stop() {

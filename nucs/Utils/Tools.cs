@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -10,17 +9,18 @@ using System.Media;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using nucs.Windows.Keyboard.CardReader.Forms;
-using Thread = System.Threading.Thread;
 using Timer = System.Windows.Forms.Timer;
 
 namespace nucs.Utils {
     public static class Tools {
-
         public const string _MinDate = "2000-01-01 00:00:00";
+
+        public static CultureInfo JewishCulture = CultureInfo.CreateSpecificCulture("he-IL");
+        public static Calendar JewishCalendar = JewishCulture.DateTimeFormat.Calendar = new HebrewCalendar();
+
         /// <summary>
         ///     Cleans the null slots from the array and returns clean minimized one.
         /// </summary>
@@ -45,22 +45,25 @@ namespace nucs.Utils {
             thread.Start();
         }
 
+        /// <summary>
+        ///     מאמת מס תעודת זהות, האם הוא הגיוני.
+        /// </summary>
+        /// <param name="IDNum"></param>
+        /// <returns></returns>
         public static bool ValidateID(string IDNum) {
-            if (IDNum.Length < 9) {
-                while (IDNum.Length < 9) {
+            if (IDNum.Length < 9)
+                while (IDNum.Length < 9)
                     IDNum = '0' + IDNum;
-                }
-            }
 
             var mone = 0;
             for (var i = 0; i < 9; i++) {
                 var incNum = Convert.ToInt32(IDNum[i].ToString());
-                incNum *= (i%2) + 1;
+                incNum *= (i % 2) + 1;
                 if (incNum > 9)
                     incNum -= 9;
                 mone += incNum;
             }
-            return mone%10 == 0;
+            return mone % 10 == 0;
         }
 
         public static bool ValidateID(long id) {
@@ -89,8 +92,6 @@ namespace nucs.Utils {
             }
 
             return str;
-
-
         }
 
         public static string FirstLetterToUpperRestToLower(string str) {
@@ -98,7 +99,7 @@ namespace nucs.Utils {
                 return str;
             var a = str.Substring(0, 1).ToUpper();
             var b = str.Substring(1, str.Length - 1).ToLower();
-            Console.WriteLine(a+b);
+            Console.WriteLine(a + b);
             if ((a + b).Contains("?"))
                 return str;
             return a + b;
@@ -109,10 +110,10 @@ namespace nucs.Utils {
         }
 
         public static TEnum ToEnum<TEnum>(string strEnumValue, TEnum defaultValue) {
-            if (!Enum.IsDefined(typeof (TEnum), strEnumValue))
+            if (!Enum.IsDefined(typeof(TEnum), strEnumValue))
                 return defaultValue;
 
-            return (TEnum) Enum.Parse(typeof (TEnum), strEnumValue);
+            return (TEnum) Enum.Parse(typeof(TEnum), strEnumValue);
         }
 
 
@@ -130,7 +131,7 @@ namespace nucs.Utils {
             var resourceReader = new ResourceReader(rStream);
             var items = resourceReader.OfType<DictionaryEntry>();
             var stream = items.First(x => (x.Key as string) == resName.ToLower()).Value;
-            return (UnmanagedMemoryStream)stream;
+            return (UnmanagedMemoryStream) stream;
         }
 
         public static string ToTimeStamp(DateTime time) {
@@ -138,21 +139,21 @@ namespace nucs.Utils {
         }
 
         public static void validateOnlyLettersEvent(object sender, KeyPressEventArgs e) {
-            if (!char.IsLetter(e.KeyChar) && (Keys)e.KeyChar != Keys.Back) {
+            if (!char.IsLetter(e.KeyChar) && (Keys) e.KeyChar != Keys.Back) {
                 SystemSounds.Beep.Play();
                 e.Handled = true;
             }
         }
 
         public static void validateOnlyDigitsEvent(object sender, KeyPressEventArgs e) {
-            if (!char.IsDigit(e.KeyChar) && (Keys)e.KeyChar != Keys.Back) {
+            if (!char.IsDigit(e.KeyChar) && (Keys) e.KeyChar != Keys.Back) {
                 SystemSounds.Beep.Play();
                 e.Handled = true;
             }
         }
 
         public static void validateOnlyDigitsAndLettersEvent(object sender, KeyPressEventArgs e) {
-            if (!char.IsLetterOrDigit(e.KeyChar) && (Keys)e.KeyChar != Keys.Back) {
+            if (!char.IsLetterOrDigit(e.KeyChar) && (Keys) e.KeyChar != Keys.Back) {
                 SystemSounds.Beep.Play();
                 e.Handled = true;
             }
@@ -161,9 +162,10 @@ namespace nucs.Utils {
         public static bool IsEnglish(string str) {
             return "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm".Any(str.Contains);
         }
+
         /// <summary>
-        /// Uses form InputWaiter.cs inorder to get the cardcode that is received from reader.
-        /// returns: string - completed: the code, form closed: String.Empty
+        ///     Uses form InputWaiter.cs inorder to get the cardcode that is received from reader.
+        ///     returns: string - completed: the code, form closed: String.Empty
         /// </summary>
         /// <returns></returns>
         public static string GetCardCode(string CRsID) {
@@ -171,7 +173,8 @@ namespace nucs.Utils {
                 return String.Empty;
             }*/
             var dialog = new InputWaiter(CRsID);
-            if (dialog.IsDisposed) return String.Empty;
+            if (dialog.IsDisposed)
+                return string.Empty;
             dialog.ShowDialog();
             var result = dialog.Output;
             dialog.Dispose();
@@ -183,6 +186,7 @@ namespace nucs.Utils {
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern int GetWindowThreadProcessId(IntPtr handle, out int processId);
+
         //
         public static bool ApplicationIsActivated() {
             return ApplicationIsActivated(Process.GetCurrentProcess().Id);
@@ -190,9 +194,8 @@ namespace nucs.Utils {
 
         public static bool ApplicationIsActivated(int ProcID) {
             var activatedHandle = GetForegroundWindow();
-            if (activatedHandle == IntPtr.Zero) {
-                return false;       // No window is currently activated
-            }
+            if (activatedHandle == IntPtr.Zero)
+                return false; // No window is currently activated
 
             var procId = ProcID;
             int activeProcId;
@@ -204,22 +207,20 @@ namespace nucs.Utils {
         public static Form GetTopMostForm() {
             try {
                 return Application.OpenForms
-                .Cast<Form>()
-                .First(x => x.Focused);
+                    .Cast<Form>()
+                    .First(x => x.Focused);
             } catch {
                 return null;
             }
-
         }
 
-        public static CultureInfo JewishCulture = CultureInfo.CreateSpecificCulture("he-IL");
-        public static Calendar JewishCalendar = JewishCulture.DateTimeFormat.Calendar = new HebrewCalendar();
         public static string DateTimeNowHebrew() {
             return ParseHebrewDateTimeString(DateTime.Now.ToString(JewishCulture)).ToString(JewishCulture);
         }
+
         public static string DateNowHebrew() {
             var s = ParseHebrewDateTimeString(DateTime.Now.Date.ToString(JewishCulture)).ToString(JewishCulture).Split(' ');
-            return string.Format("{0} {1} {2}",s[0] , s[1] , s[2]);
+            return string.Format("{0} {1} {2}", s[0], s[1], s[2]);
         }
 
         public static DateTime ParseHebrewDateTimeString(string strHebrew) {
@@ -234,16 +235,9 @@ namespace nucs.Utils {
             else
                 waitingForConnList.Add(trigger);
         }*/
-
     }
-        class DualImages {
-        public Image img {get; set; }
-        public Image blink {get; set; }
-        public int times { get; set; }
-        public int milliseconds { get; set; }
-        public Timer timer { get; set; }
-        public bool blinked { get; set; }
-        public ToolStripMenuItem destinition { get; set; }
+
+    internal class DualImages {
         public DualImages(int n, int milliseconds, Image img, Image blink, Timer timer, ToolStripMenuItem destinition) {
             this.img = img;
             this.blink = blink;
@@ -253,6 +247,14 @@ namespace nucs.Utils {
             blinked = false;
             this.destinition = destinition;
         }
+
+        public Image img { get; set; }
+        public Image blink { get; set; }
+        public int times { get; set; }
+        public int milliseconds { get; set; }
+        public Timer timer { get; set; }
+        public bool blinked { get; set; }
+        public ToolStripMenuItem destinition { get; set; }
     }
 }
 
@@ -283,5 +285,3 @@ namespace nucs.Utils {
                 return ValidateRealID(id.ToString());
 
             }*/
-
-

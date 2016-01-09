@@ -51,7 +51,7 @@ public static partial class DirectoryInfoExtension
     /// </exception>
     public static DirectoryInfo EnsureDirectoryExists(this DirectoryInfo @this)
     {
-        if (@this.Exists==false)
+        if (Directory.Exists(@this.FullName)==false)
             return Directory.CreateDirectory(@this.FullName);
         return null;
     }

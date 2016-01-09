@@ -39,7 +39,7 @@ namespace nucs.Mono.System.Threading {
     [ComVisible(false)]
     [HostProtection(SecurityAction.LinkDemand, Synchronization = true, ExternalThreading = true)]
     [DebuggerDisplay("IsCancellationRequested = {IsCancellationRequested}")]
-    public struct CancellationToken {
+    internal struct CancellationToken {
         // The backing TokenSource.
         // if null, it implicitly represents the same thing as new CancellationToken(false). 
         // When required, it will be instantiated to reflect this.
@@ -546,7 +546,7 @@ namespace nucs.Mono.System.Threading {
 #if !FEATURE_CORECLR
         [NonSerialized] private CancellationToken _cancellationToken;
 
-        public CancellationToken CancellationToken {
+        internal CancellationToken CancellationToken {
             get { return _cancellationToken; }
             private set { _cancellationToken = value; }
         }
@@ -565,11 +565,11 @@ namespace nucs.Mono.System.Threading {
         }
 
 #if !FEATURE_CORECLR
-        public OperationCanceledException(CancellationToken token) : this() { CancellationToken = token; }
+        internal OperationCanceledException(CancellationToken token) : this() { CancellationToken = token; }
 
-        public OperationCanceledException(String message, CancellationToken token) : this(message) { CancellationToken = token; }
+        internal OperationCanceledException(String message, CancellationToken token) : this(message) { CancellationToken = token; }
 
-        public OperationCanceledException(String message, Exception innerException, CancellationToken token) : this(message, innerException) { CancellationToken = token; }
+        internal OperationCanceledException(String message, Exception innerException, CancellationToken token) : this(message, innerException) { CancellationToken = token; }
 #endif //!FEATURE_CORECLR 
 
         protected OperationCanceledException(SerializationInfo info, StreamingContext context) : base(info, context) { }

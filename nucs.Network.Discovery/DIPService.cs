@@ -14,10 +14,9 @@ namespace nucs.Network.Discovery {
         public static Thread ServiceThread { get; private set; } = new Thread(ServiceCore) {Name = "DIPService", IsBackground = true};
 
         private static ManualResetEventSlim _markstop;
-        private static readonly PCNodes nodes = new PCNodes();
+        public static readonly PCNodes Nodes = new PCNodes();
         public static void Start() {
-            Ping.StartPingService();
-            var res = nodes.Open();
+            var res = Nodes.Open();
             if (!res.Successful)
                 throw res.Exception;
             IsRunning = true;
@@ -27,7 +26,7 @@ namespace nucs.Network.Discovery {
 
         public static void Stop() {
             Ping.Stop();
-            nodes.Close();
+            Nodes.Close();
             _markstop?.Set();
         }
 
@@ -38,7 +37,7 @@ namespace nucs.Network.Discovery {
                 if (local_stop == null || local_stop.IsSet) //marked to stop.
                     break;
 
-                var tasks = nodes.SyncSerially();
+                Nodes.SyncSerially();
                 Thread.Sleep(60000);
             }
         }

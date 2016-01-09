@@ -39,6 +39,11 @@ namespace nucs.Filesystem {
         /// </summary>
         public static FileInfo ExecutingExe => new FileInfo(Assembly.GetEntryAssembly().Location);
 
+        /// <summary>
+        ///     The directory that the executing exe is inside
+        /// </summary>
+        public static DirectoryInfo ExecutingDirectory => ExecutingExe.Directory;
+
         private static readonly object _randloclock = new object();
         private static readonly Collector<DirectoryInfo> _randlocdb = new Collector<DirectoryInfo>();
         /// <summary>

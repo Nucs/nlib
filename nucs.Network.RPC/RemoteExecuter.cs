@@ -10,8 +10,16 @@ using ProtoBuf;
 
 namespace nucs.Network.RPC {
 
+    /// <summary>
+    ///     A service to run code on a remote node.
+    /// </summary>
     public static class RemoteExecuter {
-        public static void InitializeListeners() {
+
+        /// <summary>
+        ///     Initialize Listeners to allow running code from remote node on this machine. 
+        ///     This is not required to execute code on a remote node.
+        /// </summary>
+        public static void Listen() {
             NetworkComms.AppendGlobalIncomingPacketHandler<ExecuteRequest>("RemoteExecution", _Execute);
             NetworkComms.AppendGlobalIncomingPacketHandler<ExecuteRequest>("RemoteReturnExecution", _ExecuteReturn);
             
@@ -20,6 +28,9 @@ namespace nucs.Network.RPC {
             }
         }
 
+        /// <summary>
+        ///     Closes Handlers for remote code execution on this machine
+        /// </summary>
         public static void Stop() {
             NetworkComms.RemoveGlobalIncomingPacketHandler("RemoteExecution");
             NetworkComms.RemoveGlobalIncomingPacketHandler("RemoteReturnExecution");
@@ -28,8 +39,6 @@ namespace nucs.Network.RPC {
         /// <summary>
         ///     prepares code for execution
         /// </summary>
-        /// <param name="code"></param>
-        /// <returns></returns>
         private static string _prepare_code(string code, List<string> namespaces) {
             var ns = string.Join(Environment.NewLine, (namespaces?.Select(s => $"using {s};") ?? new string[0]));
             if (string.IsNullOrEmpty(code.Trim()))

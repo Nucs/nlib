@@ -16,9 +16,10 @@ namespace nucs.Threading {
             get { return _delay; }
             set { _delay = value; counter.Interval = _delay; }
         }
+
         private int _delay;
         public readonly object LockObject;
-        private readonly ManualResetEventSlim reseter = new ManualResetEventSlim(true);
+        private readonly SemaphoreSlim semaphore = new SemaphoreSlim(0);
         private readonly CountdownTimer counter;
 
         public bool Waiting { get { return counter.Working; } }
@@ -31,40 +32,28 @@ namespace nucs.Threading {
             _delay = delay;
             LockObject = lockObj ?? new object();
             counter = new CountdownTimer(delay);
-            counter.Elapsed += () => reseter.Set();
+            counter.Elapsed += () => semaphore.Release();
         }
 
         /// <summary>
         /// Waits for a single loop of 'Delay', if it has already passed since last wait call, it will return immediatly.
         /// </summary>
         public void Wait() {
-            if (counter.Enabled == false)
+            if (Delay <= 0)
                 return;
-            if (Delay <= 0) {
-                if (reseter.IsSet == false) {
-                    reseter.Set();
-                    counter.Stop();
-                }
-                return;
-            }
-                
+            
             lock (LockObject) {
-                if (reseter.IsSet) {
-                    reseter.Reset();
-                    counter.Start();
-                    return;
-                }
-                reseter.Wait();
-                reseter.Reset();
+                counter.Wait();
+                counter.Reset();
                 counter.Start();
             }
         }
-        /// <summary>
+        /*/// <summary>
         /// Forces the locker to immediatly finish the waiting loop
         /// </summary>
         public void Reset() {
-            reseter.Reset();
-        }
+            
+        }*/
 
 
         

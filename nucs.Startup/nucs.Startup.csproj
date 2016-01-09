@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>nucs.Startup</RootNamespace>
     <AssemblyName>nucs.Startup</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,6 +50,7 @@
     <Compile Include="NativeMethods\MachineRegistryStartupMethod.cs" />
     <Compile Include="NativeMethods\ServiceStartupMethod.cs" />
     <Compile Include="ShellLink.cs" />
+    <Compile Include="CurrentAppStartup.cs" />
     <Compile Include="StartupManager.cs" />
   </ItemGroup>
   <ItemGroup>

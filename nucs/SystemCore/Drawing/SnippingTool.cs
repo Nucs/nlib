@@ -45,7 +45,7 @@ namespace nucs.SystemCore.Drawing {
         public static Image Snip(IntPtr hWnd, PixelFormat format = PixelFormat.Format24bppRgb) {
             NativeWin32.SetForegroundWindow(hWnd);
             var p = NativeWin32.GetWindowRect(hWnd);
-            var bmp = ScreenShot.Create(hWnd, format);
+            var bmp = ScreenShot.Create(hWnd);
             Graph = Graphics.FromImage(bmp);
             Graph.SmoothingMode = SmoothingMode.None;
             
@@ -68,7 +68,7 @@ namespace nucs.SystemCore.Drawing {
         public static Image Snip(IntPtr hWnd, out Rectangle rect, PixelFormat format = PixelFormat.Format24bppRgb) {
             NativeWin32.SetForegroundWindow(hWnd);
             var p = NativeWin32.GetWindowRect(hWnd);
-            var bmp = ScreenShot.Create(hWnd, format);
+            var bmp = ScreenShot.Create(hWnd);
             Graph = Graphics.FromImage(bmp);
             Graph.SmoothingMode = SmoothingMode.None;
             

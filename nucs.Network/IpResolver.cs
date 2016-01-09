@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
+using System.Net.NetworkInformation;
+using System.Threading;
 using System.Threading.Tasks;
+using nucs.Threading;
 
 namespace nucs.Network {
     public class IpResolver {
@@ -13,43 +16,53 @@ namespace nucs.Network {
             "http://icanhazip.com/",
             "http://ipinfo.io/ip"
         };
-        
+
+        /// <summary>
+        ///     Checks if there is any interface that can connect to internet and only then attempts to open read to google
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsInternetConnectionAvailable() {
+            return NetworkIsAvailable() && OpenReadToGoogle();
+        }
+        private static readonly FastWebClient _onlinechecker = new FastWebClient();
+
+        private static bool OpenReadToGoogle() {
+            try {
+                using (_onlinechecker.OpenRead("http://www.google.com"))
+                    ;
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        private static bool NetworkIsAvailable() {
+            var all = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (var item in all) {
+                if (item.NetworkInterfaceType == NetworkInterfaceType.Loopback)
+                    continue;
+                if (item.Name.ToLower().Contains("virtual") || item.Description.ToLower().Contains("virtual"))
+                    continue; //Exclude virtual networks set up by VMWare and others
+                if (item.OperationalStatus == OperationalStatus.Up)
+                    return true;
+            }
+            return false;
+        }
+        private static readonly IpMine _ipmine = new IpMine();
+
         /// <summary>
         ///     Retrieves the external IP from any of the services in the ExternalIpServices list.
         /// </summary>
-        public static string GetPublic() {
-            var h = new FastHttpClient();
-            var l = ExternalIpServices.Select(url => h.GetStringAsync(url)).ToArray();
-            _rewait:
-            if (l.Length == 0)
-                return null;
-            Task.WaitAny(l.ToArray());
-
-            var _finished = l.Where(task => task.IsFaulted == false && task.IsCompleted);
-            var finished = _finished.Select(r => attemptparse(r.Result))
-                .Where(s => !string.IsNullOrEmpty(s))
-                .ToArray();
-
-            l = l.Where(t => t.IsCompleted == false && t.IsFaulted == false).ToArray();
-            if (finished.Length == 0)
-                goto _rewait;
-            return finished.FirstOrDefault();
+        public static string GetPublic(int timeout = -1, CancellationTokenSource src = null) {
+            return _ipmine.MineFirstOrDefault(timeout, src);
         }
 
         /// <summary>
         ///     Retrieves the external IP from any of the services in the ExternalIpServices list.
         /// </summary>
-        public async static Task<string> GetPublicAsync() {
+        public static async Task<string> GetPublicAsync() {
             return await Task.Run(() => GetPublic());
         }
 
-        private static string attemptparse(string ip) {
-            ip = new string(ip.Trim().Where(c=>char.IsDigit(c) || c=='.').ToArray());
-            IPAddress _ip;
-            var b = IPAddress.TryParse(ip, out _ip);
-            if (b == false)
-                return null;
-            return _ip.ToString();
-        }
     }
 }

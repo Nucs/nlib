@@ -30,7 +30,7 @@ namespace nucs.Monitoring {
         private Thread t;
 
         protected MonitorBase() {
-            comparer = new DynamicEqualityComparer<T>(((x, y) => x.Equals(y)), x => x.GetHashCode());
+            comparer = new DynamicEqualityComparer<T>(((x, y) => x?.Equals(y) == true), x => x?.GetHashCode()??0);
         }
 
         protected MonitorBase(DynamicEqualityComparer<T> comparer, BoolAction<T> isblacklisted) {

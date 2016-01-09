@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Timers;
+using System.Threading;
+using Timer = System.Timers.Timer;
 
 namespace nucs.Threading {
     public class CountdownTimer {
@@ -43,7 +44,8 @@ namespace nucs.Threading {
 
             t.Elapsed += (sender, args) => {
                 Stop();
-                if (Elapsed != null) Elapsed();
+                _wait_sem.Release(100);
+                Elapsed?.Invoke();
             };
 
             if (start) Start();
@@ -52,6 +54,11 @@ namespace nucs.Threading {
         public void Start() {
             starttime = DateTime.Now;
             t.Start();
+        }
+        private readonly SemaphoreSlim _wait_sem = new SemaphoreSlim(0);
+        public void Wait() {
+            if (t.Enabled)
+                _wait_sem.Wait();
         }
 
         public void Stop() {

@@ -63,10 +63,10 @@ namespace nucs.Mono.System.Threading{
     ///         <see cref="SpinWait" /> is a value type, which means that low-level code can utilize SpinWait without
     ///         fear of unnecessary allocation overheads. SpinWait is not generally useful for ordinary applications.
     ///         In most cases, you should use the synchronization classes provided by the .NET Framework, such as
-    ///         <see cref="System.Threading.Monitor" />. For most purposes where spin waiting is required, however,
+    ///         <see cref="Monitor" />. For most purposes where spin waiting is required, however,
     ///         the <see cref="SpinWait" /> type should be preferred over the
     ///         <see
-    ///             cref="System.Threading.Thread.SpinWait" />
+    ///             cref="Thread.SpinWait" />
     ///         method.
     ///     </para>
     ///     <para>
@@ -76,7 +76,7 @@ namespace nucs.Mono.System.Threading{
     ///     </para>
     /// </remarks>
     [HostProtection(Synchronization = true, ExternalThreading = true)]
-    public struct SpinWait {
+    internal struct SpinWait {
         // These constants determine the frequency of yields versus spinning. The
         // numbers may seem fairly arbitrary, but were derived with at least some 
         // thought in the design document.  I fully expect they will need to change 
@@ -208,7 +208,7 @@ namespace nucs.Mono.System.Threading{
         /// <exception cref="T:System.ArgumentOutOfRangeException">
         ///     <paramref name="timeout" /> is a negative number
         ///     other than -1 milliseconds, which represents an infinite time-out -or- timeout is greater than
-        ///     <see cref="System.Int32.MaxValue" />.
+        ///     <see cref="int.MaxValue" />.
         /// </exception>
         public static bool SpinUntil(Func<bool> condition, TimeSpan timeout) {
             // Validate the timeout
@@ -228,7 +228,7 @@ namespace nucs.Mono.System.Threading{
         /// <param name="millisecondsTimeout">
         ///     The number of milliseconds to wait, or
         ///     <see
-        ///         cref="System.Threading.Timeout.Infinite" />
+        ///         cref="Timeout.Infinite" />
         ///     (-1) to wait indefinitely.
         /// </param>
         /// <returns>True if the condition is satisfied within the timeout; otherwise, false</returns>
@@ -273,7 +273,7 @@ namespace nucs.Mono.System.Threading{
         [MethodImpl(MethodImplOptions.InternalCall), HostProtection(Synchronization = true, ExternalThreading = true), ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success), ResourceExposure(ResourceScope.None)]
         private static extern bool YieldInternal();
 
-        public delegate TResult Func<out TResult>();
+        internal delegate TResult Func<out TResult>();
     }
 
 
