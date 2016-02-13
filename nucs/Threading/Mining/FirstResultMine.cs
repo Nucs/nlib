@@ -18,17 +18,17 @@ namespace nucs.Threading {
             var _funcs = Factory.CreateMiners(src?.Token ?? CancellationToken.None).ToArray();
             long c = _funcs.Length;
             foreach (var func in _funcs)
-                Task.Run(() => {
+                System.Threading.Tasks.Task.Factory.StartNew(() => {
                     var res = default(OUT);
                     try {
                         src?.Token.ThrowIfCancellationRequested();
                         res = func();
-#if DEBUG
+/*#if DEBUG*/
                         } catch (Exception e) {
                             Console.WriteLine(e);
-#else
+/*#else
                         } catch {
-#endif
+#endif*/
                     } finally {
                         Interlocked.Decrement(ref c);
                         if (!m.IsSet && (src?.IsCancellationRequested==true || Interlocked.Read(ref c) == 0)) {

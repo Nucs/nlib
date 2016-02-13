@@ -29,7 +29,7 @@ namespace nucs.Network {
             //this.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
         }
 
-        public uint Timeout { get; set; } = 10000;
+        public int Timeout { get; set; } = 10000;
 
         protected override WebRequest GetWebRequest(Uri address) {
             var req = (WebRequest) base.GetWebRequest(address);

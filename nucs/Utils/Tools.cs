@@ -99,7 +99,6 @@ namespace nucs.Utils {
                 return str;
             var a = str.Substring(0, 1).ToUpper();
             var b = str.Substring(1, str.Length - 1).ToLower();
-            Console.WriteLine(a + b);
             if ((a + b).Contains("?"))
                 return str;
             return a + b;

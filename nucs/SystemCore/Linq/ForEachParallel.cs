@@ -9,14 +9,14 @@ namespace MoreLinq {
         ///     Return Task array from the foreach func.
         /// </summary>
         public static Task[] ForEachParallel<T>(this IEnumerable<T> source, Action<T> act) {
-            return source.Select(item => Task.Run(() => act(item))).ToArray();
+            return source.Select(item => System.Threading.Tasks.Task.Factory.StartNew(() => act(item))).ToArray();
         }
 
         /// <summary>
         ///     Return Task array from the foreach func.
         /// </summary>
         public static Task<RET>[] ForEachParallel<RET,T>(this IEnumerable<T> source, Func<T, RET> act) {
-            return source.Select(item => Task.Run(() => act(item))).ToArray();
+            return source.Select(item => System.Threading.Tasks.Task.Factory.StartNew(() => act(item))).ToArray();
         }
          
     }

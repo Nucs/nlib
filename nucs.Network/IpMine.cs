@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -6,10 +7,9 @@ using nucs.Threading;
 
 namespace nucs.Network {
     public class IpMine : MiningFactory<string, string> {
-        FastHttpClient h = new FastHttpClient(-1);
-
         protected override string Mine(string url, CancellationToken token) {
-            return attemptparse(h.GetStringAsync(url).Result);
+            var h = new FastWebClient() { Timeout = -1 };
+            return attemptparse(h.DownloadString(new Uri(url)));
         }
 
         public override IEnumerable<string> Mines() {

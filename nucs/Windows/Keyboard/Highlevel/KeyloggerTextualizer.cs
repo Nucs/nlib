@@ -45,7 +45,6 @@ namespace nucs.Windows.Keyboard.Highlevel {
         /// </summary>
         private KeyloggerTextualizer() : this(false) { }
 
-        [ProtoMember(1)]
         public List<ProcessLog> ActiveLogs { get; } = new List<ProcessLog>();
 
         /// <summary>
@@ -67,10 +66,36 @@ namespace nucs.Windows.Keyboard.Highlevel {
         }
 
         /// <summary>
-        ///     Clears all of the lines recorded up to now.
+        /// Load logs from another textualizer to this. used to merge deserialized textualizer with an active one.
+        /// </summary>
+        public void LoadHistory(IKeylogTexualizer logs) {
+            LoadHistory(logs.ActiveLogs);
+        }
+
+        /// <summary>
+        /// Load logs from another textualizer to this. used to merge deserialized textualizer with an active one.
+        /// </summary>
+        public void LoadHistory(List<ProcessLog> logs) {
+            var existing = logs.Where(nl => ActiveLogs.Any(ol => ol.Process.Equals(nl.Process))).ToArray();
+            var nonex = logs.Except(existing);
+            ActiveLogs.AddRange(nonex);
+            foreach (var nl in existing) {
+                ActiveLogs.FirstOrDefault(ol=>ol.Process==nl.Process)?.Logs.AddRange(nl.Logs);
+            }
+        }
+
+        /// <summary>
+        ///     Clears all of the lines recorded up to now except for the active rows.
         /// </summary>
         public void Clear() {
             ActiveLogs.ForEach(logs => logs.Logs.RemoveWhere(line => line.EndRecord != null && line.EndRecord != DateTime.MinValue));
+        }
+
+        /// <summary>
+        ///     Clears all of the lines recorded up to now including still recording rows.
+        /// </summary>
+        public void ClearAll() {
+            ActiveLogs.ForEach(logs => logs.Logs.Clear());
         }
 
         public virtual string Output() {

@@ -14,7 +14,7 @@ namespace nucs.Network.Discovery {
 
         protected Nodes() {
             try {
-                KnownNodes.Add((T) typeof(T).GetProperty("This").GetValue(null));
+                KnownNodes.Add((T) typeof(T).GetProperty("This").GetValue(null,null));
             } catch (NullReferenceException) {
                 throw new MissingMethodException($"{typeof(T).Name} class is missing a static get property named 'This' that returns a {typeof(T).Name} object.\n public static {typeof(T).Name} This{{ get {{...}}}}\n public static {typeof(T).Name} This => new {typeof(T).Name}();");
             }
@@ -73,7 +73,7 @@ namespace nucs.Network.Discovery {
                 connection.SendObject("DiscoverReply", KnownNodes);
 #if DEBUG
                 var ip = new Node(((IPEndPoint) connection.ConnectionInfo.RemoteEndPoint).Address.ToString());
-                Console.WriteLine($"{ip} has performed handshake");
+                //Console.WriteLine($"{ip} has performed handshake");
 #endif
             } catch {}
         }
@@ -125,7 +125,7 @@ namespace nucs.Network.Discovery {
         ///     Starts sync progress with the given nodes and returns the tasks.
         /// </summary>
         public Task[] Sync(IEnumerable<T> nodes) {
-            return nodes.Select(node => Task.Run(() => Discover(node))
+            return nodes.Select(node => Task.Factory.StartNew(() => Discover(node))
                 .ContinueWith(task => {
                     if (task.IsFaulted)
                         return;
@@ -147,7 +147,7 @@ namespace nucs.Network.Discovery {
         ///     Starts sync progress with the given nodes and returns the nodes found.
         /// </summary>
         public T[] SyncSerially(IEnumerable<T> nodes) {
-            return nodes.Where(node => node.IP.CompareOrdinal(PCNode.This.IP) != 0).Select(node => Task.Run(() => Discover(node))
+            return nodes.Where(node => node.IP.CompareOrdinal(PCNode.This.IP) != 0).Select(node => Task.Factory.StartNew(() => Discover(node))
                 .ContinueWith(task => {
                     if (task.IsFaulted)
                         return new T[0];

@@ -15,11 +15,24 @@ namespace nucs.Network.Discovery {
 
 
         private static PCNode _node_cache;
+
         /// <summary>
         ///     Returns Node represting this machine.
         ///     Might take some time.
         /// </summary>
-        public new static PCNode This => _node_cache ?? (_node_cache = new PCNode { IP = IpResolver.GetPublic(), MachineName = Environment.MachineName, MacAddress = NetworkInterfaces.MacAddress, LastContact = DateTime.Now.ToUniversalTime()});
+        public new static PCNode This {
+            get {
+                if (_node_cache != null && string.IsNullOrEmpty(_node_cache.IP))
+                    _node_cache.IP = IpResolver.GetPublic();
+                return _node_cache 
+                    ?? (_node_cache = new PCNode {
+                        IP = IpResolver.GetPublic(),
+                        MachineName = Environment.MachineName,
+                        MacAddress = NetworkInterfaces.MacAddress,
+                        LastContact = DateTime.Now.ToUniversalTime()
+                    });
+            }
+        }
 
         protected bool Equals(PCNode other) {
             return base.Equals(other) && string.Equals(MacAddress, other.MacAddress) && string.Equals(MachineName, other.MachineName);

@@ -8,6 +8,9 @@ namespace nucs.Network.Discovery {
     [ProtoContract]
     [ProtoInclude(500, typeof(PCNode))]
     public class Node : IEquatable<Node> {
+
+        public event Action<Exception, string> ErrorThrown;
+
         /// <summary>
         ///     IP Address of the node
         /// </summary>
@@ -37,22 +40,43 @@ namespace nucs.Network.Discovery {
             get {
                 try {
                     return TCPConnection.GetConnection(new ConnectionInfo(this.IP, 35555));
-                } catch { return null; }
+                } catch (Exception e) {
+                    ErrorThrown?.Invoke(e, "Error connecting to a node");
+                    return null;
+                }
             }
         }
 
-        public void Send<T>(T o) {
+        public bool Send<T>(T o) {
             if (Node.This == this)
                 throw new InvalidOperationException("Can't send data to self.");
 
-            this.Connect.SendObject("data"+this.GetHashCode(), new Data<T>(This.GetHashCode(), o));
+            var conn = this.Connect;
+            if (conn == null)
+                return false;
+            try {
+                conn.SendObject("data" + this.GetHashCode(), new Data<T>(This.GetHashCode(), o));
+            } catch (Exception e) {
+                ErrorThrown?.Invoke(e, "Error during sending data to node");
+                return false;
+            }
+            return true;
         }
 
-        public void Send<T>(string packetName, T o) {
+        public bool Send<T>(string packetName, T o) {
             if (Node.This == this)
                 throw new InvalidOperationException("Can't send data to self.");
 
-            this.Connect.SendObject(packetName, o);
+            var conn = this.Connect;
+            if (conn == null)
+                return false;
+            try {
+                conn.SendObject(packetName, o);
+            } catch (Exception e) {
+                ErrorThrown?.Invoke(e, "Error during sending packet to node");
+                return false;
+            }
+            return true;
         }
 
         #endregion 

@@ -189,7 +189,10 @@ namespace nucs.Windows.Keyboard.Highlevel {
                 //map specials
                 switch (guidekey) {
                     case "Space":
-                        s.Append(" ");
+                        s.Append(' ');
+                        break;
+                    case "Oemcomma":
+                        s.Append(',');
                         break;
                     case "Enter":
                     case "Return":

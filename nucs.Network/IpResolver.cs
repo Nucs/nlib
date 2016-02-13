@@ -24,10 +24,11 @@ namespace nucs.Network {
         public static bool IsInternetConnectionAvailable() {
             return NetworkIsAvailable() && OpenReadToGoogle();
         }
-        private static readonly FastWebClient _onlinechecker = new FastWebClient();
 
         private static bool OpenReadToGoogle() {
             try {
+                var _onlinechecker = new FastWebClient() { Timeout = 5000 };
+
                 using (_onlinechecker.OpenRead("http://www.google.com"))
                     ;
                 return true;
@@ -56,13 +57,5 @@ namespace nucs.Network {
         public static string GetPublic(int timeout = -1, CancellationTokenSource src = null) {
             return _ipmine.MineFirstOrDefault(timeout, src);
         }
-
-        /// <summary>
-        ///     Retrieves the external IP from any of the services in the ExternalIpServices list.
-        /// </summary>
-        public static async Task<string> GetPublicAsync() {
-            return await Task.Run(() => GetPublic());
-        }
-
     }
 }

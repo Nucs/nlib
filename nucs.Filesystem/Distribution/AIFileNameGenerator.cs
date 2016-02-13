@@ -73,8 +73,6 @@ namespace nucs.Filesystem.Distribution {
                     fn = rand.Chance(50, splet.Skip(1), splet.Reverse().Skip(1).Reverse())
                             .StringJoin(rand.Chance(50, "-", ""));
                     fn = fn.DeleteDuplicateCharsMultiple("-");
-                    Console.WriteLine("!!! " + fn);
-
                 }
                 else {
                     fn = rand.Chance(50, () => fn.Replace(" ", "-"), () => fn);

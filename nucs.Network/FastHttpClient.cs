@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET_4_5
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -32,3 +33,4 @@ namespace nucs.Network {
         public FastHttpClient() : this(-1) {}
     }
 }
+#endif

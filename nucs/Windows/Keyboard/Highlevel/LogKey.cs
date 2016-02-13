@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using nucs.SystemCore.Enums;
 using ProtoBuf;
@@ -48,10 +49,20 @@ namespace nucs.Windows.Keyboard.Highlevel {
         public string AsKeyguide {
             get {
                 var kc = kc_instance ?? (kc_instance = new KeysConverter());
-                var converted = kc.ConvertToString(Key);
+                var converted = kc.ConvertToString(Key) ?? "";
+                if (converted.Length == 1)
+                    return AsChar;
                 if (converted.CompareOrdinal("OemPeriod") == 0)
                     return ".";
-                if (converted.Length==1) return AsChar;
+                if (converted.CompareOrdinal("OemQuestion") == 0)
+                    return "?";
+                if (converted.CompareOrdinal("Oemtilde") == 0)
+                    return "`";
+                if (converted.Length==4 && converted.StartsWith("Oem") && char.IsDigit(converted[3]))
+                    return converted[3].ToString();
+                if (converted.CompareOrdinal("Oemcomma") == 0)
+                    return ",";
+                
                 return converted;
 
             }

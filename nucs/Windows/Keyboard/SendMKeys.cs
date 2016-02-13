@@ -66,7 +66,6 @@ namespace nucs.Windows.Keyboard {
                 throw new ArgumentNullException("p");
             IntPtr notepadHwnd = p.MainWindowHandle;
             IntPtr editHwnd = FindWindowEx(notepadHwnd, (IntPtr)0, "Edit", null);
-            Console.WriteLine("Edit finder error: "+Marshal.GetLastWin32Error());
             SendMessage(editHwnd, (IntPtr)WM_SETTEXT, (IntPtr)0, text);
         }
 

@@ -100,6 +100,14 @@ namespace nucs.Windows.Processes {
             }
         }
 
+        public static bool operator ==(ProcessInfo left, ProcessInfo right) {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(ProcessInfo left, ProcessInfo right) {
+            return !Equals(left, right);
+        }
+
         public static ProcessInfo TryParse(string toString) {
             try {
                 var s = toString.Split('↔');

@@ -45,7 +45,7 @@ namespace nucs.Forms {
             if (c.IsNull())
                 throw new ArgumentNullException(nameof(c), "cannot invoke to a form, since it is null.");
             if (c.IsHandleCreated == false)
-                Task.Run(() => { c.WaitForHandleCreation(); c.Invoke(new MethodInvoker(act)); });
+                System.Threading.Tasks.Task.Factory.StartNew(() => { c.WaitForHandleCreation(); c.Invoke(new MethodInvoker(act)); });
             else
                 c.Invoke(new MethodInvoker(act));
         }
