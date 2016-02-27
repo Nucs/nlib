@@ -1,4 +1,4 @@
-﻿#if NET_4_5
+﻿/*#if NET_4_5*/
 using System;
 using System.Net;
 using System.Net.Http;
@@ -33,4 +33,4 @@ namespace nucs.Network {
         public FastHttpClient() : this(-1) {}
     }
 }
-#endif
+/*#endif*/

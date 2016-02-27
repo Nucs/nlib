@@ -41,6 +41,11 @@ namespace nucs.Windows.Keyboard.Highlevel {
         }
 
         /// <summary>
+        ///     If there is any logged data in records.
+        /// </summary>
+        public bool HasRecords { get { return ActiveLogs.Any(pl => pl.Logs.Count>0); } }
+
+        /// <summary>
         ///     For serializing purposes, won't actually log.
         /// </summary>
         private KeyloggerTextualizer() : this(false) { }

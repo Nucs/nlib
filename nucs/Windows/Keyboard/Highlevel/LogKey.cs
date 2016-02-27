@@ -58,11 +58,16 @@ namespace nucs.Windows.Keyboard.Highlevel {
                     return "?";
                 if (converted.CompareOrdinal("Oemtilde") == 0)
                     return "`";
+                if (converted.CompareOrdinal("Oemtilde") == 0)
+                    return "`";
                 if (converted.Length==4 && converted.StartsWith("Oem") && char.IsDigit(converted[3]))
                     return converted[3].ToString();
+                if (converted.Length == 7 && converted.StartsWith("NumPad") && char.IsDigit(converted[6]))
+                    return converted[6].ToString();
                 if (converted.CompareOrdinal("Oemcomma") == 0)
                     return ",";
-                
+                if (converted.StartsWith("Oem") && converted.Length>=4)
+                    converted = converted.Substring(3);
                 return converted;
 
             }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using nucs.Threading;
+using nucs.Threading.Mining;
 
 namespace nucs.Network {
     public class IpMine : MiningFactory<string, string> {

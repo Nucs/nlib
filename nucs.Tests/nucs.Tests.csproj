@@ -7,7 +7,7 @@
     <ProjectGuid>{478532D4-8065-426A-A63F-86ADCDEA1D36}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>nucs</RootNamespace>
+    <RootNamespace>nucs.tests</RootNamespace>
     <AssemblyName>nucs.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

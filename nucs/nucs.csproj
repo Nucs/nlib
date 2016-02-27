@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>nucs</RootNamespace>
     <AssemblyName>nucslib</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -260,13 +260,6 @@
     <Compile Include="SystemCore\Time\DatetimeOnline.cs" />
     <Compile Include="SystemCore\UriExtensions.cs" />
     <Compile Include="SystemCore\Version.cs" />
-    <Compile Include="Threading\Mining\MiningFactory.cs" />
-    <Compile Include="Threading\Mining\MultiSourceSingleResultMiner.cs" />
-    <Compile Include="Threading\Mining\FirstResultMine.cs" />
-    <Compile Include="Threading\SleepUtils.cs" />
-    <Compile Include="Threading\Syncer.cs" />
-    <Compile Include="Threading\SyncerT.cs" />
-    <Compile Include="Threading\TimeLimitedInspector.cs" />
     <Compile Include="Diagnostics\TimeMeasurer.cs" />
     <Compile Include="Reduant\Network\Client.cs" />
     <Compile Include="Reduant\Network\NetworkPoint.cs" />
@@ -288,9 +281,6 @@
     <Compile Include="Reduant\Network\SocketCommunication\Commons\AsyncRequester.cs" />
     <Compile Include="Reduant\Network\SocketCommunication\Commons\ISendable.cs" />
     <Compile Include="Reduant\Network\SocketCommunication\Commons\Sendable.cs" />
-    <Compile Include="Threading\TimedLocker.cs" />
-    <Compile Include="Threading\TimeoutTimer.cs" />
-    <Compile Include="Threading\CountdownTimer.cs" />
     <Compile Include="Utils\CountingInvoker.cs" />
     <Compile Include="Utils\Tools.cs" />
     <Compile Include="Windows\ConsoleUtils\ConsoleHelper.cs" />
@@ -338,7 +328,6 @@
     <Compile Include="Reduant\Server.cs" />
     <Compile Include="Reduant\Network\SocketCommunication\Master.cs" />
     <Compile Include="Reduant\Network\SocketCommunication\Slave.cs" />
-    <Compile Include="Threading\TaskTools.cs" />
     <Compile Include="SystemCore\String\StringTools.cs" />
     <Compile Include="Windows\Keyboard\Standard\Conversions.cs" />
     <Compile Include="Windows\Mouse\Standard\GlobalHook.cs" />
@@ -1132,7 +1121,6 @@
     <Content Include="Reduant\Network\SocketCommunication\Suggestions.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Html\" />
     <Folder Include="SystemCore\Settings\" />
     <Folder Include="Windows\Serial\" />
   </ItemGroup>

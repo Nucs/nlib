@@ -29,8 +29,7 @@ namespace nucs.Network {
             try {
                 var _onlinechecker = new FastWebClient() { Timeout = 5000 };
 
-                using (_onlinechecker.OpenRead("http://www.google.com"))
-                    ;
+                using (_onlinechecker.OpenRead("http://www.google.com")) { }
                 return true;
             } catch (Exception e) {
                 return false;

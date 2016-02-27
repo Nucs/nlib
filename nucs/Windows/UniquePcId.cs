@@ -4,7 +4,7 @@ using System.Management;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace TFer_Client.Windows.Hardware {
+namespace nucs.Windows {
     /// <summary>
     ///     Generates a 16 byte Unique Identification code of a computer
     ///     Example: 4876-8DB5-EE85-69D3-FE52-8CF7-395D-2EA9

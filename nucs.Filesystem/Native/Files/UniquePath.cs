@@ -12,8 +12,8 @@ namespace nucs.Filesystem {
             new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)),
             new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)),
             new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic)),
-            new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)),
             new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)),
+            new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures)),
         };
 
         public static DirectoryInfo GetUniqueDirectory {

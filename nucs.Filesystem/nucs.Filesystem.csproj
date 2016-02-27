@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>nucs.Filesystem</RootNamespace>
-    <AssemblyName>TFer.Filesystem</AssemblyName>
+    <AssemblyName>nucs.Filesystem</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -130,9 +130,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Search\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\nucs.Monitor\nucs.Monitoring.csproj">
       <Project>{f5b65e01-dc0c-4787-99c2-c615966e236f}</Project>

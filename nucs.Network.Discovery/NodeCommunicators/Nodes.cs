@@ -38,8 +38,7 @@ namespace nucs.Network.Discovery {
 
             try {
                 NetworkComms.AppendGlobalIncomingPacketHandler<NodesList<T>>("Discover", DiscoveryHandler);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 or.Exception = e;
                 or.Successful = false;
                 return or;
@@ -118,7 +117,7 @@ namespace nucs.Network.Discovery {
         public Task[] Sync() {
             return Sync(NodeServers.List
                 .Select(s => new T {IP=s})
-                .Concat(KnownNodes));
+                .Concat(KnownNodes).ToArray());
         }
 
         /// <summary>
@@ -140,7 +139,7 @@ namespace nucs.Network.Discovery {
         public T[] SyncSerially() {
             return SyncSerially(NodeServers.List
                 .Select(s => new T { IP = s })
-                .Concat(KnownNodes));
+                .Concat(KnownNodes).ToArray());
         }
 
         /// <summary>

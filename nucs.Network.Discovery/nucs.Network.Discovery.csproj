@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -90,6 +91,10 @@
     <ProjectReference Include="..\..\nlib\nucs\nucs.csproj">
       <Project>{AC624321-8EB6-4D1F-ACF0-C6F7CF5247A0}</Project>
       <Name>nucs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\nucs.Identity\nucs.Identity.csproj">
+      <Project>{a0c44fcd-3408-4275-8aec-db286f41d900}</Project>
+      <Name>nucs.Identity</Name>
     </ProjectReference>
     <ProjectReference Include="..\nucs.Network\nucs.Network.csproj">
       <Project>{e8f0591d-c94b-4e84-a35f-011e84768b61}</Project>

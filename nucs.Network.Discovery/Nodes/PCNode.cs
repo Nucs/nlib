@@ -1,4 +1,5 @@
 ﻿using System;
+using nucs.Identifiers;
 using ProtoBuf;
 
 namespace nucs.Network.Discovery {
@@ -13,6 +14,8 @@ namespace nucs.Network.Discovery {
         [ProtoMember(2)]
         public string MacAddress { get; set; } = null;
 
+        [ProtoMember(3)]
+        public string PCID { get; set; }
 
         private static PCNode _node_cache;
 
@@ -29,13 +32,14 @@ namespace nucs.Network.Discovery {
                         IP = IpResolver.GetPublic(),
                         MachineName = Environment.MachineName,
                         MacAddress = NetworkInterfaces.MacAddress,
-                        LastContact = DateTime.Now.ToUniversalTime()
+                        LastContact = DateTime.Now.ToUniversalTime(),
+                        PCID = Identity.This.ToString()
                     });
             }
         }
 
         protected bool Equals(PCNode other) {
-            return base.Equals(other) && string.Equals(MacAddress, other.MacAddress) && string.Equals(MachineName, other.MachineName);
+            return base.Equals(other) && string.Equals(MacAddress, other.MacAddress) && string.Equals(MachineName, other.MachineName) && string.Equals(PCID, other.PCID);
         }
 
         public override bool Equals(object obj) {
@@ -51,6 +55,7 @@ namespace nucs.Network.Discovery {
                 hashCode = (hashCode*397) ^ (MacAddress?.GetHashCode() ?? 0);
                 hashCode = (hashCode*397) ^ (MachineName?.GetHashCode() ?? 0);
                 hashCode = (hashCode*397) ^ (IP?.GetHashCode() ?? 0);
+                hashCode = (hashCode*397) ^ (PCID?.GetHashCode() ?? 0);
                 return hashCode;
             }
         }
@@ -64,7 +69,7 @@ namespace nucs.Network.Discovery {
         }
 
         public override string ToString() {
-            return $"{MachineName} - {IP ?? "0.0.0.0"} - {MacAddress}";
+            return $"{MachineName} - {IP ?? "0.0.0.0"} - {MacAddress} - {PCID}";
         }
     }
 }
