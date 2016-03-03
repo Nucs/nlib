@@ -163,6 +163,7 @@
     <Compile Include="SystemCore\AttachedObjects\TriObject .cs" />
     <Compile Include="SystemCore\AttachedObjects\QuadObject.cs" />
     <Compile Include="SystemCore\AttachedObjects\DuoObject.cs" />
+    <Compile Include="SystemCore\Cache.cs" />
     <Compile Include="SystemCore\CodeGen.cs" />
     <Compile Include="SystemCore\Enums\EnumExtension.cs" />
     <Compile Include="SystemCore\Enums\StringValueExtensions.cs" />

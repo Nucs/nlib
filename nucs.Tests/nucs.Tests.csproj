@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{478532D4-8065-426A-A63F-86ADCDEA1D36}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>nucs.tests</RootNamespace>
     <AssemblyName>nucs.Tests</AssemblyName>
@@ -29,6 +29,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="nucslib, Version=1.0.5806.25096, Culture=neutral, processorArchitecture=MSIL">
@@ -47,6 +50,7 @@
   <ItemGroup>
     <Compile Include="EmptyTestClass.cs" />
     <Compile Include="Filesystem\FileInfoExtensions.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Network\Discovery\NodesListTests.cs" />
     <Compile Include="Network\IpResolverTests.cs" />
     <Compile Include="Network\RPC\ExecutionTests.cs" />
@@ -81,10 +85,6 @@
       <Project>{3ee41257-b9e3-4627-8550-b15a79756033}</Project>
       <Name>nucs.Html</Name>
     </ProjectReference>
-    <ProjectReference Include="..\nucs.Keyboard\nucs.Keyboard.csproj">
-      <Project>{2949fd13-cb9a-4974-8466-f9d5dfa422ff}</Project>
-      <Name>nucs.Keyboard</Name>
-    </ProjectReference>
     <ProjectReference Include="..\nucs.Monitor\nucs.Monitoring.csproj">
       <Project>{f5b65e01-dc0c-4787-99c2-c615966e236f}</Project>
       <Name>nucs.Monitoring</Name>
@@ -92,10 +92,6 @@
     <ProjectReference Include="..\nucs.Network.Discovery\nucs.Network.Discovery.csproj">
       <Project>{611505cf-b8c9-404c-80db-be803e40c094}</Project>
       <Name>nucs.Network.Discovery</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\nucs.Network.Networkcomms\nucs.Network.Networkcomms.csproj">
-      <Project>{16ddc829-b7fe-4c0b-b4e1-e993be6d39a7}</Project>
-      <Name>nucs.Network.Networkcomms</Name>
     </ProjectReference>
     <ProjectReference Include="..\nucs.Network.RPC\nucs.Network.RPC.csproj">
       <Project>{be326f98-c864-4aec-9d9a-cee843e53237}</Project>
