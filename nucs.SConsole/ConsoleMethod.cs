@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Media;
 using System.Reflection;
+using Console = Colorful.Console;
 
 namespace nucs.SConsole {
     public static class SConsoleApp {
+        public static event Action OnPrintedHelp;
+        public static event Action OnPrePrintedHelp;
         public static void Start() {
             SConsole.PrintMethods();
             while (true) {
                 var e = SConsole.CaptureCommand(false,false);
                 if (e!=null)
-                    Console.WriteLine(e);
+                    Console.WriteLine(e, Color.White);
             }
         }
 
@@ -23,6 +27,9 @@ namespace nucs.SConsole {
             } catch (IOException) { }
             Start();
         }
+
+        internal static void CallOnPrintedHelp() => OnPrintedHelp?.Invoke();
+        internal static void CallOnPrePrintedHelp() => OnPrePrintedHelp?.Invoke();
     }
 
     public static class SConsole {
@@ -39,6 +46,7 @@ namespace nucs.SConsole {
         }
 
         public static void PrintMethods() {
+            SConsoleApp.CallOnPrePrintedHelp();
             var acts = Actions.Select(a =>
                 a.GetCustomAttributes<ConsoleMethodAttribute>()?.FirstOrDefault()?.CustomName
                 ?? $"{(a.ReturnType.Name == "Void" ? "" : (a.ReturnType.Name + " "))}{a.DeclaringType.Name}.{a.Name}")
@@ -52,8 +60,11 @@ namespace nucs.SConsole {
                 if (string.IsNullOrEmpty(b) == false)
                     b = $"({b})";
                 
-                Console.WriteLine($"[{i}]{(acts.Length>=11? (i<10 ? "  ": " "):" ")}{acts[i]}{b}");
+                Console.WriteLine($"[{i}]{(acts.Length>=11? (i<10 ? "  ": " "):" ")}{acts[i]}{b}", Color.White);
             }
+            SConsoleApp.CallOnPrintedHelp();
+            Console.WriteLine();
+
         }
 
         public static Exception CaptureCommand(bool cls = false, bool print=false) {
@@ -66,7 +77,8 @@ namespace nucs.SConsole {
             _retry:
             SystemSounds.Beep.Play();
             _skipbeep:
-            Console.Write(">");
+            Console.Write(">", Color.DarkGray);
+            Console.ResetColor();
             var l = ReadLine().Trim();
 
             if (string.IsNullOrEmpty(l)) {
@@ -95,7 +107,7 @@ namespace nucs.SConsole {
             try {
                 var ret = act.Invoke(null, args.Cast<object>().ToArray());
                 if (ret != null)
-                    Console.WriteLine(ret);
+                    Console.WriteLine(ret, Color.CornflowerBlue);
             } catch (Exception e) {
                 return e;
             }

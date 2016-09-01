@@ -8,8 +8,6 @@ using SHDocVw;
 namespace nucs.Filesystem.Monitoring.Windows {
     public delegate void NavigationHandler(DirectoryInfo dir);
 
-    
-
     /// <summary>
     ///     Monitors the activity over the open explorer browsers.
     /// </summary>

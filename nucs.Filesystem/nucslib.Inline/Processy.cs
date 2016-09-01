@@ -25,7 +25,7 @@ namespace nucs.Startup.Internal {
                 pinfo.WindowStyle = windowstyle;
                 pinfo.Verb = pinfo.Verbs.Any(v => v.Equals("runas", StringComparison.InvariantCultureIgnoreCase)) & asAdmin ? "runas" : "open";
                 pinfo.UseShellExecute = !forceShellAvoidance && pinfo.Verb != "runas";
-                
+                pinfo.WorkingDirectory = Path.GetDirectoryName(file);
             if (arguments!="")
                 pinfo.Arguments = arguments;
             if (Path.GetExtension(file) == ".msi") {

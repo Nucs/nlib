@@ -4,13 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Management;
 using System.Threading;
-using nucs.Mono.System.Threading;
+using nucs.Filesystem.Enumerators;
 
 namespace nucs.Filesystem.Monitoring {
-    public class ProcessRestartMonitor {
+    public class ProcessCrashMonitor {
         private string lasttitle = "";
 
-        static ProcessRestartMonitor() {
+        static ProcessCrashMonitor() {
             WerFaultKiller.Start();
         }
 
@@ -18,7 +18,7 @@ namespace nucs.Filesystem.Monitoring {
         ///     Hunts for a specific process
         /// </summary>
         /// <param name="id">The ID of the process found in Process.Id</param>
-        public ProcessRestartMonitor(int id) {
+        public ProcessCrashMonitor(int id) {
             if (id <= 0)
                 throw new ArgumentException(nameof(id));
             var proc = Process.GetProcesses().FirstOrDefault(p => p.Id == id);
@@ -32,14 +32,32 @@ namespace nucs.Filesystem.Monitoring {
         ///     Hunts for a specific process
         /// </summary>
         /// <param name="id">The ID of the process found in Process.Id</param>
-        public ProcessRestartMonitor(Process proc) {
+        public ProcessCrashMonitor(Process proc) {
             _load(proc);
+        }
+
+        /// <summary>
+        ///     Hunts for a specific process
+        /// </summary>
+        /// <param name="id">The ID of the process found in Process.Id</param>
+        public ProcessCrashMonitor(FileInfo file) {
+            if (file == null || !System.IO.File.Exists(file.FullName))
+                throw new ArgumentNullException(nameof(file));
+            var active = new ActiveProcessFiles().Enumerate(info => info.CompareTo(file));
+            if (active == null)
+                Id = 0;
+            else {
+                _load(active);
+            }
+
+
         }
 
         private void _load(Process proc) {
             File = new FileInfo(ProcessExecutablePath(proc));
             Name = proc.ProcessName;
             Id = proc.Id;
+            if (this.HasStopped)
             Thread = new Thread(Monitor);
             Thread.Start(this);
         }
@@ -96,23 +114,17 @@ namespace nucs.Filesystem.Monitoring {
         /// <summary>
         ///     Active monitoring thread.
         /// </summary>
-        public Thread Thread { get; set; }
-
-        private static void WerFaultHunter(object o) {
-            while (true) {
-                Thread.Sleep(1500);
-                var l = Process.GetProcesses().Where(pp => pp.ProcessName.Contains("WerFault")).ToList();
-                if (l.Count > 0) {
-                    Thread.Sleep(4000);
-                    Process.GetProcesses().Where(pp => pp.ProcessName.Contains("WerFault")).ToList().ForEach(p => p.Kill());
-                }
-            }
-        }
+        private Thread Thread { get; set; }
 
         /// <summary>
         ///     Called after the process has been restarted.
         /// </summary>
-        public event Action<Process> ProcessRestarted;
+        public event Action<Process> ProcessCrashed;
+
+        /// <summary>
+        ///     When process crashed and a new one has started.
+        /// </summary>
+        public event Action<Process> ProcessRebound;
 
         /// <summary>
         ///     Signals the thread to stop.
@@ -121,12 +133,30 @@ namespace nucs.Filesystem.Monitoring {
             IsStopping = true;
         }
 
+        /// <summary>
+        /// Tries to open from the existing 
+        /// </summary>
+        public void OpenIfClosed() {
+            if (Id == 0) {
+                var proc = Process.Start(File.FullName);
+                _load(proc);
+            }
+        }
+
+        public void Open() {
+            if (Id == 0) {
+                var proc = Process.Start(File.FullName);
+                _load(proc);
+            }
+        }
+
         private void Monitor(object o) {
-            var parent = o as ProcessRestartMonitor;
+            var parent = o as ProcessCrashMonitor;
             var proc = RetrieveProcess;
             while (true) {
-                if (IsStopping)
+                if (IsStopping) {
                     break;
+                }
                 _rewait:
                 if (!proc.WaitForExit(100)) {
                     if (IsStopping)
@@ -135,10 +165,17 @@ namespace nucs.Filesystem.Monitoring {
                 }
                 if (IsStopping)
                     break;
-                proc = Process.Start(File.FullName);
-                Name = proc.ProcessName;
-                Id = proc.Id;
-                ProcessRestarted?.Invoke(proc);
+
+                ProcessCrashed?.Invoke(proc);
+                //bind to new thread
+                Process np;
+                while ((np = Process.GetProcesses().FirstOrDefault(p => p.ProcessName == this.Name && ProcessExecutablePath(p).Equals(File.FullName, StringComparison.InvariantCultureIgnoreCase))) == null) {
+                    Thread.Sleep(300);
+                }
+                proc = np;
+                Name = np.ProcessName;
+                Id = np.Id;
+                ProcessRebound?.Invoke(proc);
             }
         }
 
@@ -161,76 +198,6 @@ namespace nucs.Filesystem.Monitoring {
             }
 
             return "";
-        }
-    }
-
-    public static class WerFaultKiller {
-        public static event Action Killed;
-
-        public static Thread WerFaultKillerThread;
-        private static ThreadStopper _stop;
-
-        public static void Start() {
-            if (WerFaultKillerThread != null)
-                return;
-
-            _stop = new ThreadStopper();
-            WerFaultKillerThread = new Thread(WerFaultHunter);
-            WerFaultKillerThread.Start(_stop);
-        }
-
-        public static void Stop() {
-            if (_stop != null) {
-                _stop.Stop = true;
-            }
-            _stop = null;
-            WerFaultKillerThread = null;
-        }
-
-        private static void WerFaultHunter(object o) {
-            var stop = o as ThreadStopper;
-            while (true) {
-                if (stop?.Stop == true)
-                    break;
-                Thread.Sleep(1500);
-                var l = Process.GetProcesses().Where(pp => pp.ProcessName.Contains("WerFault")).ToList();
-                if (l.Count > 0) {
-                    Thread.Sleep(4000);
-                    Process.GetProcesses().Where(pp => pp.ProcessName.Contains("WerFault")).ToList().ForEach(p => {
-                        p.Kill();
-                        Task.Run(() => Killed?.Invoke());
-                    });
-                }
-            }
-        }
-        private class ThreadStopper {
-            public bool Stop { get; set; } = false;
-        }
-    }
-
-    public static class ProcessHelper {
-        /// <summary>
-        ///     Gets the exe path of this process.
-        /// </summary>
-        public static string ExecutablePath(this Process process) {
-            try {
-                return process.MainModule.FileName;
-            } catch {
-                var query = "SELECT ExecutablePath, ProcessID FROM Win32_Process";
-                var searcher = new ManagementObjectSearcher(query);
-
-                foreach (var o in searcher.Get()) {
-                    var item = (ManagementObject) o;
-                    var id = item["ProcessID"];
-                    var path = item["ExecutablePath"];
-
-                    if (path != null && id.ToString() == process.Id.ToString()) {
-                        return path.ToString();
-                    }
-                }
-            }
-
-            return null;
         }
     }
 }

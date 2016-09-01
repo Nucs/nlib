@@ -3,11 +3,14 @@ using System.Threading;
 
 namespace nucs.Network {
     public static class MultithreadedNetworking {
-
+        private static bool hasset = false;
         /// <summary>
         ///     Sets up network settings to promise highest startholder performance.
         /// </summary>
         public static void SetupSettings() {
+            if (hasset)
+                return;
+            hasset = true;
             WebRequest.DefaultWebProxy = null;
             ServicePointManager.DefaultConnectionLimit = int.MaxValue;
             ServicePointManager.CheckCertificateRevocationList = false;

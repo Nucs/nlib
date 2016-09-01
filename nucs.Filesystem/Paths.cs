@@ -149,5 +149,13 @@ namespace nucs.Filesystem {
             return null;
         }
 
+        /// <summary>
+        ///     Compares two FileSystemInfos the right way.
+        /// </summary>
+        /// <returns></returns>
+        public static bool CompareTo(this FileSystemInfo fi, FileSystemInfo fi2) {
+            return fi.FullName.Equals(fi2.FullName, StringComparison.InvariantCulture);
+        }
+
     }
 }

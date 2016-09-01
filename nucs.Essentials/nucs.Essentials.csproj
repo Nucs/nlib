@@ -149,6 +149,7 @@
     <Compile Include="nucs\SystemCore\Bit.cs" />
     <Compile Include="nucs\SystemCore\Boolean\Bool.cs" />
     <Compile Include="nucs\SystemCore\Boolean\BooleanTools.cs" />
+    <Compile Include="nucs\SystemCore\Cache.cs" />
     <Compile Include="nucs\SystemCore\CodeGen.cs" />
     <Compile Include="nucs\SystemCore\Drawing\ColorExtensions.cs" />
     <Compile Include="nucs\SystemCore\Drawing\RectangleExtensions.cs" />

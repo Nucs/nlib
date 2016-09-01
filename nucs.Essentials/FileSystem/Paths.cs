@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using nucs.Collections;
@@ -148,6 +149,8 @@ namespace nucs.Filesystem {
             if (Paths.ExecutingExe.DirectoryName != null) return new FileInfo(Path.Combine(Paths.ExecutingExe.DirectoryName, filename));
             return null;
         }
+
+        public static string ExecutingExeVersion => FileVersionInfo.GetVersionInfo(ExecutingExe.FullName).FileVersion;
 
     }
 }

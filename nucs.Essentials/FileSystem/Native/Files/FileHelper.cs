@@ -8,7 +8,7 @@ namespace nucs.Filesystem {
         ///     Exploits windows's file attribute System|Hidden, making it totally invisiable when browsing with explorer.exe.
         /// </summary>
         public static void SetVisibility(this FileInfo fi, bool visible) {
-            //todo handle unaccessable files.
+
             fi.Attributes = visible
                 ? fi.Attributes.Remove(FileAttributes.Hidden).Remove(FileAttributes.System)
                 : fi.Attributes.Add(FileAttributes.Hidden).Add(FileAttributes.System);
@@ -22,7 +22,7 @@ namespace nucs.Filesystem {
         }
 
         public static void SetReadOnly(this FileInfo fi, bool @readonly) {
-            //todo handle unaccessable files.
+
             fi.Attributes = @readonly
                 ? fi.Attributes.Remove(FileAttributes.ReadOnly)
                 : fi.Attributes.Add(FileAttributes.ReadOnly);

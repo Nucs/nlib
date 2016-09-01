@@ -121,21 +121,22 @@
     <Compile Include="Botting\BotLib.cs" />
     <Compile Include="Botting\Pixel.cs" />
     <Compile Include="Botting\ScreenShot.cs" />
-    <Compile Include="Collections\Extensions\ArrayExtensions.cs" />
     <Compile Include="Collections\ArrayQueue.cs" />
     <Compile Include="Collections\Collector.cs" />
     <Compile Include="Collections\ConcurrentDict.cs" />
     <Compile Include="Collections\ConcurrentHashSet.cs" />
     <Compile Include="Collections\ConcurrentList.cs" />
+    <Compile Include="Collections\DictionaySelfModifier.cs" />
     <Compile Include="Collections\DynamicEqualityComparer.cs" />
     <Compile Include="Collections\EnumerationPartitioner.cs" />
+    <Compile Include="Collections\EventyDictionary.cs" />
+    <Compile Include="Collections\Extensions\ArrayExtensions.cs" />
     <Compile Include="Collections\Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Collections\ICollectorAdder.cs" />
-    <Compile Include="Collections\ImprovedSortedSet.cs" />
     <Compile Include="Collections\ImprovedList.cs" />
+    <Compile Include="Collections\ImprovedSortedSet.cs" />
     <Compile Include="Collections\SynchronizedList.cs" />
     <Compile Include="Collections\ThreadSafeList.cs" />
-    <Compile Include="Collections\DictionaySelfModifier.cs" />
     <Compile Include="Diagnostics\AssertExtensions.cs" />
     <Compile Include="Forms\ApplicationSimulator.cs">
       <SubType>Form</SubType>
@@ -309,7 +310,6 @@
     <Compile Include="Windows\Keyboard\Standard\AKey.cs" />
     <Compile Include="Windows\Keyboard\CardReader\CRManager.cs" />
     <Compile Include="Windows\Keyboard\CardReader\InputDevice.cs" />
-    <Compile Include="Collections\EventyDictionary.cs" />
     <Compile Include="Windows\Keyboard\CardReader\Forms\InputDeviceDetect.cs">
       <SubType>Form</SubType>
     </Compile>

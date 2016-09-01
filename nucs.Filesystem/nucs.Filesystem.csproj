@@ -73,7 +73,9 @@
     <Compile Include="Distribution\SubdirectoriesDistributer.cs" />
     <Compile Include="FileCall.cs" />
     <Compile Include="FileInfoExtensions.cs" />
+    <Compile Include="Monitoring\AppMonitor.cs" />
     <Compile Include="Monitoring\Monitors.cs" />
+    <Compile Include="Monitoring\ProcessCrashMonitor.cs" />
     <Compile Include="Monitoring\ProcessRestartMonitor.cs" />
     <Compile Include="Monitoring\Windows\DriveMonitor.cs" />
     <Compile Include="Monitoring\Windows\ExplorerMonitor.cs" />

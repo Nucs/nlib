@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading;
-using Timer = System.Timers.Timer;
+using System.Threading.Tasks;
+using System.Windows.Threading;
+using _Timer = System.Timers.Timer;
 
 namespace nucs.SystemCore {
     public class Cache<T> : IDisposable {
-
+        public event Action<T, DateTime> Updated; 
 
         public static Cache<T> Minute(Func<T> update, bool constantly_update) {
             return new Cache<T>(update, 60*1000, constantly_update);
@@ -116,7 +118,12 @@ namespace nucs.SystemCore {
                     } else {
                         _timer.Reset();
                         _timer.Start();
-                        return _obj = Update();
+                        _obj = Update();
+                        if (Updated != null) {
+                            var o = _obj;
+                            Task.Factory.StartNew(() => { Updated?.Invoke(o, DateTime.Now); });
+                        }
+                        return _obj;
                     }
 
                 }
@@ -146,6 +153,10 @@ namespace nucs.SystemCore {
                 lock (sync) {
                     try {
                         Object = Update();
+                        if (Updated != null) {
+                            var o = Object;
+                            Task.Factory.StartNew(() => { Updated?.Invoke(o, DateTime.Now); });
+                        }
                     } catch {
                         Object = default(T);
                     }
@@ -194,7 +205,7 @@ namespace nucs.SystemCore {
             {
                 _interval = interval;
                 enabled = interval > 0;
-                t = new Timer(interval <= 0 ? 1 : interval) { AutoReset = false, Enabled = false };
+                t = new _Timer(interval <= 0 ? 1 : interval) { AutoReset = false, Enabled = false };
 
                 t.Elapsed += (sender, args) => {
                     Stop();
