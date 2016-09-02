@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F6779F2B-8F66-4C77-AFBA-D37B23894A67}</ProjectGuid>
+    <ProjectGuid>{4D193865-891F-4AC5-B3A4-728715603995}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>nucs.Threading.FastThreadPool</RootNamespace>
-    <AssemblyName>nucs.Threading.FastThreadPool</AssemblyName>
+    <RootNamespace>nucs.Threading.Syncers</RootNamespace>
+    <AssemblyName>nucs.Threading.Syncers</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,16 +22,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -46,9 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FastThreadPool.cs" />
-    <Compile Include="HaltedTask.cs" />
+    <Compile Include="Pipes\PipeAsyncManualReset.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DataflowNotifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\nucs.Collections\nucs.Collections.csproj">

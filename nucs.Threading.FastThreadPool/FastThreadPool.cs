@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using nlib.Threading.FastThreadPool;
 using nucs.Collections.Concurrent.Pipes;
 
 namespace nucs.Threading.FastThreadPool {
@@ -13,6 +14,10 @@ namespace nucs.Threading.FastThreadPool {
         private readonly TaskFactory factory = new TaskFactory(TaskScheduler.Default);
         private readonly List<HaltedTask> Tasks;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tasks">The amount of standby tasks to be always available - note that if the requested amount exceeds the given amount, the tasks pool will increase temporary.</param>
         public FastThreadPool(int tasks) {
             TasksAmount = tasks;
             manager = new Thread(ManagerCore) {IsBackground = true, Priority = ThreadPriority.AboveNormal, Name = "FastThreadPoolManager"};
@@ -30,6 +35,18 @@ namespace nucs.Threading.FastThreadPool {
         /// <param name="act"></param>
         public void Enqueue(Action act) {
             syncer.Enqueue(act);
+        }
+
+        public async Task<T> Enqueue<T>(Func<T> act) {
+            var sync = new Syncer<T>();
+            var s = new TaskCompletionSource<T>(); //todo finish!
+            
+            var local = act;
+            
+            Enqueue(() => {
+                sync.Set(local());
+            });
+            return sync.Wait();
         }
 
         /// <summary>

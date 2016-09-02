@@ -4,9 +4,10 @@ using System.Threading;
 namespace nlib.Threading.FastThreadPool {
     public class Syncer<T> : IDisposable {
         private readonly ManualResetEventSlim _reset = new ManualResetEventSlim();
+
         private T obj;
         private readonly object syncer = new object();
-        public void Set(T o) {
+        public void Set(T o) { 
             lock (syncer) {
                 obj = o;
                 _reset.Set();

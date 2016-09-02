@@ -12,7 +12,7 @@ namespace nlib.Threading.FastThreadPool {
         private readonly object waiting_syncer = new object();
         public void Set(T o) {
             lock (waiting_syncer) {
-                if (_reset.IsSet) {
+                if (!_reset.IsSet) {
                     _reset.Wait();
                 }
             
