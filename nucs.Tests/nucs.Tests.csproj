@@ -32,6 +32,46 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNET40|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugNET40\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNET40|AnyCPU'">
+    <OutputPath>bin\ReleaseNET40\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNET461|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugNET461\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNET461|AnyCPU'">
+    <OutputPath>bin\ReleaseNET461\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="nucslib, Version=1.0.5806.25096, Culture=neutral, processorArchitecture=MSIL">
@@ -61,10 +101,6 @@
     <Compile Include="Filesystem\EndFileStorage\TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\nucs.Cryptography\nucs.Cryptography.csproj">
-      <Project>{4822ef60-52a9-405e-aca9-a0aca81c83ae}</Project>
-      <Name>nucs.Cryptography</Name>
-    </ProjectReference>
     <ProjectReference Include="..\nucs.Filesystem.EndFileStorage\nucs.Filesystem.EndFileStorage.csproj">
       <Project>{a80e1451-267d-4525-b284-54afce333b66}</Project>
       <Name>nucs.Filesystem.EndFileStorage</Name>
@@ -73,21 +109,9 @@
       <Project>{68872ada-5959-4fc6-9395-3723d10e436e}</Project>
       <Name>nucs.Filesystem.Resources</Name>
     </ProjectReference>
-    <ProjectReference Include="..\nucs.Filesystem.Zip\nucs.Filesystem.Zip.csproj">
-      <Project>{75cd7e92-fab4-44e8-bd70-a5a46f51c740}</Project>
-      <Name>nucs.Filesystem.Zip</Name>
-    </ProjectReference>
     <ProjectReference Include="..\nucs.Filesystem\nucs.Filesystem.csproj">
       <Project>{e97c0d95-437a-4d4b-9d21-815d2350a94b}</Project>
       <Name>nucs.Filesystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\nucs.Html\nucs.Html.csproj">
-      <Project>{3ee41257-b9e3-4627-8550-b15a79756033}</Project>
-      <Name>nucs.Html</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\nucs.Monitor\nucs.Monitoring.csproj">
-      <Project>{f5b65e01-dc0c-4787-99c2-c615966e236f}</Project>
-      <Name>nucs.Monitoring</Name>
     </ProjectReference>
     <ProjectReference Include="..\nucs.Network.Discovery\nucs.Network.Discovery.csproj">
       <Project>{611505cf-b8c9-404c-80db-be803e40c094}</Project>
@@ -109,14 +133,6 @@
       <Project>{a3a7cee1-0674-4bf7-a5ae-df6111df4397}</Project>
       <Name>nucs.Serialization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\nucs.Settings\nucs.Settings.csproj">
-      <Project>{ccfa4c21-2d5b-4e7b-b704-c866585ffa1b}</Project>
-      <Name>nucs.Settings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\nucs.Smtp\nucs.Smtp.csproj">
-      <Project>{cdb64a1f-a717-4e57-85d0-b3f0685d67e8}</Project>
-      <Name>nucs.Smtp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\nucs.Startup\nucs.Startup.csproj">
       <Project>{77397641-60ee-4092-93fd-771651c80406}</Project>
       <Name>nucs.Startup</Name>
@@ -124,10 +140,6 @@
     <ProjectReference Include="..\nucs.WinForms\nucs.WinForms.csproj">
       <Project>{6ed71236-f99f-44d7-a009-28613dfad6f7}</Project>
       <Name>nucs.WinForms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\nucs\nucs.csproj">
-      <Project>{ac624321-8eb6-4d1f-acf0-c6f7cf5247a0}</Project>
-      <Name>nucs</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

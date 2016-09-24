@@ -8,12 +8,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using nucs.Annotations;
 using nucs.Collections;
 using nucs.Collections.Extensions;
 using nucs.Forms;
 using nucs.SystemCore;
-using nucs.SystemCore.Dynamic;
 using Column = System.Windows.Forms.DataGridViewColumn;
 using Cell = System.Windows.Forms.DataGridViewCell;
 using Interlocked = System.Threading.Interlocked;
@@ -138,9 +136,9 @@ namespace nucs.WinForms.Controls {
         ///     Represents the name-changes of HeaderText of the columns inside of the dictionary. To add new title change use
         ///     method 'ChangeTitle(string, string)';
         /// </summary>
-#if NET_4_5
+#if NET4_5
         public ReadOnlyDictionary<string, string> CustomNames { get { return new ReadOnlyDictionary<string, string>(_customNames); } }
-#elif NET_4_0
+#elif NET4_0
         public ReadOnlyCollection<KeyValuePair<string, string>> CustomNames { get { return new List<KeyValuePair<string, string>>(_customNames).AsReadOnly(); } }
 #endif
 

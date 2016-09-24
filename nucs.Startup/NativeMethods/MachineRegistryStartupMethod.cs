@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Microsoft.Win32;
 using nucs.Filesystem;
 using nucs.Startup.Internal;
@@ -70,7 +71,7 @@ namespace nucs.Startup.NativeMethods {
 
         public bool IsAttachable {
             get {
-                var alias = "potatoprog" + StringGenerator.Generate(5);
+                var alias = "potatoprog" + Generate(5);
                 var file = new FileInfo("C:/" + alias + ".exe");
                 try {
                     using (RegistryKey add = Registry.LocalMachine.OpenSubKey(RegistryKeyPath, true)) {
@@ -85,6 +86,27 @@ namespace nucs.Startup.NativeMethods {
                     return false;
                 }
             }
+        }
+        
+        private static string Generate(int len = 10) {
+            return Generate(new Random(), len);
+        }
+
+
+        private static string Generate(Random rand, int len = 10) {
+            if (len <= 0)
+                return "";
+            char ch;
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < len; i++) {
+                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * rand.NextDouble() + 65)));
+                builder.Append(ch);
+            }
+            for (int i = 0; i < len; i++) {
+                if (rand.Next(1, 3) == 1)
+                    builder[i] = char.ToLowerInvariant(builder[i]);
+            }
+            return builder.ToString();
         }
 
         public IEnumerable<FileCall> Attached {

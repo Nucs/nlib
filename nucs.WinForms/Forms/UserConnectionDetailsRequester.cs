@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using nucs.Forms;
 using nucs.Network;
 using nucs.SystemCore.String;
-#if NET_4_5
+#if NET4_5
 using System.Threading;
 using System.Threading.Tasks;
 #else

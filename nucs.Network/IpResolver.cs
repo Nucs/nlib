@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
-using nucs.Threading;
 
 namespace nucs.Network {
     public class IpResolver {

@@ -1,4 +1,4 @@
-﻿/*#if NET_4_5*/
+﻿/*#if NET4_5*/
 using System;
 using System.Net;
 using System.Net.Http;

@@ -1,4 +1,4 @@
-﻿#if !(NET_3_5 || NET_3_0 || NET_2_0)
+﻿#if !(NET35 || NET3 || NET2)
 
 using System;
 using System.Collections.Generic;

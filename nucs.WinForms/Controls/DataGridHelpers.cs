@@ -277,11 +277,11 @@ namespace nucs.WinForms.Controls {
         #endregion
 
         #region Database Operations
-#if !NET_4_5
+#if !NET4_5
         private bool singrun = false;
 #endif
         public int Load() {
-#if !NET_4_5
+#if !NET4_5
             if (singrun) return -1;
             singrun=true;
 #else
