@@ -1,4 +1,4 @@
-﻿#if !AV_SAFE
+﻿/*#if !AV_SAFE
 
 using System;
 using System.Windows.Forms;
@@ -93,8 +93,8 @@ namespace nucs.WinForms.Controls {
          * BTW please post WinForms related questions in the WinForms forum. 
          * Please reserve the C# forum for questions specifically about C#. 
          * I'm moving your posting to the WinForms forum.  Thanks.
-         */
+         #2#
 
     }
 }
-#endif
+#endif*/

@@ -31,7 +31,9 @@ namespace nucs.Threading.FastThreadPool {
 
             //warmup to create threads
             Enqueue(() => { });
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Enqueue<object>(() => null);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             EnqueueMonitored(() => {}).Wait();
         }
 

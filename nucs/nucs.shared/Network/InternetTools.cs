@@ -6,13 +6,6 @@ using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-#if NET45
-using System.Threading.Tasks;
-using System.Threading;
-#else
-
-#endif
-
 namespace nucs.Network {
     public static class InternetTools {
         [DllImport("wininet.dll")]

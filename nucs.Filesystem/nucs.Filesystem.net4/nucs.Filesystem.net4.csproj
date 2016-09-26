@@ -28,7 +28,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;NET4;NET40;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -75,7 +75,6 @@
     <Compile Include="Inline\Boolean\Bool.cs" />
     <Compile Include="Inline\Boolean\BooleanTools.cs" />
     <Compile Include="Inline\Cache.cs" />
-    <Compile Include="Inline\CodeGen.cs" />
     <Compile Include="Inline\Collector.cs" />
     <Compile Include="Inline\Extensions\ArrayExtensions.cs" />
     <Compile Include="Inline\Extensions\IEnumerableExtensions.cs" />

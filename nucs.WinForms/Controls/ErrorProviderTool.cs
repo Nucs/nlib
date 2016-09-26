@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using nucs.Properties;
 using Control = System.Windows.Forms.Control;
 using Image = System.Drawing.Image;
 using ToolTip = System.Windows.Forms.ToolTip;
@@ -21,7 +20,7 @@ namespace nucs.WinForms.Controls {
         public bool RTL { get; set; }
         public ErrorProviderTool() {
             this.AutoShow = true;
-            icon = Resources.errorIcon;
+            //todo icon = Resources.errorIcon;
             RTL = false;
         }
 
@@ -45,19 +44,19 @@ namespace nucs.WinForms.Controls {
 
         public ErrorProviderTool(bool AutoShow, string pointlessString) {
             this.AutoShow = AutoShow;
-            icon = Resources.errorIcon;
+            //todo icon = Resources.errorIcon;
             RTL = false;
         }
 
         public ErrorProviderTool(bool RTL) {
             this.AutoShow = true;
-            icon = Resources.errorIcon;
+            //todo icon = Resources.errorIcon;
             this.RTL = RTL;
         }
 
         public ErrorProviderTool(bool RTL, bool AutoShow) {
             this.AutoShow = AutoShow;
-            icon = Resources.errorIcon;
+            //todo icon = Resources.errorIcon;
             this.RTL = RTL;
             this.AutoShow = AutoShow;
         }

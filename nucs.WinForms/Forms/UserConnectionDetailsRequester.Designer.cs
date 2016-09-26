@@ -85,7 +85,7 @@
             // 
             // picRefresh
             // 
-            this.picRefresh.Image = nucs.Properties.Resources.refresh_icon;
+            
             this.picRefresh.Location = new System.Drawing.Point(211, 18);
             this.picRefresh.Name = "picRefresh";
             this.picRefresh.Size = new System.Drawing.Size(22, 22);

@@ -12,7 +12,6 @@ using nucs.SystemCore.Boolean;
 
 #if NET45
 using System.Threading;
-using System.Threading.Tasks;
 #else
 using System.Threading;
 #endif

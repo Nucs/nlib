@@ -8,10 +8,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using MoreLinq;
 using nucs.Collections;
 using nucs.Collections.Extensions;
 using nucs.Forms;
 using nucs.SystemCore;
+using nucs.SystemCore.Dynamic;
 using Column = System.Windows.Forms.DataGridViewColumn;
 using Cell = System.Windows.Forms.DataGridViewCell;
 using Interlocked = System.Threading.Interlocked;
@@ -479,7 +481,7 @@ namespace nucs.WinForms.Controls {
         /// Used to leave focus from the grid when a click is called outside of it.
         /// </summary>
         /// <param name="parent">the parent form containing all of the controls.</param>
-        public void BindEndEditOnClickElsewhere([NotNull] Control parent) {
+        public void BindEndEditOnClickElsewhere(Control parent) {
             if (_bound_mouseclick) return;
             Parent = parent;
             Parent.MouseClick += _OnMouseStopEdit;

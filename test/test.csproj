@@ -33,14 +33,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -48,6 +52,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\nucs.Automation\nucs.Automation.csproj">
+      <Project>{ae53d952-46dd-498b-9c1e-08add87e4096}</Project>
+      <Name>nucs.Automation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\nucs.Emailing\nucs.Emailing.csproj">
+      <Project>{e3f0db90-c315-4f67-a024-32c2ec7a8a1d}</Project>
+      <Name>nucs.Emailing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\nucs.Toaster\nucs.Toaster.csproj">
+      <Project>{6995abfd-720f-41e7-be8b-38f23ba4bb57}</Project>
+      <Name>nucs.Toaster</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

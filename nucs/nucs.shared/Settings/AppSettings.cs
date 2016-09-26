@@ -4,31 +4,33 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
+using nucs.SystemCore.Filesystem;
 
 namespace nucs.Settings {
     public abstract class AppSettings<T> : ISaveable where T : new() {
         public const string DEFAULT_FILENAME = "settings.jsn";
 
         // ReSharper disable once StaticFieldInGenericType
-        static AppSettings() {
-        }
+        static AppSettings() {}
 
         /// <summary>
         /// The filename that was originally loaded from. saving to other file does not change this field!
         /// </summary>
         public virtual void Save(string filename = DEFAULT_FILENAME) {
-            File.WriteAllText(filename, JsonConvert.SerializeObject(this));
+            File.WriteAllText(filename, JsonConvert.SerializeObject(this, Formatting.Indented));
         }
 
         /// <summary>
         /// The filename that was originally loaded from. saving to other file does not change this field!
         /// </summary>
         public virtual void Save() {
-            File.WriteAllText(DEFAULT_FILENAME, JsonConvert.SerializeObject(this));
+            object o = this;
+            Save((T) o, DEFAULT_FILENAME);
         }
 
         public static void Save(T pSettings, string filename = DEFAULT_FILENAME) {
-            File.WriteAllText(filename, JsonConvert.SerializeObject(pSettings));
+            filename = filename.NormalizePath();
+            File.WriteAllText(filename, JsonConvert.SerializeObject(pSettings, Formatting.Indented));
         }
 
         /// <summary>
@@ -37,12 +39,13 @@ namespace nucs.Settings {
         /// <param name="fileName">File name, for example "settings.jsn". no path required, just a file name.</param>
         /// <returns>The loaded or freshly new saved object</returns>
         public static T Load(string fileName = DEFAULT_FILENAME) {
+            fileName = fileName.NormalizePath();
             if (File.Exists(fileName))
                 try {
                     var fc = File.ReadAllText(fileName);
                     if (string.IsNullOrEmpty((fc ?? "").Trim()))
                         goto _save;
-                    return JsonConvert.DeserializeObject<T>(fc);
+                    return JsonConvert.DeserializeObject<T>(fc, new JsonSerializerSettings() {Formatting = Formatting.Indented});
                 } catch (InvalidOperationException e) {
                     if (e.Message.Contains("Cannot convert"))
                         throw new Exception("Unable to deserialize settings file, value<->type mismatch. see inner exception", e);
@@ -63,34 +66,29 @@ namespace nucs.Settings {
         /// </summary>
         /// <param name="attribute">the type of the attribute.</param>
         /// <returns></returns>
-        private static IEnumerable<Type> GetAllAttributeHolders(Type attribute)
-        {
+        private static IEnumerable<Type> GetAllAttributeHolders(Type attribute) {
             return from assmb in AppDomain.CurrentDomain.GetAssemblies() from type in gettypes(assmb) where type.GetCustomAttributes(attribute, true).Length > 0 select type;
         }
 
-        private static Type[] gettypes(Assembly assmb)
-        {
+        private static Type[] gettypes(Assembly assmb) {
             return !File.Exists(AssemblyDirectory(assmb)) ? new Type[0] : assmb.GetTypes();
         }
 
-        private static string AssemblyDirectory(Assembly asm)
-        {
+        private static string AssemblyDirectory(Assembly asm) {
             string codeBase = asm.CodeBase;
             UriBuilder uri = new UriBuilder(codeBase);
             string path = Uri.UnescapeDataString(uri.Path);
             return Path.GetDirectoryName(path);
         }
 #pragma warning disable 693
-        private static T CreateInstance<T>(Type @this)
-        {
-            return (T)Activator.CreateInstance(@this);
+        private static T CreateInstance<T>(Type @this) {
+            return (T) Activator.CreateInstance(@this);
         }
     }
 #pragma warning restore 693
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public sealed class SettingsConverterAttribute : Attribute {
-        public SettingsConverterAttribute() { }
+        public SettingsConverterAttribute() {}
     }
-
 }

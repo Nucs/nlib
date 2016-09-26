@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using nucs.Cryptography;
+using nucs.SystemCore.Filesystem;
 using Newtonsoft.Json;
 
 namespace nucs.Settings {
@@ -74,12 +75,14 @@ namespace nucs.Settings {
         /// </summary>
         public virtual void Save(string filename = "#DEFAULT") {
             if (string.IsNullOrEmpty(filename) || filename== "#DEFAULT") filename = DEFAULT_FILENAME;
+            filename = filename.NormalizePath();
             var serialized = JsonConvert.SerializeObject(this);
             File.WriteAllText((DEFAULT_PATH == "#BASE" ? "" : DEFAULT_PATH) + filename, Encryptor.Encrypt(serialized));
         }
 
         public static void Save(T pSettings, string filename = "#DEFAULT") {
             if (string.IsNullOrEmpty(filename) || filename == "#DEFAULT") filename = DEFAULT_FILENAME;
+            filename = filename.NormalizePath();
             var serialized = JsonConvert.SerializeObject(pSettings);
             File.WriteAllText(filename,((EncryptedAppSettings<T>)(object)pSettings).Encryptor.Encrypt(serialized));
         }
@@ -91,6 +94,7 @@ namespace nucs.Settings {
         /// <returns>The loaded or freshly new saved object</returns>
         public static T Load(string filename = "#DEFAULT", bool encrypted = true) {
             if (string.IsNullOrEmpty(filename) || filename == "#DEFAULT") filename = DEFAULT_FILENAME;
+            filename = filename.NormalizePath();
 
             if (File.Exists(filename)) {
                 var t = new T();

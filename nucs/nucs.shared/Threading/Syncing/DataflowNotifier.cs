@@ -9,6 +9,7 @@ using nucs.Collections.Concurrent.Pipes;
 
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Nito.AsyncEx;
 
 namespace nucs.Threading.Syncers {
 
@@ -34,7 +35,7 @@ namespace nucs.Threading.Syncers {
         public readonly ConcurrentList<T> Collection = new ConcurrentList<T>();
         private readonly PipedConcurrentQueue<T> queue;
         private readonly Syncing.PipeAsyncManualReset<T> awaker;
-        private readonly ManualResetEventSlim endwaiter = new ManualResetEventSlim(false);
+        private readonly AsyncManualResetEvent endwaiter = new AsyncManualResetEvent(false);
         private readonly object syncer = new object();
         /// <summary>
         ///     Has SetEnded been called.
@@ -71,16 +72,17 @@ namespace nucs.Threading.Syncers {
         /// </summary>
         public void SetEnd() {
             HasEnded = true;
+            endwaiter.Set();
         }
         /// <summary>
         ///     Set the End trigger to force Set not to add new items while adding this item as the last one.
         /// </summary>
         public void SetEnd(T obj) {
             Set(obj);
-            HasEnded = true;
-            endwaiter.Set();
+            SetEnd();
         }
 
+        //internal use only
         internal void Reset() {
             awaker.Reset();
         }
@@ -89,8 +91,8 @@ namespace nucs.Threading.Syncers {
             return WaitAsync().GetAwaiter();
         }
 #endif
-#region Return Waits
-#if NET4
+        #region Return Waits
+        #if NET4
         public Task<ResultWaiting<T>> WaitAsync(int milliseconds, CancellationToken cancellationToken) {
             return Tasky.Run(() => {
                 _repeat:
@@ -109,7 +111,7 @@ namespace nucs.Threading.Syncers {
                 }
             });
         }
-#else
+        #else
         public async Task<ResultWaiting<T>> WaitAsync(int milliseconds, CancellationToken cancellationToken) {
             _repeat:
             var successful = await awaker.WaitAsync(milliseconds, cancellationToken);
@@ -131,7 +133,7 @@ namespace nucs.Threading.Syncers {
         #endregion
 
         #region Waits
-
+        #region WaitAsync
         /// <summary>
         ///     Asynchronously waits for this event to be set.
         /// </summary>
@@ -170,7 +172,8 @@ namespace nucs.Threading.Syncers {
         public Task<ResultWaiting<T>> WaitAsync(CancellationToken cancellationToken) {
             return WaitAsync(-1, cancellationToken);
         }
-
+        #endregion
+        #region Wait
         /// <summary>
         ///     Synchronously waits for this event to be set. This method may block the calling thread.
         /// </summary>
@@ -202,7 +205,8 @@ namespace nucs.Threading.Syncers {
         public ResultWaiting<T> Wait(CancellationToken cancellationToken) {
             return WaitAsync(cancellationToken).Result;
         }
-
+        #endregion
+        #region WaitEnd
         /// <summary>Blocks the current thread until the current <see cref="T:System.Threading.ManualResetEventSlim" /> is set.</summary>
         /// <exception cref="T:System.InvalidOperationException">The maximum number of waiters has been exceeded.</exception>
         /// <exception cref="T:System.ObjectDisposedException">The object has already been disposed.</exception>
@@ -242,7 +246,7 @@ namespace nucs.Threading.Syncers {
         /// <exception cref="T:System.InvalidOperationException">The maximum number of waiters has been exceeded. </exception>
         /// <exception cref="T:System.ObjectDisposedException">The object has already been disposed or the <see cref="T:System.Threading.CancellationTokenSource" /> that created <paramref name="cancellationToken" /> has been disposed.</exception>
         public bool WaitEnd(TimeSpan timeout, CancellationToken cancellationToken) {
-            return endwaiter.Wait(timeout, cancellationToken);
+            return endwaiter.Wait(Convert.ToInt32(timeout.TotalMilliseconds), cancellationToken);
         }
 
         /// <summary>Blocks the current thread until the current <see cref="T:System.Threading.ManualResetEventSlim" /> is set, using a 32-bit signed integer to measure the time interval.</summary>
@@ -269,8 +273,154 @@ namespace nucs.Threading.Syncers {
         public bool WaitEnd(int millisecondsTimeout, CancellationToken cancellationToken) {
             return endwaiter.Wait(millisecondsTimeout, cancellationToken);
         }
+        #endregion
+        #region WaitAll
+#if !NET4
+        /// <summary>Blocks the current thread until the current <see cref="T:System.Threading.ManualResetEventSlim" /> is set.</summary>
+        /// <exception cref="T:System.InvalidOperationException">The maximum number of waiters has been exceeded.</exception>
+        /// <exception cref="T:System.ObjectDisposedException">The object has already been disposed.</exception>
+        public async Task<T[]> WaitAll() {
+            return await WaitAll(-1, CancellationToken.None);
+        }
 
-#endregion
+        /// <summary>Blocks the current thread until the current <see cref="T:System.Threading.ManualResetEventSlim" /> receives a signal, while observing a <see cref="T:System.Threading.CancellationToken" />.</summary>
+        /// <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken" /> to observe.</param>
+        /// <exception cref="T:System.InvalidOperationException">The maximum number of waiters has been exceeded.</exception>
+        /// <exception cref="T:System.OperationCanceledException">
+        /// <paramref name="cancellationToken" /> was canceled.</exception>
+        /// <exception cref="T:System.ObjectDisposedException">The object has already been disposed or the <see cref="T:System.Threading.CancellationTokenSource" /> that created <paramref name="cancellationToken" /> has been disposed.</exception>
+        public async Task<T[]> WaitAll(CancellationToken cancellationToken) {
+            return await WaitAll(-1, cancellationToken);
+        }
+
+        /// <summary>Blocks the current thread until the current <see cref="T:System.Threading.ManualResetEventSlim" /> is set, using a <see cref="T:System.TimeSpan" /> to measure the time interval.</summary>
+        /// <returns>true if the <see cref="T:System.Threading.ManualResetEventSlim" /> was set; otherwise, false.</returns>
+        /// <param name="timeout">A <see cref="T:System.TimeSpan" /> that represents the number of milliseconds to wait, or a <see cref="T:System.TimeSpan" /> that represents -1 milliseconds to wait indefinitely.</param>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <paramref name="timeout" /> is a negative number other than -1 milliseconds, which represents an infinite time-out. -or-The number of milliseconds in <paramref name="timeout" /> is greater than <see cref="F:System.Int32.MaxValue" />. </exception>
+        /// <exception cref="T:System.InvalidOperationException">The maximum number of waiters has been exceeded.</exception>
+        /// <exception cref="T:System.ObjectDisposedException">The object has already been disposed.</exception>
+        public async Task<T[]> WaitAll(TimeSpan timeout) {
+            return await WaitAll(Convert.ToInt32(timeout.TotalMilliseconds), CancellationToken.None);
+        }
+
+        /// <summary>Blocks the current thread until the current <see cref="T:System.Threading.ManualResetEventSlim" /> is set, using a <see cref="T:System.TimeSpan" /> to measure the time interval, while observing a <see cref="T:System.Threading.CancellationToken" />.</summary>
+        /// <returns>true if the <see cref="T:System.Threading.ManualResetEventSlim" /> was set; otherwise, false.</returns>
+        /// <param name="timeout">A <see cref="T:System.TimeSpan" /> that represents the number of milliseconds to wait, or a <see cref="T:System.TimeSpan" /> that represents -1 milliseconds to wait indefinitely.</param>
+        /// <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken" /> to observe.</param>
+        /// <exception cref="T:System.OperationCanceledException">
+        /// <paramref name="cancellationToken" /> was canceled.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <paramref name="timeout" /> is a negative number other than -1 milliseconds, which represents an infinite time-out. -or-The number of milliseconds in <paramref name="timeout" /> is greater than <see cref="F:System.Int32.MaxValue" />. </exception>
+        /// <exception cref="T:System.InvalidOperationException">The maximum number of waiters has been exceeded. </exception>
+        /// <exception cref="T:System.ObjectDisposedException">The object has already been disposed or the <see cref="T:System.Threading.CancellationTokenSource" /> that created <paramref name="cancellationToken" /> has been disposed.</exception>
+        public async Task<T[]> WaitAll(TimeSpan timeout, CancellationToken cancellationToken) {
+            return await WaitAll(Convert.ToInt32(timeout.TotalMilliseconds), cancellationToken);
+        }
+
+        /// <summary>Blocks the current thread until the current <see cref="T:System.Threading.ManualResetEventSlim" /> is set, using a 32-bit signed integer to measure the time interval.</summary>
+        /// <returns>true if the <see cref="T:System.Threading.ManualResetEventSlim" /> was set; otherwise, false.</returns>
+        /// <param name="millisecondsTimeout">The number of milliseconds to wait, or <see cref="F:System.Threading.Timeout.Infinite" />(-1) to wait indefinitely.</param>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <paramref name="millisecondsTimeout" /> is a negative number other than -1, which represents an infinite time-out.</exception>
+        /// <exception cref="T:System.InvalidOperationException">The maximum number of waiters has been exceeded.</exception>
+        /// <exception cref="T:System.ObjectDisposedException">The object has already been disposed.</exception>
+        public async Task<T[]> WaitAll(int millisecondsTimeout) {
+            return await WaitAll(millisecondsTimeout, CancellationToken.None);
+        }
+
+        /// <summary>Blocks the current thread until the current <see cref="T:System.Threading.ManualResetEventSlim" /> is set, using a 32-bit signed integer to measure the time interval, while observing a <see cref="T:System.Threading.CancellationToken" />.</summary>
+        /// <returns>true if the <see cref="T:System.Threading.ManualResetEventSlim" /> was set; otherwise, false.</returns>
+        /// <param name="millisecondsTimeout">The number of milliseconds to wait, or <see cref="F:System.Threading.Timeout.Infinite" />(-1) to wait indefinitely.</param>
+        /// <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken" /> to observe.</param>
+        /// <exception cref="T:System.OperationCanceledException">
+        /// <paramref name="cancellationToken" /> was canceled.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <paramref name="millisecondsTimeout" /> is a negative number other than -1, which represents an infinite time-out.</exception>
+        /// <exception cref="T:System.InvalidOperationException">The maximum number of waiters has been exceeded.</exception>
+        /// <exception cref="T:System.ObjectDisposedException">The object has already been disposed or the <see cref="T:System.Threading.CancellationTokenSource" /> that created <paramref name="cancellationToken" /> has been disposed.</exception>
+        public async Task<T[]> WaitAll(int millisecondsTimeout, CancellationToken cancellationToken) {
+            var b = await endwaiter.WaitAsync(millisecondsTimeout, cancellationToken);
+            if (b == false)
+                return null;
+            return Collection.ToArray();
+        }
+        #else
+        
+        /// <summary>Blocks the current thread until the current <see cref="T:System.Threading.ManualResetEventSlim" /> is set.</summary>
+        /// <exception cref="T:System.InvalidOperationException">The maximum number of waiters has been exceeded.</exception>
+        /// <exception cref="T:System.ObjectDisposedException">The object has already been disposed.</exception>
+        public Task<T[]> WaitAll() {
+            return WaitAll(-1, CancellationToken.None);
+        }
+
+        /// <summary>Blocks the current thread until the current <see cref="T:System.Threading.ManualResetEventSlim" /> receives a signal, while observing a <see cref="T:System.Threading.CancellationToken" />.</summary>
+        /// <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken" /> to observe.</param>
+        /// <exception cref="T:System.InvalidOperationException">The maximum number of waiters has been exceeded.</exception>
+        /// <exception cref="T:System.OperationCanceledException">
+        /// <paramref name="cancellationToken" /> was canceled.</exception>
+        /// <exception cref="T:System.ObjectDisposedException">The object has already been disposed or the <see cref="T:System.Threading.CancellationTokenSource" /> that created <paramref name="cancellationToken" /> has been disposed.</exception>
+        public Task<T[]> WaitAll(CancellationToken cancellationToken) {
+            return WaitAll(-1, cancellationToken);
+        }
+
+        /// <summary>Blocks the current thread until the current <see cref="T:System.Threading.ManualResetEventSlim" /> is set, using a <see cref="T:System.TimeSpan" /> to measure the time interval.</summary>
+        /// <returns>true if the <see cref="T:System.Threading.ManualResetEventSlim" /> was set; otherwise, false.</returns>
+        /// <param name="timeout">A <see cref="T:System.TimeSpan" /> that represents the number of milliseconds to wait, or a <see cref="T:System.TimeSpan" /> that represents -1 milliseconds to wait indefinitely.</param>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <paramref name="timeout" /> is a negative number other than -1 milliseconds, which represents an infinite time-out. -or-The number of milliseconds in <paramref name="timeout" /> is greater than <see cref="F:System.Int32.MaxValue" />. </exception>
+        /// <exception cref="T:System.InvalidOperationException">The maximum number of waiters has been exceeded.</exception>
+        /// <exception cref="T:System.ObjectDisposedException">The object has already been disposed.</exception>
+        public Task<T[]> WaitAll(TimeSpan timeout) {
+            return WaitAll(Convert.ToInt32(timeout.TotalMilliseconds), CancellationToken.None);
+        }
+
+        /// <summary>Blocks the current thread until the current <see cref="T:System.Threading.ManualResetEventSlim" /> is set, using a <see cref="T:System.TimeSpan" /> to measure the time interval, while observing a <see cref="T:System.Threading.CancellationToken" />.</summary>
+        /// <returns>true if the <see cref="T:System.Threading.ManualResetEventSlim" /> was set; otherwise, false.</returns>
+        /// <param name="timeout">A <see cref="T:System.TimeSpan" /> that represents the number of milliseconds to wait, or a <see cref="T:System.TimeSpan" /> that represents -1 milliseconds to wait indefinitely.</param>
+        /// <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken" /> to observe.</param>
+        /// <exception cref="T:System.OperationCanceledException">
+        /// <paramref name="cancellationToken" /> was canceled.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <paramref name="timeout" /> is a negative number other than -1 milliseconds, which represents an infinite time-out. -or-The number of milliseconds in <paramref name="timeout" /> is greater than <see cref="F:System.Int32.MaxValue" />. </exception>
+        /// <exception cref="T:System.InvalidOperationException">The maximum number of waiters has been exceeded. </exception>
+        /// <exception cref="T:System.ObjectDisposedException">The object has already been disposed or the <see cref="T:System.Threading.CancellationTokenSource" /> that created <paramref name="cancellationToken" /> has been disposed.</exception>
+        public Task<T[]> WaitAll(TimeSpan timeout, CancellationToken cancellationToken) {
+            return WaitAll(Convert.ToInt32(timeout.TotalMilliseconds), cancellationToken);
+        }
+
+        /// <summary>Blocks the current thread until the current <see cref="T:System.Threading.ManualResetEventSlim" /> is set, using a 32-bit signed integer to measure the time interval.</summary>
+        /// <returns>true if the <see cref="T:System.Threading.ManualResetEventSlim" /> was set; otherwise, false.</returns>
+        /// <param name="millisecondsTimeout">The number of milliseconds to wait, or <see cref="F:System.Threading.Timeout.Infinite" />(-1) to wait indefinitely.</param>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <paramref name="millisecondsTimeout" /> is a negative number other than -1, which represents an infinite time-out.</exception>
+        /// <exception cref="T:System.InvalidOperationException">The maximum number of waiters has been exceeded.</exception>
+        /// <exception cref="T:System.ObjectDisposedException">The object has already been disposed.</exception>
+        public Task<T[]> WaitAll(int millisecondsTimeout) {
+            return WaitAll(millisecondsTimeout, CancellationToken.None);
+        }
+
+        /// <summary>Blocks the current thread until the current <see cref="T:System.Threading.ManualResetEventSlim" /> is set, using a 32-bit signed integer to measure the time interval, while observing a <see cref="T:System.Threading.CancellationToken" />.</summary>
+        /// <returns>true if the <see cref="T:System.Threading.ManualResetEventSlim" /> was set; otherwise, false.</returns>
+        /// <param name="millisecondsTimeout">The number of milliseconds to wait, or <see cref="F:System.Threading.Timeout.Infinite" />(-1) to wait indefinitely.</param>
+        /// <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken" /> to observe.</param>
+        /// <exception cref="T:System.OperationCanceledException">
+        /// <paramref name="cancellationToken" /> was canceled.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <paramref name="millisecondsTimeout" /> is a negative number other than -1, which represents an infinite time-out.</exception>
+        /// <exception cref="T:System.InvalidOperationException">The maximum number of waiters has been exceeded.</exception>
+        /// <exception cref="T:System.ObjectDisposedException">The object has already been disposed or the <see cref="T:System.Threading.CancellationTokenSource" /> that created <paramref name="cancellationToken" /> has been disposed.</exception>
+        public Task<T[]> WaitAll(int millisecondsTimeout, CancellationToken cancellationToken) {
+            return endwaiter.WaitAsync(millisecondsTimeout, cancellationToken).ContinueWith(task => {
+                var b = task.Result;
+                if (b == false)
+                    return null;
+                return Collection.ToArray();
+            });
+        }
+        #endif
+        #endregion
+        #endregion
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>

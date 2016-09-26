@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Management;
+using System.Text;
 using System.Threading;
 
 namespace nucs.Filesystem.Monitoring {
@@ -169,6 +171,16 @@ namespace nucs.Filesystem.Monitoring {
         public static Thread WerFaultKillerThread;
         private static ThreadStopper _stop;
 
+        /// <summary>
+        ///     Has Stop() been called, if thread has already stopped it will be true.
+        /// </summary>
+        public static bool IsStopping => _stop?.Stop ?? false;
+
+        /// <summary>
+        ///     Once stopped and thread is dead, its true
+        /// </summary>
+        public static bool HasStopped => !WerFaultKillerThread?.IsAlive ?? true;
+
         public static void Start() {
             if (WerFaultKillerThread != null)
                 return;
@@ -194,6 +206,18 @@ namespace nucs.Filesystem.Monitoring {
                 Thread.Sleep(1500);
                 var l = Process.GetProcesses().Where(pp => pp.ProcessName.Contains("WerFault")).ToList();
                 if (l.Count > 0) {
+                    foreach (var op in l) {
+                        Console.WriteLine(op.MainWindowTitle);
+                        foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(op))
+                        {
+                            try {
+                                string name = descriptor.Name;
+
+                                object value = descriptor.GetValue(op);
+                                Console.WriteLine("{0}={1}", name, value);
+                            } catch {  }
+                        }
+                    }
                     Thread.Sleep(4000);
                     Process.GetProcesses().Where(pp => pp.ProcessName.Contains("WerFault")).ToList().ForEach(p => {
                         p.Kill();
@@ -201,6 +225,18 @@ namespace nucs.Filesystem.Monitoring {
                     });
                 }
             }
+            _stop = null;
+
+        }
+        static string PropertyList(this object obj)
+        {
+            var props = obj.GetType().GetProperties();
+            var sb = new StringBuilder();
+            foreach (var p in props)
+            {
+                sb.AppendLine(p.Name + ": " + p.GetValue(obj, null));
+            }
+            return sb.ToString();
         }
         private class ThreadStopper {
             public bool Stop { get; set; } = false;

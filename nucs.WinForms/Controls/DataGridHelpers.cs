@@ -12,6 +12,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using MoreLinq;
 using nucs.Collections;
 using nucs.Collections.Extensions;
 using Column = System.Windows.Forms.DataGridViewColumn;

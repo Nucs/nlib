@@ -86,7 +86,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)Monitoring\Monitors\ClipboardStringMonitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Monitoring\Monitors\ForegroundWindowMonitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Monitoring\nucslib.Inline\DynamicComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\AwaitableSocket.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\FastHttpClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\FastWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Network\InternetTools.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\IpMine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\IpResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\MultithreadedNetworking.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\NetworkInterface.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)nucslib.Inline\RandomExtensionMethods.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\AppSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\EncryptedAppSettings.cs" />
@@ -105,14 +114,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Diagnostics\TimeMeasurer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Drawing\ColorExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Drawing\RectangleExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Drawing\SnippingTool.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Drawing\SnippingTool.Designer.cs">
-      <DependentUpon>SnippingTool.cs</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Dynamic\AnonymousProperties.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Dynamic\Dynamic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Enums\EnumExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Enums\StringValueExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Filesystem\Files.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\ISizeComparable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Linq\Acquire.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Linq\Assert.cs" />
@@ -206,6 +212,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Threading\FastThreadPool\FastPool.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\FastThreadPool\FastThreadPool.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\FastThreadPool\HaltedTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\IdleTimer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\ILockingObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\IWaitable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\IWaitress.cs" />
@@ -949,9 +956,6 @@
     <Content Include="$(MSBuildThisFileDirectory)Images\refresh-icon.png" />
     <Content Include="$(MSBuildThisFileDirectory)Libraries\System.Web.Extensions.dll" />
     <Content Include="$(MSBuildThisFileDirectory)Libraries\System.Web.Extensions.xml" />
-    <Content Include="$(MSBuildThisFileDirectory)Resources\erroricon.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Resources\questionmark.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Resources\refreshImg.bmp" />
     <Content Include="$(MSBuildThisFileDirectory)SystemCore\Linq\Fold.g.tt" />
     <Content Include="$(MSBuildThisFileDirectory)SystemCore\Linq\ToDelimitedString.g.tt" />
     <Content Include="$(MSBuildThisFileDirectory)Threading\jargon.AsyncEx\packages.config" />

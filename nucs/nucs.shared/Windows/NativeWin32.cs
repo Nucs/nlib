@@ -37,7 +37,7 @@ namespace nucs.Windows {
 		/// </returns>
 		[DllImport("user32")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
+        public static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
 
         [DllImport("kernel32.dll")]
         public static extern int FreeConsole();

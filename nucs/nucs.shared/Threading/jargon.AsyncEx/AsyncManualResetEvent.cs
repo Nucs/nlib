@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using nucs.Threading;
@@ -41,7 +42,11 @@ namespace Nito.AsyncEx {
                 _tcs.SetResult();
             }
         }
-
+        #if !NET4
+        public TaskAwaiter GetAwaiter() {
+            return WaitAsync().GetAwaiter();
+        }
+        #endif
         /// <summary>
         ///     Creates an async-compatible manual-reset event that is initially unset.
         /// </summary>
@@ -134,7 +139,8 @@ namespace Nito.AsyncEx {
             }
         }
 #endregion
-#region Wait
+
+        #region Wait
         /// <summary>
         ///     Synchronously waits for this event to be set. This method may block the calling thread.
         /// </summary>
@@ -159,6 +165,12 @@ namespace Nito.AsyncEx {
         /// <summary>
         ///     Synchronously waits for this event to be set. This method may block the calling thread.
         /// </summary>
+        public bool Wait(int milliseconds, CancellationToken cancellationToken) {
+            return WaitAsync().Wait(milliseconds, cancellationToken);
+        }
+        /// <summary>
+        ///     Synchronously waits for this event to be set. This method may block the calling thread.
+        /// </summary>
         /// <param name="cancellationToken">
         ///     The cancellation token used to cancel the wait. If this token is already canceled, this
         ///     method will first check whether the event is set.
@@ -169,6 +181,7 @@ namespace Nito.AsyncEx {
                 return;
             ret.Wait(cancellationToken);
         }
+
 #endregion
 
         /// <summary>

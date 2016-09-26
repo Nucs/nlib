@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.props" Condition="Exists('..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>nucs.WinForms</RootNamespace>
     <AssemblyName>nucs.WinForms</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -21,7 +20,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET45;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -116,6 +115,12 @@
     </Compile>
     <Compile Include="Controls\DGVCustomControlEventLayout.cs" />
     <Compile Include="Controls\ErrorProviderTool.cs" />
+    <Compile Include="Controls\SnippingTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\SnippingTool.Designer.cs">
+      <DependentUpon>SnippingTool.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ModernMessageBox.cs" />
     <Compile Include="Forms\UserConnectionDetailsRequester.cs">
       <SubType>Form</SubType>
@@ -123,9 +128,7 @@
     <Compile Include="Forms\UserConnectionDetailsRequester.Designer.cs">
       <DependentUpon>UserConnectionDetailsRequester.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\KeyDetectionButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Controls\KeyDetectionButton.cs" />
     <Compile Include="Controls\LogBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -145,6 +148,8 @@
     <Compile Include="Controls\StringUpDown.Designer.cs">
       <DependentUpon>StringUpDown.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tray\TrayAnimator.cs" />
+    <Compile Include="Tray\TrayIcon.cs" />
     <Compile Include="WindowFinder\WindowFinder.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -154,6 +159,9 @@
     <Compile Include="WindowFinder\WindowFinderDesigner.cs" />
     <Compile Include="WindowFinder\WindowFinderResouceFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Windows\Hooking\AbstractGlobalHook.cs" />
+    <Compile Include="Windows\Hooking\MouseListener.cs" />
+    <Compile Include="Windows\ScreenShot.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\UserConnectionDetailsRequester.resx">
@@ -183,11 +191,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="ILMerge.props" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ILMergeOrder.txt" />
+    <Content Include="Resources\erroricon.png" />
+    <Content Include="Resources\questionmark.png" />
+    <Content Include="Resources\refreshImg.bmp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\nucs\nucs.net45\nucs.net45.csproj">
@@ -196,14 +205,6 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.props'))" />
-    <Error Condition="!Exists('..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.targets'))" />
-  </Target>
-  <Import Project="..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.targets" Condition="Exists('..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
