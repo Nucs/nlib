@@ -39,7 +39,7 @@ namespace nucs.Automation.Mirror {
                 }
             }
         }
-
+        
         /// <summary>
         ///     The process name of this window
         /// </summary>

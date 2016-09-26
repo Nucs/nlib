@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace nucs.shared.Network {
+#if !NET4
     public sealed class SocketAwaitable : INotifyCompletion {
         private readonly static Action SENTINEL = () => { };
         internal bool m_wasCompleted;
@@ -101,4 +102,5 @@ namespace nucs.shared.Network {
 
         // … 
     }
+#endif
 }
