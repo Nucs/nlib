@@ -53,7 +53,14 @@ namespace nucs.SystemCore.Filesystem {
         /// <param name="encoding">Default: UTF8</param>
         /// <returns></returns>
         public static string Read(string fileandpath, Encoding encoding) {
-            return File.ReadAllText(Normalize(fileandpath), encoding);
+            var path = Normalize(fileandpath);
+            if (!File.Exists(path))
+                throw new FileNotFoundException(path);
+            return File.ReadAllText(path, encoding);
+        }
+
+        public static bool Exists(string file) {
+            return File.Exists(Normalize(file));
         }
 
         /// <summary>

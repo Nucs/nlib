@@ -80,6 +80,7 @@
     <Compile Include="Inline\Collector.cs" />
     <Compile Include="Inline\Extensions\ArrayExtensions.cs" />
     <Compile Include="Inline\Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Inline\Network\HttpUtilities.cs" />
     <Compile Include="Inline\ICollectorAdder.cs" />
     <Compile Include="Inline\ImprovedList.cs" />
     <Compile Include="Inline\ISizeComparable.cs" />

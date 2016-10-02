@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Web;
 using nucs.Monitoring;
+using nucs.Web;
 using SHDocVw;
 
 namespace nucs.Filesystem.Monitoring.Windows {
@@ -43,7 +46,7 @@ namespace nucs.Filesystem.Monitoring.Windows {
     public class ExplorerWindowRepresentor {
 
         public event NavigationHandler Navigated;
-
+        public IntPtr hWnd => (IntPtr) IE.HWND;
         public SHDocVw.InternetExplorer IE { get; private set; }
         public int UID { get {
             try {
@@ -76,7 +79,7 @@ namespace nucs.Filesystem.Monitoring.Windows {
         public DirectoryInfo Location {
             get {
                 try {
-                    return new DirectoryInfo(IE.LocationURL.Replace("file:///", ""));
+                    return new DirectoryInfo(HttpUtilities.UrlDecode(IE.LocationURL.Replace("file:///", "")));
                 } catch {
                     return null;
                 }

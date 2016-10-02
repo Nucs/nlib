@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Nito.AsyncEx;
 
 namespace nucs.Automation.Mirror {
-    public class SmartProcess {
+    [DebuggerDisplay("{ProcessName} - {MainWindow.Title}")]
+    public class SmartProcess
+    {
         /// <summary>
         ///     Original Process
         /// </summary>
@@ -24,6 +28,13 @@ namespace nucs.Automation.Mirror {
             get { return this.GetWindows(); }
         }
 
+        public Window MainWindow => Window.Create(this, MainWindowHandle);
+
+        /// <summary>
+        ///     Sets this window as ForegroundWindow, basiclly set focus on it and bring to the front
+        /// </summary>
+        /// <returns>If returns false meaning it can be set to foreground</returns>
+        public bool BringToFront() => Native.SetForegroundWindow(MainWindowHandle);
 
         #region Delegating Process 
 
@@ -88,14 +99,22 @@ namespace nucs.Automation.Mirror {
         /// <param name="milliseconds">A value of 1 to <see cref="F:System.Int32.MaxValue" /> that specifies the amount of time, in milliseconds, to wait for the associated process to become idle. A value of 0 specifies an immediate return, and a value of -1 specifies an infinite wait. </param>
         /// <exception cref="T:System.InvalidOperationException">The process does not have a graphical interface.-or-An unknown error occurred. The process failed to enter an idle state.-or-The process has already exited. -or-No process is associated with this <see cref="T:System.Diagnostics.Process" /> object.</exception>
         public bool WaitForInputIdle(int milliseconds) {
-            return OGProcess.WaitForInputIdle(milliseconds);
+            try {
+                return OGProcess.WaitForInputIdle(milliseconds);
+            } catch (InvalidOperationException) {
+                return false;
+            }
         }
 
         /// <summary>Causes the <see cref="T:System.Diagnostics.Process" /> component to wait indefinitely for the associated process to enter an idle state. This overload applies only to processes with a user interface and, therefore, a message loop.</summary>
         /// <returns>true if the associated process has reached an idle state.</returns>
         /// <exception cref="T:System.InvalidOperationException">The process does not have a graphical interface.-or-An unknown error occurred. The process failed to enter an idle state.-or-The process has already exited. -or-No process is associated with this <see cref="T:System.Diagnostics.Process" /> object.</exception>
         public bool WaitForInputIdle() {
-            return OGProcess.WaitForInputIdle();
+            try {
+                return OGProcess.WaitForInputIdle();
+            } catch (InvalidOperationException) {
+                return false;
+            }
         }
 
         /// <summary>Gets a value indicating whether the associated process has been terminated.</summary>
@@ -217,6 +236,22 @@ namespace nucs.Automation.Mirror {
             await _exitWaiter.WaitAsync(milliseconds);
         }
 
+        /// <summary>
+        ///     Waits for the process to be responding
+        /// </summary>
+        public void WaitForResponding() {
+            Refresh();
+            this.WaitForInputIdle();
+            SpinWait.SpinUntil(() => Responding);
+        }
+
+        /// <summary>
+        ///     Waits for the process to be responding
+        /// </summary>
+        public async Task WaitForRespondingAsync() {
+            await Task.Yield();
+            WaitForResponding();
+        }
         #endregion
 
         #region Static
@@ -263,6 +298,21 @@ namespace nucs.Automation.Mirror {
             }
             return @out;
         }
+
+        /// <summary>
+        ///     Gets or create the instance out of the foreground window.
+        /// </summary>
+        /// <param name="process">The process to smart.</param>
+        /// <returns></returns>
+        public static SmartProcess GetForeground() {
+            IntPtr hwnd = Native.GetForegroundWindow();
+            uint pid;
+            Native.GetWindowThreadProcessId(hwnd, out pid);
+            Process p = Process.GetProcessById((int)pid);
+            return Get(p);
+        }
+
+
         #endregion
     }
 }

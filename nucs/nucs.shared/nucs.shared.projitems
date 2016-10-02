@@ -91,6 +91,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Network\FastWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Network\HttpUtilities.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Network\InternetTools.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Network\IpMine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Network\IpResolver.cs" />

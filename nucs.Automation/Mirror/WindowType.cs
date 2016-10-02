@@ -1,8 +1,8 @@
-﻿namespace nucs.Automation {
+﻿namespace nucs.Automation.Mirror {
     /// <summary>
     ///     Classifications to what type of window is it.
     /// </summary>
-    public enum WindowClassification {
+    public enum WindowType {
         /// <summary>
         ///     A regular window to a regular exe.
         /// </summary>
@@ -19,5 +19,9 @@
         ///     A chrome/firefox/internet explorer window.
         /// </summary>
         InternetBrowser,
+        /// <summary>
+        ///     A Run window
+        /// </summary>
+        Run
     }
 }

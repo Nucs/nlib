@@ -65,7 +65,7 @@ namespace nucs.Filesystem.Monitoring {
                 throw new ArgumentNullException(nameof(file));
             var active = new ActiveProcessFiles().Enumerate(info => info.CompareTo(file));
             if (active == null) { 
-                File = file;
+                File = new FileInfo(Paths.NormalizePath(file.FullName));
                 Id = 0;
             }
         }
@@ -94,7 +94,10 @@ namespace nucs.Filesystem.Monitoring {
         }
 
         public void Minimize() {
-            MinimizeWindow(ProcessProcess().MainWindowHandle);
+            var proc = ProcessProcess();
+            if (proc == null)
+                return;
+            MinimizeWindow(proc.MainWindowHandle);
         }
 
         #endregion
@@ -106,7 +109,7 @@ namespace nucs.Filesystem.Monitoring {
         /// </summary>
         /// <param name="foundprocess"></param>
         /// <returns></returns>
-        private Process ProcessProcess(Process foundprocess = null) {
+        public Process ProcessProcess(Process foundprocess = null) {
             Process p = foundprocess;
             try {
                 if (p != null)
@@ -127,11 +130,11 @@ namespace nucs.Filesystem.Monitoring {
                     p = new ActiveProcessFiles().Enumerate(info => info.CompareTo(this.File));
                     return p;
                 }
-
                 return null;
             } finally {
                 if (p != null) {
-                    File = new FileInfo(ProcessExecutablePath(p));
+                    if (File==null)
+                        File = new FileInfo(ProcessExecutablePath(p));
                     Id = p.Id;
                     Name = p.ProcessName;
                 }

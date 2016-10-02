@@ -10,12 +10,12 @@ using nucs.Startup.Internal;
 using nucs.SystemCore.Boolean;
 
 namespace nucs.Filesystem {
-
     /// <summary>
     ///     Class that determines paths.
     /// </summary>
     public static partial class Paths {
         private static Task _cacheprogress = null;
+
         public static void Cache() {
             _cacheprogress?.Wait();
 
@@ -37,7 +37,7 @@ namespace nucs.Filesystem {
         /// Gives the path to windows dir, most likely to be 'C:/Windows/'
         /// </summary>
         public static DirectoryInfo WindowsDir => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.System));
-        
+
         /// <summary>
         ///     The exe that has started this process
         /// </summary>
@@ -50,6 +50,7 @@ namespace nucs.Filesystem {
 
         private static readonly object _randloclock = new object();
         private static readonly Collector<DirectoryInfo> _randlocdb = new Collector<DirectoryInfo>();
+
         /// <summary>
         ///     Will generate a clever random location.
         /// </summary>
@@ -61,7 +62,7 @@ namespace nucs.Filesystem {
                     while (_randlocdb.ItemsLeft == 0)
                         Paths._cacheprogress.Wait(100);
 
-                    while (_randlocdb.ItemsLeft>0) {
+                    while (_randlocdb.ItemsLeft > 0) {
                         var randloc = _randlocdb.TakeRandom();
                         randloc.EnsureDirectoryExists();
                         var fn = AIFileNameGenerator.Generate(randloc);
@@ -79,7 +80,7 @@ namespace nucs.Filesystem {
                 }
             }
         }
-        
+
         /// <summary>
         ///     Will generate a writable directory.
         /// </summary>
@@ -90,8 +91,8 @@ namespace nucs.Filesystem {
                     Cache();
                     while (_randlocdb.ItemsLeft == 0)
                         Paths._cacheprogress.Wait(100);
-                    
-                    while (_randlocdb.ItemsLeft>0) {
+
+                    while (_randlocdb.ItemsLeft > 0) {
                         var randloc = _randlocdb.TakeRandom();
                         randloc.EnsureDirectoryExists();
                         var fn = new FileInfo(Path.Combine(randloc.FullName, StringGenerator.Generate(10)));
@@ -108,7 +109,7 @@ namespace nucs.Filesystem {
             }
         }
 
-        
+
         /// <summary>
         /// Checks the ability to create and write to a file in the supplied directory.
         /// </summary>
@@ -129,8 +130,7 @@ namespace nucs.Filesystem {
                         File.Delete(fullPath);
                         success = true;
                     }
-                }
-                catch (Exception) {
+                } catch (Exception) {
                     success = false;
                 }
             }
@@ -142,14 +142,15 @@ namespace nucs.Filesystem {
         /// </summary>
         public static DirectoryInfo UniqueWritableLocation => UniquePath.GetUniqueDirectory;
 
-        
+
         /// <summary>
         ///     Combines the file name with the dir of <see cref="Paths.ExecutingExe"/>, resulting in path of a file inside the directory of the executing exe file.
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
         public static FileInfo CombineToExecutingBase(string filename) {
-            if (Paths.ExecutingExe.DirectoryName != null) return new FileInfo(Path.Combine(Paths.ExecutingExe.DirectoryName, filename));
+            if (Paths.ExecutingExe.DirectoryName != null)
+                return new FileInfo(Path.Combine(Paths.ExecutingExe.DirectoryName, filename));
             return null;
         }
 
@@ -158,8 +159,16 @@ namespace nucs.Filesystem {
         /// </summary>
         /// <returns></returns>
         public static bool CompareTo(this FileSystemInfo fi, FileSystemInfo fi2) {
-            return fi.FullName.Equals(fi2.FullName, StringComparison.InvariantCulture);
+            return NormalizePath(fi.FullName).Equals(NormalizePath(fi2.FullName), StringComparison.InvariantCulture);
         }
 
+        /// <summary>
+        ///     Normalizes path to prepare for comparison or storage
+        /// </summary>
+        public static string NormalizePath(string path) {
+            return Path.GetFullPath(new Uri(path).LocalPath).Replace("/", "\\")
+                .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                .ToUpperInvariant();
+        }
     }
 }
