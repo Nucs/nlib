@@ -215,8 +215,11 @@ pip-log.txt
 .mr.developer.cfg
 
 
-Libraries/IconsLibrary/
-_mono project 4 restoration/
-_nucs/
-_core.nucs/
-archive/
+Libraries/IconsLibrary/*
+_mono project 4 restoration/*
+_nucs/*
+_core.nucs/*
+archive/*
+*/test/*
+test/*
+packages/*
