@@ -193,7 +193,7 @@ namespace StringManipulator {
             return new ManipulatedString(str);
         }
         /// <summary>
-        ///     Gives the string 
+        ///     Gives the string via manipulated string
         /// </summary>
         /// <param name="src"></param>
         /// <param name="start"></param>

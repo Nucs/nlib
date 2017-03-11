@@ -31,13 +31,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\Sapphirerz\Srz\packages\Newtonsoft.Json.9.0.2-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RazorEngine, Version=3.9.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\..\Sapphirerz\Srz\packages\RazorEngine.3.9.0\lib\net45\RazorEngine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Sapphirerz\Srz\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
@@ -47,6 +54,12 @@
     <Compile Include="AuthValidation\SmtpConnectorWithoutSsl.cs" />
     <Compile Include="AuthValidation\SmtpHelper.cs" />
     <Compile Include="Email.cs" />
+    <Compile Include="Helpers\DefaultEnums.cs" />
+    <Compile Include="IEmail.cs" />
+    <Compile Include="OutEmail.cs" />
+    <Compile Include="TVoid.cs" />
+    <Compile Include="SimpleLog.cs" />
+    <Compile Include="SmtpSettings.cs" />
     <Compile Include="Templating\EmailTemplating.cs" />
     <Compile Include="Helpers\Files.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -57,16 +70,14 @@
     <Compile Include="Templating\EmailSources.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Simple.email.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\nucs\nucs.net45\nucs.net45.csproj">
-      <Project>{647EDC67-D125-4528-8E8D-0C770BA77CFF}</Project>
-      <Name>nucs.net45</Name>
+    <ProjectReference Include="..\..\Sapphirerz\Srz\Mailzory\Mailzor\Mailzory.csproj">
+      <Project>{5874c275-72fb-4a1b-9b62-d4f2b240bbad}</Project>
+      <Name>Mailzory</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

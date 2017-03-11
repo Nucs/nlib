@@ -49,11 +49,11 @@ namespace nucs.Emailing.Settings {
                 } catch (InvalidOperationException e) {
                     if (e.Message.Contains("Cannot convert"))
                         throw new Exception("Unable to deserialize settings file, value<->type mismatch. see inner exception", e);
-                    throw e;
+                    throw;
                 } catch (System.ArgumentException e) {
                     if (e.Message.StartsWith("Invalid"))
                         throw new Exception("Settings file is corrupt.");
-                    throw e;
+                    throw;
                 }
             _save:
             var t = new T();

@@ -2,14 +2,10 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System;
 using System.Net.Security;
-using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading.Tasks;
-using nucs.shared.Network;
 
 namespace B2BFamily.SmtpValidation.Lib.SmtpConnector {
     internal abstract class SmtpConnectorBase {

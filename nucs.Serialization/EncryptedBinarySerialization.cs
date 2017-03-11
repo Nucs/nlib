@@ -3,10 +3,8 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using nucs.Cryptography;
 
-namespace nucs.Serialization
-{
-    public static class EncryptedBinarySerialization  {
-
+namespace nucs.Serialization {
+    public static class EncryptedBinarySerialization {
         public static byte[] SerializeBinary(this object o, string pass, ICrypter crypter = null) {
             crypter = crypter ?? new RijndaelCrypter();
             var bf = new BinaryFormatter();
@@ -34,7 +32,7 @@ namespace nucs.Serialization
             if (typeof(T) != o.GetType())
                 throw new InvalidCastException("The deserialized object does not fit to the generic type T.");
 
-            return (T)o;
+            return (T) o;
         }
     }
 }

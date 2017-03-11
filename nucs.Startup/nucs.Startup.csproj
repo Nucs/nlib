@@ -98,12 +98,6 @@
     <Folder Include="Methods\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\nucs.Filesystem\nucs.Filesystem.net4\nucs.Filesystem.net4.csproj">
-      <Project>{e97c0d95-437a-4d4b-9d21-815d2350a94b}</Project>
-      <Name>nucs.Filesystem.net4</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>

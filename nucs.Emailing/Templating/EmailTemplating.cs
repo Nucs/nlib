@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net.Mail;
 
 namespace nucs.Emailing {
@@ -7,6 +9,16 @@ namespace nucs.Emailing {
     ///     Two functions that handle templating.
     /// </summary>
     public class EmailTemplate {
+        public Dictionary<string, StampTemplate> LocalStamps { get; } = new Dictionary<string, StampTemplate>();
+
+        public void AddStamp(string key, StampTemplate stamp) {
+            if (!key.StartsWith("@{") && !key.EndsWith("}"))
+                key = $"@{{{key}}}";
+            if (Stamps.ContainsKey(key))
+                throw new InvalidOperationException("The stamp already exists in the static stamp.");
+            LocalStamps.Add(key, stamp);
+        }
+
         /// <summary>
         ///     Is it actually a template and it requires translating
         /// </summary>
@@ -28,7 +40,6 @@ namespace nucs.Emailing {
 
             return msg.Translate(this);
         }
-
 
         /// <summary>
         ///     Is this email string a template and not plain text
@@ -57,13 +68,13 @@ namespace nucs.Emailing {
         ///     Contains all the Stamps that stamps the value into the template sign, for example (template, stamp, msg)=>template.Replace(stamp, msg.Subject);
         /// </summary>
         public static Dictionary<string, StampTemplate> Stamps { get; } = new Dictionary<string, StampTemplate>() {
-            {"@{body}", (template, stamp, msg) => template.Replace(stamp, msg.Body ?? "")},
-            {"@{title}", (template, stamp, msg) => template.Replace(stamp, msg.Subject)},
-            {"@{subject}", (template, stamp, msg) => template.Replace(stamp, msg.Subject)},
-            {"@{sender}", (template, stamp, msg) => template.Replace(stamp, msg.From?.Address?.ToString())},
-            {"@{from}", (template, stamp, msg) => template.Replace(stamp, msg.From?.Address?.ToString())},
-            {"@{receiver}", (template, stamp, msg) => template.Replace(stamp, msg.To[0]?.Address?.ToString())},
-            {"@{to}", (template, stamp, msg) => template.Replace(stamp, msg.To[0]?.Address?.ToString())},
+            {"@{body}", (template, stamp, msg) => template.Replace(stamp, msg?.Body ?? "")},
+            {"@{title}", (template, stamp, msg) => template.Replace(stamp, msg?.Subject)},
+            {"@{subject}", (template, stamp, msg) => template.Replace(stamp, msg?.Subject)},
+            {"@{sender}", (template, stamp, msg) => template.Replace(stamp, msg?.From?.Address?.ToString())},
+            {"@{from}", (template, stamp, msg) => template.Replace(stamp, msg?.From?.Address?.ToString())},
+            {"@{receiver}", (template, stamp, msg) => template.Replace(stamp, msg?.To[0]?.Address?.ToString())},
+            {"@{to}", (template, stamp, msg) => template.Replace(stamp, msg?.To[0]?.Address?.ToString())},
         };
 
         /// <summary>
@@ -78,7 +89,7 @@ namespace nucs.Emailing {
                 .TrimStart('\n', '\r')
                 .Remove(0, "@Template".Length);
 
-            foreach (var stampkv in Stamps) {
+            foreach (var stampkv in Stamps.Concat(etemp.LocalStamps.Select(kv=>kv))) {
                 var stamp = stampkv.Key;
                 var act = stampkv.Value;
                 template = act(template, stamp, message);

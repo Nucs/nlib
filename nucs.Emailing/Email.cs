@@ -10,106 +10,33 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using B2BFamily.SmtpValidation.Lib;
+using Mailzory;
 using nucs.Emailing.Helpers;
 using nucs.Emailing.Templating;
 
 namespace nucs.Emailing {
-    public class Email {
-        /// <summary>
-        ///     The exe that has started this process
-        /// </summary>
-        private static FileInfo ExecutingExe => new FileInfo(Assembly.GetEntryAssembly().Location);
+    public class Email : IEmail {
+        public SimpleLog Logger { get; set; }
+        public SmtpSettings Settings { get; set; }
 
-        /// <summary>
-        ///     The directory that the executing exe is inside
-        /// </summary>
-        private static DirectoryInfo ExecutingDirectory => ExecutingExe.Directory;
-
-        public static Email LoadConfiguration(string filename = "email.credentials.settings") {
-            return LoadConfiguration(new FileInfo(Files.Normalize(filename)));
+        public Email(SimpleLog logger, SmtpSettings settings) {
+            Logger = logger;
+            Settings = settings;
         }
 
-        public static Email LoadConfiguration(FileInfo file) {
-            var s = Settings.AppSettings<Configuration>.Load(file.FullName);
-            var e = new Email() {DefaultSender = s.DefaultSender, EnableSSL = s.EnableSSL, HostIp = s.HostIp, LogDirectoryName = s.LogDirectoryName, Password = ConvertToSecureString(s.Password), Port = s.Port, LogLocally = s.LogLocally, UseDefaultCredentials = s.UseDefaultCredentials, Username = s.Username};
-            return e;
+        public Email(Configuration config) {
+            Logger = SimpleLog.LoadConfiguration(config);
+            Settings = SmtpSettings.LoadConfiguration(config);
         }
-
-        private static SecureString ConvertToSecureString(string password) {
-            var securePassword = new SecureString();
-
-            foreach (char c in password ?? "")
-                securePassword.AppendChar(c);
-
-            securePassword.MakeReadOnly();
-            return securePassword;
-        }
-
-        /// <summary>
-        ///     The default email address the emails will be sent through when not specified.
-        ///     e.g.: address@yourdomain.com
-        /// </summary>
-        public string DefaultSender;
-
-        /// <summary>
-        ///     The display name that will be shown - sent from...
-        /// </summary>
-        public string DefaultSenderDisplayName;
-
-        public string Username;
-
-        public SecureString Password;
-
-        public string HostIp;
-
-        public ushort Port = 587;
-
-        public bool EnableSSL = false;
-
-        public bool UseDefaultCredentials = true;
-
-        /// <summary>
-        ///     Log all emails sent to a local directory specified in <paramref name="LogDirectoryName"/>
-        /// </summary>
-        public bool LogLocally = false;
-
-        /// <summary>
-        ///     The directory name for logging, plain word.
-        ///     e.g.: log
-        /// </summary>
-        public string LogDirectoryName = "log";
-
-        private readonly object logdir_sync = new object();
-        private DirectoryInfo _logdir;
-
-        private DirectoryInfo logdir {
-            get {
-                lock (logdir_sync) {
-                    if (_logdir == null) {
-                        _logdir = new DirectoryInfo(Path.Combine(ExecutingDirectory.FullName, LogDirectoryName));
-                        if (!Directory.Exists(_logdir.FullName))
-                            _logdir.Create();
-                    }
-                    return _logdir;
-                }
-            }
-        }
-
-        private MailMessage _prepareNewMail => new MailMessage() {
-            BodyEncoding = Encoding.UTF8,
-            IsBodyHtml = true
-        };
-
 
         /// <summary>
         ///     Gets a smtp client, with valid credetials - make sure to dispose at the end!
         /// </summary>
-        public SmtpClient GetClient {
+        public SmtpClientAdv GetClient {
             get {
-                var client = new SmtpClient(HostIp, Port);
+                var client = Settings.UseDefaultCredentials ? new SmtpClientAdv(Settings.HostIp, Settings.Port) : new SmtpClientAdv(Settings.HostIp, Settings.Port, Settings.Username, Settings.Password);
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.EnableSsl = EnableSSL;
-                client.UseDefaultCredentials = UseDefaultCredentials;
+                client.EnableSsl = Settings.EnableSSL;
                 return client;
             }
         }
@@ -118,135 +45,36 @@ namespace nucs.Emailing {
 
         #region Overloads
 
-        /// <summary>
-        ///     Sends a templated email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        /// <param name="source">Which source refer to</param>
-        /// <param name="identifier">Depends on the EmailSource, if File then a path, if Resource then the resource name.</param>
-        public async Task SendTemplate(MailAddress receiver, string subject, Body body, EmailSource source, string identifier) {
-            await SendTemplate(new MailAddress(DefaultSender, DefaultSenderDisplayName), receiver, subject, body.Content, source, identifier);
+        public Task SendTemplate(string sender, string sender_displayname, string receiver, string subject, EmailSource source, string identifier) {
+            return SendTemplate(new MailAddress(sender, sender_displayname), new[] {new MailAddress(receiver)}, subject, source, identifier);
         }
 
-        /// <summary>
-        ///     Sends a templated email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        /// <param name="source">Which source refer to</param>
-        /// <param name="identifier">Depends on the EmailSource, if File then a path, if Resource then the resource name.</param>
-        public async Task SendTemplate(string receiver, string subject, Body body, EmailSource source, string identifier) {
-            await SendTemplate(new MailAddress(DefaultSender, DefaultSenderDisplayName), new MailAddress(receiver), subject, body.Content, source, identifier);
+        public Task SendTemplate(string sender, string sender_displayname, string[] receiver, string subject, EmailSource source, string identifier) {
+            return SendTemplate(new MailAddress(sender, sender_displayname), receiver.Select(s => new MailAddress(s)).ToArray(), subject, source, identifier);
         }
 
-        /// <summary>
-        ///     Sends a templated email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        /// <param name="source">Which source refer to</param>
-        /// <param name="identifier">Depends on the EmailSource, if File then a path, if Resource then the resource name.</param>
-        public async Task SendTemplate(MailAddress receiver, string subject, EmailSource source, string identifier) {
-            await SendTemplate(new MailAddress(DefaultSender, DefaultSenderDisplayName), receiver, subject, null, source, identifier);
+        public Task SendTemplate(string sender, string sender_displayname, MailAddress receiver, string subject, EmailSource source, string identifier) {
+            return SendTemplate(new MailAddress(sender, sender_displayname), new[] {receiver}, subject, source, identifier);
         }
 
-        /// <summary>
-        ///     Sends a templated email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        /// <param name="source">Which source refer to</param>
-        /// <param name="identifier">Depends on the EmailSource, if File then a path, if Resource then the resource name.</param>
-        public async Task SendTemplate(string receiver, string subject, EmailSource source, string identifier) {
-            await SendTemplate(new MailAddress(DefaultSender, DefaultSenderDisplayName), new MailAddress(receiver), subject, null, source, identifier);
+        public Task SendTemplate(string sender, string sender_displayname, MailAddress[] receiver, string subject, EmailSource source, string identifier) {
+            return SendTemplate(new MailAddress(sender, sender_displayname), receiver, subject, source, identifier);
         }
 
-
-        /// <summary>
-        ///     Sends a templated email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        /// <param name="source">Which source refer to</param>
-        /// <param name="identifier">Depends on the EmailSource, if File then a path, if Resource then the resource name.</param>
-        public async Task SendTemplate(string sender, MailAddress receiver, string subject, string body, EmailSource source, string identifier) {
-            await SendTemplate(new MailAddress(sender), receiver, subject, body, source, identifier);
+        public Task SendTemplate(Sender sender, string receiver, string subject, EmailSource source, string identifier) {
+            return SendTemplate(new MailAddress(Settings.DefaultSender, Settings.DefaultSenderDisplayName), new[] {new MailAddress(receiver)}, subject, source, identifier);
         }
 
-        /// <summary>
-        ///     Sends a templated email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        /// <param name="source">Which source refer to</param>
-        /// <param name="identifier">Depends on the EmailSource, if File then a path, if Resource then the resource name.</param>
-        public async Task SendTemplate(string sender, string receiver, string subject, Body body, EmailSource source, string identifier) {
-            await SendTemplate(new MailAddress(sender), new MailAddress(receiver), subject, body.Content, source, identifier);
+        public Task SendTemplate(Sender sender, string[] receiver, string subject, EmailSource source, string identifier) {
+            return SendTemplate(new MailAddress(Settings.DefaultSender, Settings.DefaultSenderDisplayName), receiver.Select(s => new MailAddress(s)).ToArray(), subject, source, identifier);
         }
 
-        /// <summary>
-        ///     Sends a templated email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        /// <param name="source">Which source refer to</param>
-        /// <param name="identifier">Depends on the EmailSource, if File then a path, if Resource then the resource name.</param>
-        public async Task SendTemplate(MailAddress sender, string receiver, string subject, Body body, EmailSource source, string identifier) {
-            await SendTemplate(sender, new MailAddress(receiver), subject, body.Content, source, identifier);
+        public Task SendTemplate(Sender sender, MailAddress receiver, string subject, EmailSource source, string identifier) {
+            return SendTemplate(new MailAddress(Settings.DefaultSender, Settings.DefaultSenderDisplayName), new[] {receiver}, subject, source, identifier);
         }
 
-        /// <summary>
-        ///     Sends a templated email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        /// <param name="source">Which source refer to</param>
-        /// <param name="identifier">Depends on the EmailSource, if File then a path, if Resource then the resource name.</param>
-        public async Task SendTemplate(string sender, MailAddress receiver, string subject, EmailSource source, string identifier) {
-            await SendTemplate(new MailAddress(sender), receiver, subject, null, source, identifier);
-        }
-
-        /// <summary>
-        ///     Sends a templated email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        /// <param name="source">Which source refer to</param>
-        /// <param name="identifier">Depends on the EmailSource, if File then a path, if Resource then the resource name.</param>
-        public async Task SendTemplate(string sender, string receiver, string subject, EmailSource source, string identifier) {
-            await SendTemplate(new MailAddress(sender), new MailAddress(receiver), subject, null, source, identifier);
-        }
-
-        /// <summary>
-        ///     Sends a templated email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        /// <param name="source">Which source refer to</param>
-        /// <param name="identifier">Depends on the EmailSource, if File then a path, if Resource then the resource name.</param>
-        public async Task SendTemplate(MailAddress sender, string receiver, string subject, EmailSource source, string identifier) {
-            await SendTemplate(sender, new MailAddress(receiver), subject, null, source, identifier);
+        public Task SendTemplate(Sender sender, MailAddress[] receivers, string subject, EmailSource source, string identifier) {
+            return SendTemplate(new MailAddress(Settings.DefaultSender, Settings.DefaultSenderDisplayName), receivers, subject, source, identifier);
         }
 
         #endregion
@@ -255,26 +83,76 @@ namespace nucs.Emailing {
         ///     Sends a templated email.
         /// </summary>
         /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
+        /// <param name="receivers">The receiver of the email</param>
+        /// <param name="subject">Subject of the email</param>
+        /// <param name="source">Which source refer to</param>
+        /// <param name="identifier">Depends on the EmailSource, if File then a path, if Resource then the resource name.</param>
+        public async Task SendTemplate(MailAddress sender, MailAddress[] receivers, string subject, EmailSource source, string identifier) {
+            await SendTemplate<TVoid>(sender, receivers, subject, source, identifier,null);
+        }
+
+        #region Overloads
+
+        public Task SendTemplate<TModel>(string sender, string sender_displayname, string receiver, string subject, EmailSource source, string identifier, TModel model) where TModel : class {
+            return SendTemplate(new MailAddress(sender, sender_displayname), new[] {new MailAddress(receiver)}, subject, source, identifier, model);
+        }
+
+        public Task SendTemplate<TModel>(string sender, string sender_displayname, string[] receiver, string subject, EmailSource source, string identifier, TModel model) where TModel : class {
+            return SendTemplate(new MailAddress(sender, sender_displayname), receiver.Select(s => new MailAddress(s)).ToArray(), subject, source, identifier, model);
+        }
+
+        public Task SendTemplate<TModel>(string sender, string sender_displayname, MailAddress receiver, string subject, EmailSource source, string identifier, TModel model) where TModel : class {
+            return SendTemplate(new MailAddress(sender, sender_displayname), new[] {receiver}, subject, source, identifier, model);
+        }
+
+        public Task SendTemplate<TModel>(string sender, string sender_displayname, MailAddress[] receiver, string subject, EmailSource source, string identifier, TModel model) where TModel : class {
+            return SendTemplate(new MailAddress(sender, sender_displayname), receiver, subject, source, identifier, model);
+        }
+
+        public Task SendTemplate<TModel>(Sender sender, string receiver, string subject, EmailSource source, string identifier, TModel model) where TModel : class {
+            return SendTemplate(new MailAddress(Settings.DefaultSender, Settings.DefaultSenderDisplayName), new[] {new MailAddress(receiver)}, subject, source, identifier, model);
+        }
+
+        public Task SendTemplate<TModel>(Sender sender, string[] receiver, string subject, EmailSource source, string identifier, TModel model) where TModel : class {
+            return SendTemplate(new MailAddress(Settings.DefaultSender, Settings.DefaultSenderDisplayName), receiver.Select(s => new MailAddress(s)).ToArray(), subject, source, identifier, model);
+        }
+
+        public Task SendTemplate<TModel>(Sender sender, MailAddress receiver, string subject, EmailSource source, string identifier, TModel model) where TModel : class {
+            return SendTemplate(new MailAddress(Settings.DefaultSender, Settings.DefaultSenderDisplayName), new[] {receiver}, subject, source, identifier, model);
+        }
+
+        public Task SendTemplate<TModel>(Sender sender, MailAddress[] receivers, string subject, EmailSource source, string identifier, TModel model) where TModel : class {
+            return SendTemplate(new MailAddress(Settings.DefaultSender, Settings.DefaultSenderDisplayName), receivers, subject, source, identifier, model);
+        }
+
+        #endregion
+
+        /// <summary>
+        ///     Sends a templated email.
+        /// </summary>
+        /// <param name="sender">Which email address sends this email</param>
+        /// <param name="receivers">The receiver of the email</param>
         /// <param name="subject">Subject of the email</param>
         /// <param name="body">Content of the email</param>
         /// <param name="source">Which source refer to</param>
         /// <param name="identifier">Depends on the EmailSource, if File then a path, if Resource then the resource name.</param>
-        public async Task SendTemplate(MailAddress sender, MailAddress receiver, string subject, string body, EmailSource source, string identifier) {
+        /// <param name="model">The model to pass to the view, default(TModel) to pass nothing.</param>
+        public async Task SendTemplate<TModel>(MailAddress sender, MailAddress[] receivers, string subject, EmailSource source, string identifier, TModel model) where TModel : class {
+            if (sender == null)
+                throw new ArgumentNullException(nameof(sender));
+            if (receivers == null)
+                throw new ArgumentNullException(nameof(receivers));
+
             var template = EmailSources.Fetch(source, identifier);
             if (template == null)
                 throw new FileNotFoundException($"Template could not have been found!\n Source: {source}, Identifier: {identifier}");
+            //support for void model:
+            Mailzory.Email e = typeof(TModel) == typeof(void) ? (Mailzory.Email) (new OutEmail(template, GetClient)) : (Mailzory.Email) new OutEmail<TModel>(template, model, GetClient);
 
-            var msg = _prepareNewMail;
-            msg.Sender = sender;
-            msg.From = sender;
-            msg.To.Add(receiver);
-            msg.Subject = subject ?? "No Subject";
-            msg.Body = body ?? "";
-
-            //new translated body
-            msg.Body = msg.Translate(template);
-            await _internal_sendasyncmail(msg);
+            if (Logger.LogLocally)
+                Logger.LogMessage(subject, receivers.Select(r=>r.Address).ToArray(), sender.Address,sender.DisplayName, ((IBodyGenerator) e).GenerateMailBody()); //todo add a body to this!
+            e.SetFrom(sender.Address, sender.DisplayName);
+            await e.SendAsync(receivers, subject ?? "No Subject");
         }
 
         #endregion
@@ -282,118 +160,37 @@ namespace nucs.Emailing {
         #region Regular Send
 
         #region Overloads
-
-        /// <summary>
-        ///     Sends an email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        public async Task Send(MailAddress receiver, string subject, Body body) {
-            await Send(new MailAddress(DefaultSender, DefaultSenderDisplayName), receiver, subject, body.Content);
+        public Task Send(string sender, string sender_displayname, string receiver, string subject, string body) {
+            return Send(new MailAddress(sender, sender_displayname), new[] {new MailAddress(receiver)}, subject, body);
         }
 
-        /// <summary>
-        ///     Sends an email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        public async Task Send(string receiver, string subject, Body body) {
-            await Send(new MailAddress(DefaultSender, DefaultSenderDisplayName), new MailAddress(receiver), subject, body.Content);
+        public Task Send(string sender, string sender_displayname, string[] receiver, string subject, string body) {
+            return Send(new MailAddress(sender, sender_displayname), receiver.Select(s => new MailAddress(s)).ToArray(), subject, body);
         }
 
-        /// <summary>
-        ///     Sends an email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        public async Task Send(MailAddress receiver, string subject) {
-            await Send(new MailAddress(DefaultSender, DefaultSenderDisplayName), receiver, subject, null);
+        public Task Send(string sender, string sender_displayname, MailAddress receiver, string subject, string body) {
+            return Send(new MailAddress(sender, sender_displayname), new[] {receiver}, subject, body);
         }
 
-        /// <summary>
-        ///     Sends an email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        public async Task Send(string receiver, string subject) {
-            await Send(new MailAddress(DefaultSender, DefaultSenderDisplayName), new MailAddress(receiver), subject, null);
+        public Task Send(string sender, string sender_displayname, MailAddress[] receiver, string subject, string body) {
+            return Send(new MailAddress(sender, sender_displayname), receiver, subject, body);
         }
 
-
-        /// <summary>
-        ///     Sends an email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        public async Task Send(string sender, MailAddress receiver, string subject, string body) {
-            await Send(new MailAddress(sender), receiver, subject, body);
+        public Task Send(Sender sender, string receiver, string subject, string body) {
+            return Send(new MailAddress(Settings.DefaultSender, Settings.DefaultSenderDisplayName), new[] {new MailAddress(receiver)}, subject, body);
         }
 
-        /// <summary>
-        ///     Sends an email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        public async Task Send(string sender, string receiver, string subject, Body body) {
-            await Send(new MailAddress(sender), new MailAddress(receiver), subject, body.Content);
+        public Task Send(Sender sender, string[] receiver, string subject, string body) {
+            return Send(new MailAddress(Settings.DefaultSender, Settings.DefaultSenderDisplayName), receiver.Select(s => new MailAddress(s)).ToArray(), subject, body);
         }
 
-        /// <summary>
-        ///     Sends an email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        public async Task Send(MailAddress sender, string receiver, string subject, Body body) {
-            await Send(sender, new MailAddress(receiver), subject, body.Content);
+        public Task Send(Sender sender, MailAddress receiver, string subject, string body) {
+            return Send(new MailAddress(Settings.DefaultSender, Settings.DefaultSenderDisplayName), new[] {receiver}, subject, body);
         }
 
-        /// <summary>
-        ///     Sends an email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        public async Task Send(string sender, MailAddress receiver, string subject) {
-            await Send(new MailAddress(sender), receiver, subject, null);
+        public Task Send(Sender sender, MailAddress[] receivers, string subject, string body) {
+            return Send(new MailAddress(Settings.DefaultSender, Settings.DefaultSenderDisplayName), receivers, subject, body);
         }
-
-        /// <summary>
-        ///     Sends an email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        public async Task Send(string sender, string receiver, string subject) {
-            await Send(new MailAddress(sender), new MailAddress(receiver), subject, null);
-        }
-
-        /// <summary>
-        ///     Sends an email.
-        /// </summary>
-        /// <param name="sender">Which email address sends this email</param>
-        /// <param name="receiver">The receiver of the email</param>
-        /// <param name="subject">Subject of the email</param>
-        /// <param name="body">Content of the email</param>
-        public async Task Send(MailAddress sender, string receiver, string subject) {
-            await Send(sender, new MailAddress(receiver), subject, null);
-        }
-
         #endregion
 
         /// <summary>
@@ -403,77 +200,27 @@ namespace nucs.Emailing {
         /// <param name="receiver">The receiver of the email</param>
         /// <param name="subject">Subject of the email</param>
         /// <param name="body">Content of the email</param>
-        public async Task Send(MailAddress sender, MailAddress receiver, string subject, string body) {
-            var msg = _prepareNewMail;
-            msg.Sender = sender;
-            msg.From = sender;
-            msg.To.Add(receiver);
-            msg.Subject = subject ?? "No Subject";
-            msg.Body = body ?? "";
-            await _internal_sendasyncmail(msg);
+        public Task Send(MailAddress sender, MailAddress[] receiver, string subject, string body) {
+            return SendTemplate(sender, receiver, subject, EmailSource.String, body);
         }
 
         #endregion
 
         private async Task _internal_sendasyncmail(MailMessage msg) {
-            if (string.IsNullOrEmpty(msg.Sender?.Address))
-                throw new ArgumentNullException(nameof(msg.Sender), "Sender specified is null!");
-            if (msg.To.Count == 0 || string.IsNullOrEmpty(msg.To[0]?.Address))
-                throw new ArgumentNullException(nameof(msg.Sender), "Receiver specified is null!");
-            if (LogLocally)
-                LogMessage(msg);
+
 
             using (var cli = GetClient) {
-                cli.Credentials = new NetworkCredential(Username, Password);
+                cli.Credentials = new NetworkCredential(Settings.Username, Settings.Password);
                 await cli.SendMailAsync(msg);
             }
         }
+
         /// <summary>
         ///     Tests the connection and authentication
         /// </summary>
         /// <returns></returns>
         public async Task<bool> TestConnection() {
-            return await SmtpHelper.ValidateCredentials(Username, SecureStringToString(Password), HostIp, Port, EnableSSL);
-        }
-
-
-        private void LogMessage(MailMessage msg) {
-            var @out = Path.Combine(logdir.FullName, $"{DateTime.Now.Ticks}.{CleanForFileName(msg.Subject)}.email.txt");
-            var cont =
-                $@"To: {msg.To}
-From: {msg.From}
-Sender: {msg.Sender}
-Title: {msg.Subject}
-
-{msg.Body}";
-            File.WriteAllText(@out, cont);
-        }
-
-
-        private static string CleanForFileName(string fileName) {
-            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c.ToString(), string.Empty));
-        }
-
-        private String SecureStringToString(SecureString value)
-        {
-            IntPtr valuePtr = IntPtr.Zero;
-            try
-            {
-                valuePtr = Marshal.SecureStringToGlobalAllocUnicode(value);
-                return Marshal.PtrToStringUni(valuePtr);
-            }
-            finally
-            {
-                Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
-            }
-        }
-    }
-
-    public class Body {
-        public string Content { get; set; }
-
-        public Body(string content) {
-            Content = content;
+            return await SmtpHelper.ValidateCredentials(Settings.Username, Settings.PasswordToString(), Settings.HostIp, Settings.Port, Settings.EnableSSL);
         }
     }
 }

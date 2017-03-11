@@ -1,9 +1,14 @@
 ﻿#if !NET4
 
+
 using System;
+
 using System.Collections.Generic;
+
 using System.Threading;
+
 using nucs.Collections.Concurrent.ValueTask;
+
 
 namespace nucs.Collections.Concurrent
 {
@@ -17,7 +22,7 @@ namespace nucs.Collections.Concurrent
 		private readonly AsyncQueue<IReadOnlyList<T>> _batchQueue = new AsyncQueue<IReadOnlyList<T>>();
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="AsyncBatchQueue"/> that produces batches of a specified size.
+		/// Initializes a new instance of <see cref="AsyncBatchQueue{T}"/> that produces batches of a specified size.
 		/// </summary>
 		/// <param name="batchSize">Amount of the items contained in an output batch.</param>
 		public AsyncBatchQueue( int batchSize )

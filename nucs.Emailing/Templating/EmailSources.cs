@@ -7,14 +7,16 @@ using nucs.Emailing.Helpers;
 
 namespace nucs.Emailing.Templating {
     public static class EmailSources {
-
-
-        public static EmailTemplate Fetch(EmailSource src, string identifier) {
+        public static string Fetch(EmailSource src, string identifier) {
             switch (src) {
                 case EmailSource.EmbeddedResource:
                     return Resource(identifier);
                 case EmailSource.File:
                     return File(identifier);
+                case EmailSource.MvcDirectory:
+                    return File(new FileInfo(identifier).FullName);
+                case EmailSource.String:
+                    return identifier;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(src), src, null);
             }
@@ -24,7 +26,7 @@ namespace nucs.Emailing.Templating {
         ///     Finds the resource in All assemblies that contains the given string 'name'.
         ///     Be precise as much as possible to avoid multiple detections
         /// </summary>
-        public static EmailTemplate Resource(string name) {
+        public static string Resource(string name) {
             var asms = AppDomain.CurrentDomain.GetAssemblies();
             Assembly asmy = null;
             string target = null;
@@ -42,7 +44,7 @@ namespace nucs.Emailing.Templating {
                 if (stream == null)
                     throw new FileNotFoundException($"Could not find a resource that contains the name '{name}'");
                 using (var reader = new StreamReader(stream)) {
-                    return new EmailTemplate(reader.ReadToEnd());
+                    return reader.ReadToEnd();
                 }
             }
         }
@@ -54,13 +56,28 @@ namespace nucs.Emailing.Templating {
         /// </summary>
         /// <param name="fileandpath"></param>
         /// <returns></returns>
-        public static EmailTemplate File(string fileandpath) {
-            return new EmailTemplate(Files.Read(fileandpath, Encoding.UTF8));
+        public static string File(string fileandpath) {
+            return Files.Read(fileandpath, Encoding.UTF8);
         }
+
     }
 
     public enum EmailSource {
+        /// <summary>
+        ///     And embedded resource.
+        /// </summary>
         EmbeddedResource,
-        File
+        /// <summary>
+        ///     A path to a file.
+        /// </summary>
+        File,
+        /// <summary>
+        ///     A path to a directory in mvc project - e.g. 'Views/Emails/someemail.cshtml'
+        /// </summary>
+        MvcDirectory,
+        /// <summary>
+        ///     When the identifier is the string
+        /// </summary>
+        String
     }
 }
