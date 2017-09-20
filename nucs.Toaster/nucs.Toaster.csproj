@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6995ABFD-720F-41E7-BE8B-38F23BA4BB57}</ProjectGuid>
+    <ProjectGuid>{900DCA3C-E293-4120-892A-C96B59607697}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>nucs.Toaster</RootNamespace>
@@ -114,6 +114,9 @@
     <Resource Include="Resources\Finished.png" />
     <Resource Include="Resources\Info.png" />
     <Resource Include="Resources\Welcome.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Mobile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

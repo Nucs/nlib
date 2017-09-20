@@ -123,9 +123,9 @@ namespace nucs.WinForms.WindowFinder
             {
                 // Load cursors
                 Assembly assembly = Assembly.GetExecutingAssembly();
-                cursorTarget = new Cursor(assembly.GetManifestResourceStream("nucs.Controls.WindowFinder.Resources.curTarget.cur"));
-                bitmapFind = new Bitmap(assembly.GetManifestResourceStream("nucs.Controls.WindowFinder.Resources.bmpFind.bmp"));
-                bitmapFinda = new Bitmap(assembly.GetManifestResourceStream("nucs.Controls.WindowFinder.Resources.bmpFinda.bmp"));
+                /*cursorTarget = new Cursor(assembly.GetManifestResourceStream("nucs.Controls.WindowFinder.Resources.curTarget.cur"));*/
+/*                bitmapFind = new Bitmap(assembly.GetManifestResourceStream("nucs.Controls.WindowFinder.Resources.bmpFind.bmp"));
+                bitmapFinda = new Bitmap(assembly.GetManifestResourceStream("nucs.Controls.WindowFinder.Resources.bmpFinda.bmp"));*/
             }
             catch(Exception x)
             {
@@ -343,5 +343,10 @@ namespace nucs.WinForms.WindowFinder
         private string windowText = string.Empty;
         private bool isWindowUnicode = false;
         private string windowCharset = string.Empty;
+
+        private void picTarget_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

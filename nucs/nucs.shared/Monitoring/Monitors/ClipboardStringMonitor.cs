@@ -10,6 +10,7 @@ namespace nucs.Monitoring {
         public override string FetchCurrent() {
             return Clipboardy.GetText();
         }
+
     }
 
     internal static class Clipboardy {
@@ -49,5 +50,7 @@ namespace nucs.Monitoring {
 
             return data;
         }
+
+
     }
 }

@@ -23,7 +23,7 @@ namespace nucs.Network {
             // Change the minimum number of worker threads to four, but
             // keep the old setting for minimum asynchronous I/O 
             // completion threads.
-            ThreadPool.SetMinThreads(50, minIOC); //50 threads to handle async tasks.
+            ThreadPool.SetMinThreads(multithreads, minIOC); //50 threads to handle async tasks.
         }
 
     }

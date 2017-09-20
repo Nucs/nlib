@@ -22,7 +22,7 @@ namespace nucs.Collections.Concurrent
 		private long _queueBalance = 0;
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="AsyncCollection"/> with a specified <see cref="IProducerConsumerCollection{T}"/> as an underlying item storage.
+		/// Initializes a new instance of <see cref="AsyncCollection{T}"/> with a specified <see cref="IProducerConsumerCollection{T}"/> as an underlying item storage.
 		/// </summary>
 		/// <param name="itemQueue">The collection to use as an underlying item storage. MUST NOT be accessed elsewhere.</param>
 		public AsyncCollection( IProducerConsumerCollection<T> itemQueue )

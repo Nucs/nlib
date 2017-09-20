@@ -23,8 +23,7 @@ namespace nucs.Toaster {
         }
         
         public void SetNotificationsLocation(NotificationLocation location) {
-            if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
-            {
+            if (!Dispatcher.CheckAccess()) { // CheckAccess returns true if you're on the dispatcher thread
                 Dispatcher.Invoke(new Action(() => SetNotificationsLocation(location)));
                 return;
             }
@@ -55,11 +54,11 @@ namespace nucs.Toaster {
         }
 
         public void AddNotification(Toast toast) {
-            if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
-            {
+            if (!Dispatcher.CheckAccess()) { // CheckAccess returns true if you're on the dispatcher thread
                 Dispatcher.Invoke(new Action(() => AddNotification(toast)));
                 return;
             }
+
             toast.Id = _count++;
             if (ToastsCollection.Count + 1 > MaxNotifications)
                 _buffer.Add(toast);

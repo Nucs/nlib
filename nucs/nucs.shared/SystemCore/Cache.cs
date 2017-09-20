@@ -4,8 +4,6 @@ using Timer = System.Timers.Timer;
 
 namespace nucs.SystemCore {
     public class Cache<T> : IDisposable {
-
-
         public static Cache<T> Minute(Func<T> update, bool constantly_update) {
             return new Cache<T>(update, 60*1000, constantly_update);
         }
@@ -123,6 +121,13 @@ namespace nucs.SystemCore {
                 
             }
             private set { _obj = value; }
+        }
+        /// <summary>
+        ///     Forces creation of new object and replaces the cached one with it. note that it will not reset time till next update
+        /// </summary>
+        /// <returns></returns>
+        public T ForceUpdate() {
+            return _obj = Update();
         }
 
         public void Dispose() {

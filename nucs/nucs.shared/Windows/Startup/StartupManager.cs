@@ -1,5 +1,4 @@
-﻿/*#if !AV_SAFE
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -442,5 +441,3 @@ namespace nucs.Windows.Startup {
         LocalUserStartupRegistry = 3
     }
 }
-
-#endif*/

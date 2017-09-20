@@ -58,6 +58,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Pipes\PipeManualReset.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Pipes\PipeTask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Pipes\SafeEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\SafeDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\SynchronizedList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\ThreadSafeList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Cryptography\Encoding\Base64Encoder.cs" />
@@ -290,6 +291,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Syncing\DataflowNotifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Syncing\PipeAsyncManualReset.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\TaskCascading.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\TimedLocker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\TimeLimitedInspector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\ConsoleUtils\ConsoleHelper.cs" />

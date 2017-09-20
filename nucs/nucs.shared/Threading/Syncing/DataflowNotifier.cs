@@ -5,10 +5,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using nucs.Collections;
-using nucs.Collections.Concurrent.Pipes;
 
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using nucs.Collections.Concurrent.Pipes;
 using Nito.AsyncEx;
 
 namespace nucs.Threading.Syncers {
@@ -18,6 +18,7 @@ namespace nucs.Threading.Syncers {
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class DataflowNotifier<T> : IWaitress<ResultWaiting<T>>, IEnumerable<T> {
+        public bool CollectIntoCollection { get; set; }
 
         /// <summary>
         ///     Filter that when it returns false, the object wont be queued.
@@ -32,7 +33,7 @@ namespace nucs.Threading.Syncers {
         /// <summary>
         ///     A side collection that will collect all queued objects into it - works only if Collect is set to true.
         /// </summary>
-        public readonly ConcurrentList<T> Collection = new ConcurrentList<T>();
+        public readonly ConcurrentList<T> Collection = null;
         private readonly PipedConcurrentQueue<T> queue;
         private readonly Syncing.PipeAsyncManualReset<T> awaker;
         private readonly AsyncManualResetEvent endwaiter = new AsyncManualResetEvent(false);
@@ -42,15 +43,24 @@ namespace nucs.Threading.Syncers {
         /// </summary>
         public bool HasEnded { get; private set; } = false;
 
-        public DataflowNotifier() {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="collectIntoCollection">Should the inserted data be cached on a side list to be always accessible. if false: IWaitress will return only null.</param>
+        public DataflowNotifier(bool collectIntoCollection = true) {
+            CollectIntoCollection = collectIntoCollection;
             queue = new PipedConcurrentQueue<T>(PipedQueueStyle.OnEnqueue);
+            if (collectIntoCollection)
+                Collection = new ConcurrentList<T>();
             awaker = new Syncing.PipeAsyncManualReset<T>(queue);
         }
 
         /// <param name="filter">Apply filter that when false is returned, the item wont be queued.</param>
-        public DataflowNotifier(Func<T, bool> filter) : this() {
+        /// <param name="collectIntoCollection">Should the inserted data be cached on a side list to be always accessible. if false: IWaitress will return only null.</param>
+        public DataflowNotifier(Func<T, bool> filter, bool collectIntoCollection = true) : this(collectIntoCollection) {
             Filter = filter;
         }
+
         /// <summary>
         ///     Set with an object.
         /// </summary>
@@ -63,7 +73,7 @@ namespace nucs.Threading.Syncers {
             }
             if (Filter != null && Filter(obj) == false) //if was filtered
                 return; 
-            Collection.Add(obj);
+            Collection?.Add(obj);
             queue.Enqueue(obj);
         }
 
@@ -81,6 +91,14 @@ namespace nucs.Threading.Syncers {
             Set(obj);
             SetEnd();
         }
+/*
+
+        /// <summary>
+        ///     Clears the queue and resets everything
+        /// </summary>
+        public void Clear() {
+        }
+*/
 
         //internal use only
         internal void Reset() {
@@ -343,7 +361,7 @@ namespace nucs.Threading.Syncers {
             var b = await endwaiter.WaitAsync(millisecondsTimeout, cancellationToken);
             if (b == false)
                 return null;
-            return Collection.ToArray();
+            return Collection?.ToArray();
         }
         #else
         
@@ -415,7 +433,7 @@ namespace nucs.Threading.Syncers {
                 var b = task.Result;
                 if (b == false)
                     return null;
-                return Collection.ToArray();
+                return Collection?.ToArray();
             });
         }
         #endif
@@ -425,6 +443,8 @@ namespace nucs.Threading.Syncers {
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<T> GetEnumerator() {
+            if (Collection == null)
+                return (IEnumerator<T>) new T[0].GetEnumerator();
             return ((IEnumerable<T>) Collection.ToArray()).GetEnumerator();
         }
 

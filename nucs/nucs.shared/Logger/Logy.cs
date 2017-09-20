@@ -18,7 +18,7 @@ namespace nucs.Logger {
             PrefixGenerator += () => $"[{DateTime.Now.ToString("F", CultureInfo.InvariantCulture)}]";
         }
 
-        public static string Base = FileHelper.ExecutedDirectoryPath() + "/logs/";
+        public static string Base = Path.Combine(FileHelper.ExecutedDirectoryPath(), "/logs/");
 
         public static string Filename = DateTime.Now.ToString("yy-MM-dd");
         public static string Extension = "log";

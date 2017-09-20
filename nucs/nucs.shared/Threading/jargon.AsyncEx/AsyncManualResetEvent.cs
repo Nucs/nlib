@@ -14,6 +14,7 @@ namespace Nito.AsyncEx {
     /// </summary>
     [DebuggerDisplay("Id = {Id}, IsSet = {GetStateForDebugger}")]
     [DebuggerTypeProxy(typeof(DebugView))]
+    [DebuggerStepThrough]
     public sealed class AsyncManualResetEvent : IWaitable {
         /// <summary>
         ///     The object used for synchronization.
@@ -189,9 +190,12 @@ namespace Nito.AsyncEx {
         ///     this method does nothing.
         /// </summary>
         public void Set() {
+            if (IsSet)
+                return;
             lock (_sync) {
-                //Enlightenment.Trace.AsyncManualResetEvent_Set(this, _tcs.Task);
-                _tcs.TrySetResultWithBackgroundContinuations();
+                if (IsSet)
+                    return;
+                _tcs.SetResult();
             }
         }
 

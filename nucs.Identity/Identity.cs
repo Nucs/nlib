@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace nucs.Identifiers
-{
+namespace nucs.Identifiers {
     public static class Identity {
-
         private static Guid _thiscache = Guid.Empty;
 
         /// <summary>
@@ -19,7 +17,7 @@ namespace nucs.Identifiers
                     if (File.Exists(dir))
                         _thiscache = new Guid(File.ReadAllText(dir));
                     else
-                        File.WriteAllText(dir, (_thiscache=Guid.NewGuid()).ToString());
+                        File.WriteAllText(dir, (_thiscache = Guid.NewGuid()).ToString());
                 }
                 return _thiscache;
             }

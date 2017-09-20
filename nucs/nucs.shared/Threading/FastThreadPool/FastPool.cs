@@ -6,10 +6,6 @@ namespace nucs.Threading.FastThreadPool {
     ///     Static singleton implementation of FastThreadPool, once accessed - a static constuctor initializes a new instance.
     /// </summary>
     public static class FastPool {
-        static FastPool() {
-            FastThreadPool.Default = new FastThreadPool(8);
-        }
-
         /// <summary>
         ///     Enqueues a job
         /// </summary>
@@ -20,6 +16,20 @@ namespace nucs.Threading.FastThreadPool {
 
         public static Task<T> Enqueue<T>(Func<T> act) {
             return FastThreadPool.Default.Enqueue(act);
+        }
+
+        /// <summary>
+        ///     Runs a task through the current task scheduler
+        /// </summary>
+        public static Task Run(Action act) {
+            return FastThreadPool.Default.Run(act);
+        }
+
+        /// <summary>
+        ///     Runs a task through the current task scheduler
+        /// </summary>
+        public static Task<T> Run<T>(Func<T> func) {
+            return FastThreadPool.Default.Run(func);
         }
 
         /// <summary>

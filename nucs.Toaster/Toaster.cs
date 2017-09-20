@@ -56,6 +56,7 @@ namespace nucs.Toaster {
                 Manager.Closed += (sender2, e2) => Manager.Dispatcher.InvokeShutdown();
 
                 Images.Load(); //load to this dispatcher
+
                 Default = new Toast() {
                     Title = null,
                     Image = Images.SuccessThumbs,
@@ -71,6 +72,19 @@ namespace nucs.Toaster {
             ToasterThread.Name = "ToasterThread";
             ToasterThread.SetApartmentState(ApartmentState.STA);
             ToasterThread.Start();
+        }
+
+        /// <summary>Gets or sets the opacity factor applied to the entire <see cref="T:System.Windows.UIElement" /> when it is rendered in the user interface (UI).  This is a dependency property.</summary>
+        /// <returns>The opacity factor. Default opacity is 1.0. Expected values are between 0.0 and 1.0.</returns>
+        public static double Opacity {
+            get { return Manager.Opacity; }
+            set {
+                if (!Manager.Dispatcher.CheckAccess()) {
+                    Manager.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => Opacity = value));
+                    return;
+                }
+                Manager.Opacity = value;
+            }
         }
 
         private static readonly object sync = new object();
@@ -96,30 +110,31 @@ namespace nucs.Toaster {
         /// <summary>
         ///     Sends a toast
         /// </summary>
-        public static void Add(string title, string message, BitmapImage image) {
+        public static void Add(string title, string message, BitmapImage image, Action<Toast> onclick = null) {
             _sync.Wait();
             var t = Default.Clone() as Toast;
             if (image != null)
                 t.Image = image;
             t.Title = title;
             t.Message = message;
+            /*t.Clicked += onclick;*/
             lock (sync) {
                 Manager.AddNotification(t);
             }
         }
-
+        
         /// <summary>
         ///     Sends a toast
         /// </summary>
-        public static void Add(string title, string message, ToastImage image) {
-            Add(title, message, image?.Image);
+        public static void Add(string title, string message, ToastImage image, Action<Toast> onclick = null) {
+            Add(title, message, image?.Image, onclick);
         }
 
         /// <summary>
         ///     Sends a toast
         /// </summary>
-        public static void Add(string title, string message) {
-            Add(title, message, null);
+        public static void Add(string title, string message, Action<Toast> onclick = null) {
+            Add(title, message, null, onclick);
         }
     }
 }

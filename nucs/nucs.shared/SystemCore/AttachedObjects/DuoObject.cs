@@ -6,8 +6,11 @@ using System.Text;
 
 namespace nucs.SystemCore.AttachedObjects {
     [DebuggerStepThrough]
+    [DebuggerDisplay("{First}, {Second}")]
     public class DuoObject<T1,T2> {
-        
+        public static DuoObject<T1, T2> Create(T1 a, T2 b) {
+            return new DuoObject<T1, T2>(a,b);
+        }
         public T1 First { get; set; }
         
         public T2 Second { get; set; }
