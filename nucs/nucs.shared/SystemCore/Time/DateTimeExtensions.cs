@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Media;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
@@ -12,6 +11,9 @@ using System.Threading;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
+#if !NETSTANDARD2_0
+using System.Media;
+#endif
 namespace nucs.Utils {
     public static class DateTimeExtensions {
         public const string _MinDate = "2000-01-01 00:00:00";
@@ -137,21 +139,27 @@ namespace nucs.Utils {
 
         public static void validateOnlyLettersEvent(object sender, KeyPressEventArgs e) {
             if (!char.IsLetter(e.KeyChar) && (Keys) e.KeyChar != Keys.Back) {
+#if !NETSTANDARD2_0
                 SystemSounds.Beep.Play();
+#endif
                 e.Handled = true;
             }
         }
 
         public static void validateOnlyDigitsEvent(object sender, KeyPressEventArgs e) {
             if (!char.IsDigit(e.KeyChar) && (Keys) e.KeyChar != Keys.Back) {
+#if !NETSTANDARD2_0
                 SystemSounds.Beep.Play();
+#endif
                 e.Handled = true;
             }
         }
 
         public static void validateOnlyDigitsAndLettersEvent(object sender, KeyPressEventArgs e) {
             if (!char.IsLetterOrDigit(e.KeyChar) && (Keys) e.KeyChar != Keys.Back) {
+#if !NETSTANDARD2_0
                 SystemSounds.Beep.Play();
+#endif
                 e.Handled = true;
             }
         }

@@ -1,6 +1,7 @@
 // Copyright (c) 2014 Jonathan Magnan (http://jonathanmagnan.com).
 // All rights reserved (http://jonathanmagnan.com/extension-methods-library).
 // Licensed under MIT License (MIT) (http://zextensionmethods.codeplex.com/license).
+#if !NETSTANDARD2_0
 
 using System;
 
@@ -29,3 +30,4 @@ public static partial class TypeExtension
         return Activator.GetObject(type, url, state);
     }
 }
+#endif

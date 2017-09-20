@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>nucs.standard</AssemblyName>
+    <RootNamespace>nucs</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NET45;NET451;NET452;NET46;NET460;NET461;NET462;NETSTANDARD2_0</DefineConstants>
+  </PropertyGroup>
+
+  <Import Project="..\nucs\nucs.shared\nucs.shared.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Windows.Forms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="C:\Users\Eli\Desktop\nucs\nlib\nucs\nucs.shared\SystemCore\Linq\Fold.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </Content>
+    <Content Update="C:\Users\Eli\Desktop\nucs\nlib\nucs\nucs.shared\SystemCore\Linq\ToDelimitedString.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </Content>
+  </ItemGroup>
+
+</Project>

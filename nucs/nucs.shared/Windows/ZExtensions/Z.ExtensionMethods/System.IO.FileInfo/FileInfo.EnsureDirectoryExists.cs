@@ -82,7 +82,7 @@ public static partial class FileInfoExtension
     {
         return Directory.CreateDirectory(@this.Directory.FullName);
     }
-
+#if !NETSTANDARD2_0
     /// <summary>
     ///     Creates all directories and subdirectories in the specified @this if the directory doesn't already exists.
     ///     This methods is the same as FileInfo.CreateDirectory however it's less ambigues about what happen if the
@@ -159,4 +159,5 @@ public static partial class FileInfoExtension
     {
         return Directory.CreateDirectory(@this.Directory.FullName, directorySecurity);
     }
+#endif
 }

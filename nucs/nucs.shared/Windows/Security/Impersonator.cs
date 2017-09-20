@@ -1,16 +1,18 @@
-﻿using System;
+﻿#if !NETSTANDARD2_0
+
+using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 
 namespace nucs.Windows.Security {
-    #region Using directives.
+#region Using directives.
 
     // ----------------------------------------------------------------------
     
     // ----------------------------------------------------------------------
 
-    #endregion
+#endregion
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -37,7 +39,7 @@ namespace nucs.Windows.Security {
     /// </remarks>
     public class Impersonator :
         IDisposable {
-        #region Public methods.
+#region Public methods.
 
         // ------------------------------------------------------------------
 
@@ -58,9 +60,9 @@ namespace nucs.Windows.Security {
 
         // ------------------------------------------------------------------
 
-        #endregion
+#endregion
 
-        #region IDisposable member.
+#region IDisposable member.
 
         // ------------------------------------------------------------------
 
@@ -70,9 +72,9 @@ namespace nucs.Windows.Security {
 
         // ------------------------------------------------------------------
 
-        #endregion
+#endregion
 
-        #region P/Invoke.
+#region P/Invoke.
 
         // ------------------------------------------------------------------
 
@@ -103,9 +105,9 @@ namespace nucs.Windows.Security {
 
         // ------------------------------------------------------------------
 
-        #endregion
+#endregion
 
-        #region Private member.
+#region Private member.
 
         // ------------------------------------------------------------------
 
@@ -171,8 +173,9 @@ namespace nucs.Windows.Security {
 
         // ------------------------------------------------------------------
 
-        #endregion
+#endregion
     }
 
     /////////////////////////////////////////////////////////////////////////
 }
+#endif

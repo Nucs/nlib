@@ -1,4 +1,4 @@
-﻿#if NET45
+﻿#if NET45 && !NETSTANDARD2_0
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -53,11 +53,11 @@ namespace nucs.SystemCore {
 
             code = PrepareCode(code, includeNamespaces);
 
-            #if DEBUG
+#if DEBUG
             try {
                 code.SaveAs(OutputCodeTarget);
             } catch {} //safecatch
-            #endif
+#endif
 
             CompilerResults results = provider.CompileAssemblyFromSource(parameters, code);
             return new CodeGenerated(results);

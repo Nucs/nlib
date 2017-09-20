@@ -395,7 +395,9 @@ namespace nucs.WinForms.Controls {
             EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
             if (Adapter != null && Adapter.BindingSource.AllowEdit)
                 Adapter.BindingSource.EndEdit();
+#pragma warning disable 618
             EndEdit();
+#pragma warning restore 618
             EditMode = _editMode;
         }
 
@@ -407,7 +409,9 @@ namespace nucs.WinForms.Controls {
             EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
             if (Adapter != null && Adapter.BindingSource.AllowEdit)
                 Adapter.BindingSource.EndEdit();
+#pragma warning disable 618
             EndEdit(context);
+#pragma warning restore 618
             EditMode = _editMode;
         }
 
