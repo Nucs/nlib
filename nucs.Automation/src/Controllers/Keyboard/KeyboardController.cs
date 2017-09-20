@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace nucs.Automation.Controllers {
-    public class KeyboardController : IModernKeyboard {
+    public class KeyboardController : IExtendedKeyboardController {
         #region Write
 
         /// <summary>
@@ -77,8 +77,8 @@ namespace nucs.Automation.Controllers {
                 inputData = {
                     ki = new KEYBDINPUT {
                         wVk = (ushort) keycode,
-                        wScan = this.Convert(keycode),
-                        dwFlags = this.IsExtendedKey(keycode) ? 1U : 8U,
+                        wScan = Convert(keycode),
+                        dwFlags = IsExtendedKey(keycode) ? 1U : 8U,
                         time = 0U,
                         dwExtraInfo = 0
                     }
@@ -93,8 +93,8 @@ namespace nucs.Automation.Controllers {
                 inputData = {
                     ki = new KEYBDINPUT {
                         wVk = (ushort) keycode,
-                        wScan = this.Convert(keycode),
-                        dwFlags = this.IsExtendedKey(keycode) ? 3U : 2U,
+                        wScan = Convert(keycode),
+                        dwFlags = IsExtendedKey(keycode) ? 3U : 2U,
                         time = 0U,
                         dwExtraInfo = 0
                     }
@@ -166,11 +166,11 @@ namespace nucs.Automation.Controllers {
 
         #region Helpers
 
-        private bool IsExtendedKey(KeyCode keyCode) {
+        internal static bool IsExtendedKey(KeyCode keyCode) {
             return keyCode == KeyCode.Menu || keyCode == KeyCode.LMenu || (keyCode == KeyCode.RMenu || keyCode == KeyCode.Control) || (keyCode == KeyCode.RControl || keyCode == KeyCode.Insert || (keyCode == KeyCode.Delete || keyCode == KeyCode.Home)) || (keyCode == KeyCode.End || keyCode == KeyCode.Prior || (keyCode == KeyCode.Next || keyCode == KeyCode.Right) || (keyCode == KeyCode.Up || keyCode == KeyCode.Left || (keyCode == KeyCode.Down || keyCode == KeyCode.Numlock))) || (keyCode == KeyCode.Cancel || keyCode == KeyCode.Snapshot || (keyCode == KeyCode.Divide || keyCode == KeyCode.LWIN) || keyCode == KeyCode.RWIN);
         }
 
-        private ushort Convert(KeyCode keycode) {
+        internal static ushort Convert(KeyCode keycode) {
             switch (keycode) {
                 case KeyCode.Back:
                     return 1038;

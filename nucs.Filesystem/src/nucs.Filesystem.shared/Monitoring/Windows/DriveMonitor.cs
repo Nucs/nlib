@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management;
-using nucs.Filesystem.Comparers;
 using nucs.Monitoring;
 
 namespace nucs.Filesystem.Monitoring.Windows {

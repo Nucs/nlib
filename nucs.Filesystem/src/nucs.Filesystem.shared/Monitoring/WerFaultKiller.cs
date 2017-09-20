@@ -66,7 +66,7 @@ namespace nucs.Filesystem.Monitoring {
                     Process.GetProcesses().Where(pp => pp.ProcessName.Contains("WerFault")).ToList().ForEach(p => {
                         p.Kill();
                         Tasky.Run(() => Killed?.Invoke());
-                        Console.WriteLine($"[WerFault] {p.ProcessName} has been killed.");
+                        //Console.WriteLine($"[WerFault] {p.ProcessName} has been killed.");
                     });
                 }
             }

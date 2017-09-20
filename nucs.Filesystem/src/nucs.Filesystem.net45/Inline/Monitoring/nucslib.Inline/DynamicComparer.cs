@@ -9,7 +9,6 @@ public delegate bool CompareEqualityHandler<in T>(T x, T y);
 
 public delegate int HashcodeHandler<in T>(T x);
 
-namespace nucs.Filesystem.Comparers {
 
     /// <summary>
     /// Provides a base class for implementations of the <see cref="T:System.Collections.Generic.IComparer`1"/> generic interface.
@@ -52,4 +51,3 @@ namespace nucs.Filesystem.Comparers {
             return HashcodeMethod(obj);
         }
     }
-}

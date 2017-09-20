@@ -346,6 +346,7 @@ namespace nucs.Automation.Mirror {
         public static SmartProcess GetCached(Guid guid) {
             return sporcs.SingleOrDefault(sproc => sproc.GUID.Equals(guid));
         }
+
         /// <summary>
         ///     Gets or create the instance out of the foreground window.
         /// </summary>
@@ -359,6 +360,12 @@ namespace nucs.Automation.Mirror {
             return Get(p);
         }
 
+        /// <summary>
+        ///     Returns the executing process via <see cref="Process.GetCurrentProcess()"/>
+        /// </summary>
+        public static SmartProcess This() {
+            return Get(Process.GetCurrentProcess());
+        }
 
         #endregion
     }

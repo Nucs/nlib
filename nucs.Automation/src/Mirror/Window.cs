@@ -242,7 +242,7 @@ namespace nucs.Automation.Mirror {
             Process = process;
             Handle = handle;
             Mouse = new RelativeMouseEmulator(this);
-            Keyboard = new KeyboardEmulator(handle);
+            KeyboardController = new KeyboardControllerEmulator(handle);
         }
 
         #endregion
@@ -445,12 +445,12 @@ namespace nucs.Automation.Mirror {
         ///     Perform clicks relative to the window position only!
         ///     For otherwise, access static instance Mouse
         /// </summary>
-        public KeyboardEmulator Keyboard { get; }
+        public KeyboardControllerEmulator KeyboardController { get; }
 
-        public class KeyboardEmulator : IModernKeyboard {
+        public class KeyboardControllerEmulator : IExtendedKeyboardController {
             public HWND hWnd { get; set; }
 
-            public KeyboardEmulator(HWND hWnd) {
+            public KeyboardControllerEmulator(HWND hWnd) {
                 this.hWnd = hWnd;
             }
 

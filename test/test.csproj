@@ -35,14 +35,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nucs.Automation, Version=1.0.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\nucs.Automation.1.0.1\lib\net45\nucs.Automation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nucs.Filesystem, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\nucs.Filesystem.1.0.0\lib\net461\nucs.Filesystem.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -63,9 +55,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\nucs.Automation.Imaging\nucs.Automation.Imaging.csproj">
-      <Project>{481ea152-fb73-4acf-8c26-8414e28b5af5}</Project>
-      <Name>nucs.Automation.Imaging</Name>
+    <ProjectReference Include="..\nucs.Automation\src\nucs.Automation.csproj">
+      <Project>{ae53d952-46dd-498b-9c1e-08add87e4096}</Project>
+      <Name>nucs.Automation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\nucs.Filesystem\src\nucs.Filesystem.net45\nucs.Filesystem.net45.csproj">
+      <Project>{bb205bb3-37ae-4e3c-8aa1-617ab610f98a}</Project>
+      <Name>nucs.Filesystem.net45</Name>
     </ProjectReference>
     <ProjectReference Include="..\nucs\nucs.net45\nucs.net45.csproj">
       <Project>{647EDC67-D125-4528-8E8D-0C770BA77CFF}</Project>

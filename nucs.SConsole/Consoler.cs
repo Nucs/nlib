@@ -59,7 +59,7 @@ namespace nucs.SConsole {
             Console.Write("[INPUT] ", Color.DarkGray);
             Console.Write(question, Color.White);
             Console.Write($"{(question.Last() == ' ' ? "" : " ")}(default:[", Color.Aqua);
-            Console.Write($"{ enumtype.Name}.{@default}", Color.White);
+            Console.Write(@default==null?"null":$"{ enumtype.Name}.{@default}", Color.White);
             Console.WriteLine("],[exit])", Color.Aqua);
             var vals = Enum.GetValues(enumtype).Cast<object>().OrderByDescending(o => o.ToString()).ToArray();
             for (int i = 0; i < vals.Length; i++) {
@@ -155,8 +155,16 @@ namespace nucs.SConsole {
             Console.ResetColor();
             var input = Console.ReadLine()?.ExpandEscaped() ?? "";
 
-            if (string.IsNullOrEmpty(input))
-                return @default;
+            if (string.IsNullOrEmpty(input)) {
+                if (validate == null)
+                    return @default;
+                if (validate(@default))
+                    return @default;
+                else {
+                    Error("Invalid Input and Default Value.");
+                    goto _reprint;
+                }
+            }
 
             var @out = MapToType(input, @out_type);
             if (@out is Exception && (@out as Exception).Message == "__ERROR") {

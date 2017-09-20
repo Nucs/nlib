@@ -29,7 +29,6 @@ namespace nucs.Database {
             var @default = strings.Cast<ConnectionStringSettings>().FirstOrDefault(cs => cs.Name == "Default");
             if (@default == null)
                 return;
-            System.Timers.Timer
             ChangeConnectionString(@default);
         }
 

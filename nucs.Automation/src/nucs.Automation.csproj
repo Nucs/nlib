@@ -54,10 +54,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\Keyboard\KeyboardController.cs" />
-    <Compile Include="Controllers\Keyboard\IKeyboard.cs" />
-    <Compile Include="Controllers\Keyboard\IModernKeyboard.cs" />
+    <Compile Include="Controllers\Keyboard\IKeyboardController.cs" />
+    <Compile Include="Controllers\Keyboard\IExtendedKeyboardController.cs" />
     <Compile Include="Controllers\InputControl.cs" />
+    <Compile Include="Controllers\Keyboard\WindowSpecificKeyboardController.cs" />
+    <Compile Include="Controllers\Mouse\IMouseController.cs" />
     <Compile Include="Controllers\Mouse\MouseButton.cs" />
+    <Compile Include="Fluent\FluentInvoker.cs" />
+    <Compile Include="Fluent\FluentTemplate.cs" />
     <Compile Include="Internals\AsyncManualResetEvent.cs" />
     <Compile Include="Internals\Cache.cs" />
     <Compile Include="Internals\Key.cs" />
@@ -99,10 +103,6 @@
     <ProjectReference Include="..\..\nucs.Filesystem\src\nucs.Filesystem.net45\nucs.Filesystem.net45.csproj">
       <Project>{bb205bb3-37ae-4e3c-8aa1-617ab610f98a}</Project>
       <Name>nucs.Filesystem.net45</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\Users\NUCS\Documents\Visual Studio 2015\Projects\nucs.Summoners\mwinapi\ManagedWinapi\ManagedWinapi.csproj">
-      <Project>{fbd3ec1e-47e2-4d2d-81c9-d6506125a09a}</Project>
-      <Name>ManagedWinapi</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

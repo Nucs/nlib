@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Web;
-using nucs.Filesystem.Comparers;
 using nucs.Monitoring;
 using nucs.Web;
 using SHDocVw;
