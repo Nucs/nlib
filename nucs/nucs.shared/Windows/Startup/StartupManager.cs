@@ -57,7 +57,7 @@ namespace nucs.Windows.Startup {
 
 
                 case StartupType.MachineStartupRegistry:
-                    RegistryKey add = Registry.LocalMachine.OpenSubKey(
+                    RegistryKey add = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
                         @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
                     if (add == null)
                         throw new Exception("Invalid registery path.");
@@ -66,7 +66,7 @@ namespace nucs.Windows.Startup {
 
 
                 case StartupType.LocalUserStartupRegistry:
-                    RegistryKey ad = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run",
+                    RegistryKey ad = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run",
                                                                      true);
                     if (ad == null)
                         throw new Exception("Invalid registery path.");
@@ -200,16 +200,16 @@ namespace nucs.Windows.Startup {
                     }
                     return false;
                 case StartupType.MachineStartupRegistry:
-                    RegistryKey add = Registry.LocalMachine.OpenSubKey(
+                    RegistryKey add = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
                         @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
                     if (add == null)
                         throw new Exception("Invalid registery path.");
                     add.DeleteValue(applicationName, true);
                     return true;
                 case StartupType.LocalUserStartupRegistry:
-                    var ad = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.Delete);
+                    var ad = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.Delete);
                     try {
-                        Registry.CurrentUser.DeleteValue(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\" +
+                        Microsoft.Win32.Registry.CurrentUser.DeleteValue(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\" +
                                                          applicationName);
                     }
                     catch (ArgumentException e) {
@@ -242,12 +242,12 @@ namespace nucs.Windows.Startup {
         /// <returns></returns>
         public static StartupType GetPreferedAllowedStartupType(string pathToFile) {
             try {
-                Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.Default, RegistryRights.WriteKey);
+                Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.Default, RegistryRights.WriteKey);
                 return StartupType.MachineStartupRegistry;
             } catch (SecurityException) { } 
 
             try {
-                Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.Default, RegistryRights.WriteKey);
+                Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.Default, RegistryRights.WriteKey);
                 return StartupType.LocalUserStartupRegistry;
             } catch (SecurityException) { } 
 
@@ -278,7 +278,7 @@ namespace nucs.Windows.Startup {
             RegistryKey add;
             //read registry user
             try {
-                add = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.Default, RegistryRights.ReadKey);
+                add = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.Default, RegistryRights.ReadKey);
             } catch (SecurityException) {
                 goto _next;
             }
@@ -290,7 +290,7 @@ namespace nucs.Windows.Startup {
             //read registry machine
             _next:
             try {
-                add = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.Default, RegistryRights.ReadKey);
+                add = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.Default, RegistryRights.ReadKey);
             } catch (SecurityException) {
                 yield break;
             }

@@ -195,6 +195,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Randomizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Reflection\AttributesTools.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Reflection\NamespacesTools.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Reflection\ReflectionEnumerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Reflection\ReflectionTools.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\SingleRun.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SystemCore\Sounds\SystemSoundExtension.cs" />
@@ -312,9 +313,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Processes\Processy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Processes\WindowFinder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Registery\DefaultApplication.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Registery\RegistryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Security\Impersonator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Security\SecurityDiagnoser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Startup\StartupManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\SystemInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\UniquePcId.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\ZExtensions\Z.ExtensionMethods.Object\ObjectExtension\Casting\Object.As.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\ZExtensions\Z.ExtensionMethods.Object\ObjectExtension\Casting\Object.AsOrDefault.cs" />
@@ -959,7 +962,6 @@
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Collections\HellBrick.AsyncCollections\packages.config" />
     <Content Include="$(MSBuildThisFileDirectory)Collections\HellBrick.AsyncCollections\README.md" />
-    <Content Include="$(MSBuildThisFileDirectory)ILMergeOrder.txt" />
     <Content Include="$(MSBuildThisFileDirectory)Images\refresh-icon.png" />
     <Content Include="$(MSBuildThisFileDirectory)Libraries\System.Web.Extensions.dll" />
     <Content Include="$(MSBuildThisFileDirectory)Libraries\System.Web.Extensions.xml" />
@@ -974,7 +976,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)ILMerge.props" />
     <None Include="$(MSBuildThisFileDirectory)packages.config" />
   </ItemGroup>
 </Project>

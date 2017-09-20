@@ -10,7 +10,7 @@
     <DefineConstants>TRACE;DEBUG;NET45;NET451;NET452;NET46;NET460;NET461;NET462;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
 
-  <Import Project="..\nucs\nucs.shared\nucs.shared.projitems" Label="Shared" />
+  <Import Project="..\nucs.shared\nucs.shared.projitems" Label="Shared" />
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
