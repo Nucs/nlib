@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !NETSTANDARD2_0
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -441,3 +442,4 @@ namespace nucs.Windows.Startup {
         LocalUserStartupRegistry = 3
     }
 }
+#endif

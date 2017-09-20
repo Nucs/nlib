@@ -111,6 +111,12 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\nucs.Filesystem\src\nucs.Filesystem.net4\nucs.Filesystem.net4.csproj">
+      <Project>{e97c0d95-437a-4d4b-9d21-815d2350a94b}</Project>
+      <Name>nucs.Filesystem.net4</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,3 +1,4 @@
+#pragma warning disable 649
 namespace nucs.WinForms.WindowFinder
 {
     partial class WindowFinder
