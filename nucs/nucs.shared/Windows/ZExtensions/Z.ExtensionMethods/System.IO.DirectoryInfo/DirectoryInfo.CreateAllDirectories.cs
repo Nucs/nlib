@@ -79,6 +79,7 @@ public static partial class DirectoryInfoExtension
     {
         return Directory.CreateDirectory(@this.FullName);
     }
+#if !NETSTANDARD2_0
 
     /// <summary>
     ///     Creates all the directories in the specified @this, applying the specified Windows security.
@@ -153,4 +154,5 @@ public static partial class DirectoryInfoExtension
     {
         return Directory.CreateDirectory(@this.FullName, directorySecurity);
     }
+#endif
 }

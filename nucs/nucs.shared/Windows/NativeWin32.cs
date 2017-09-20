@@ -23,22 +23,23 @@ namespace nucs.Windows {
 		/// </returns>
 		[DllImport("user32")]
         public static extern bool PrintWindow(IntPtr hwnd, IntPtr hdcBlt, uint nFlags);
+#if !NETSTANDARD2_0
         /// <summary>
-		///     The get window rect.
-		/// </summary>
-		/// <param name="hWnd">
-		///     The h wnd.
-		/// </param>
-		/// <param name="lpRect">
-		///     The lp rect.
-		/// </param>
-		/// <returns>
-		///     The <see cref="bool" />.
-		/// </returns>
-		[DllImport("user32")]
+        ///     The get window rect.
+        /// </summary>
+        /// <param name="hWnd">
+        ///     The h wnd.
+        /// </param>
+        /// <param name="lpRect">
+        ///     The lp rect.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
+        [DllImport("user32")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
-
+#endif
         [DllImport("kernel32.dll")]
         public static extern int FreeConsole();
         [DllImport("user32.dll")]

@@ -1,5 +1,5 @@
 ﻿using System.IO;
-
+#if !NETSTANDARD2_0
 namespace nucs.Windows.Registery {
     public static class Registry {
         public static string GetDefaultApplication(string extension) {
@@ -35,3 +35,4 @@ namespace nucs.Windows.Registery {
         }
     }
 }
+#endif

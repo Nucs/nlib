@@ -99,6 +99,8 @@
     <Compile Include="Filesystem\EndFileStorage\EndDataStorageTestClass.cs" />
     <Compile Include="Filesystem\EndFileStorage\EndFileDataTest.cs" />
     <Compile Include="Filesystem\EndFileStorage\TestHelper.cs" />
+    <Compile Include="Serialization\BinaryTests.cs" />
+    <Compile Include="Serialization\EncryptedBinaryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\nucs.Filesystem.EndFileStorage\nucs.Filesystem.EndFileStorage.csproj">
@@ -109,7 +111,7 @@
       <Project>{68872ada-5959-4fc6-9395-3723d10e436e}</Project>
       <Name>nucs.Filesystem.Resources</Name>
     </ProjectReference>
-    <ProjectReference Include="..\nucs.Filesystem\nucs.Filesystem.csproj">
+    <ProjectReference Include="..\nucs.Filesystem\nucs.Filesystem.net4\nucs.Filesystem.net4.csproj">
       <Project>{e97c0d95-437a-4d4b-9d21-815d2350a94b}</Project>
       <Name>nucs.Filesystem</Name>
     </ProjectReference>

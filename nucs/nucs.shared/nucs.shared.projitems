@@ -280,6 +280,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Mining\MiningFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Mining\MultiSourceSingleResultMiner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Net4Support.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\QueueThreading\TaskState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\QueueThreading\ProgressDescriber.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\QueueThreading\QueueThread.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\QueueThreading\QueuedTask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Syncer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Syncer.T.cs">
       <DependentUpon>Syncer.cs</DependentUpon>
