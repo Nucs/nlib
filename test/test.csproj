@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>test</RootNamespace>
     <AssemblyName>test</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,6 +36,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -55,17 +59,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\nucs.Automation\src\nucs.Automation.csproj">
-      <Project>{ae53d952-46dd-498b-9c1e-08add87e4096}</Project>
-      <Name>nucs.Automation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\nucs.Filesystem\src\nucs.Filesystem.net45\nucs.Filesystem.net45.csproj">
-      <Project>{bb205bb3-37ae-4e3c-8aa1-617ab610f98a}</Project>
-      <Name>nucs.Filesystem.net45</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\nucs\nucs.net45\nucs.net45.csproj">
-      <Project>{647EDC67-D125-4528-8E8D-0C770BA77CFF}</Project>
-      <Name>nucs.net45</Name>
+    <ProjectReference Include="..\nucs.Settings\src\nucs.JsonSettings.csproj">
+      <Project>{77ea72c1-d15f-472f-978f-c59a6da43be4}</Project>
+      <Name>nucs.JsonSettings</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

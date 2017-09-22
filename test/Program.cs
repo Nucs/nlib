@@ -10,14 +10,16 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using nucs.Automation;
+using nucs.JsonSettings;
+
+/*using nucs.Automation;
 using nucs.Automation.Controllers;
 using nucs.Automation.Fluent;
 using nucs.Automation.Mirror;
 using nucs.Automation.Mirror.Helpers;
 using nucs.Automation.Scripts;
 using nucs.Filesystem;
-using nucs.Threading.FastThreadPool;
+using nucs.Threading.FastThreadPool;*/
 
 namespace test {
 
@@ -36,16 +38,23 @@ namespace test {
     }*/
 
     class Program {
-
+        
         static unsafe void Main(string[] args) {
             var sw = new Stopwatch();
+            sw.Start();
+            var vb = JsonSettings.Load<SettingsBag>("lolnub");
+            var vbb = JsonSettings.Load(new SettingsBag(),"lolnub");
+            vb.Autosave = true;
+            
+            vb["kek"] = "lol";
+            vb.Save();
 
-            var invoker = FluentInvoker.CreateDefault();
+/*            var invoker = FluentInvoker.CreateDefault();
             invoker.KeyboardController = new WindowSpecificKeyboardController(SmartProcess.Get("notepad"));
             invoker.Write("hello");
             invoker.Press(KeyCode.A);
             invoker.Press(KeyCode.A);
-            invoker.Press(KeyCode.A);
+            invoker.Press(KeyCode.A);*/
             //var t = FluentInvoker.CreateTemplate(invoker);
             
                 //.Invoke();

@@ -64,7 +64,7 @@ namespace nucs.Settings {
 
         [NonSerialized]
         private readonly RijndaelEnhanced Encryptor;
-	
+	    
 		/// <summary>
         /// 	Generate a constant seed that will be used to encrypt the text.
         /// </summary>
